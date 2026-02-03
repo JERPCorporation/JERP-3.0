@@ -32,10 +32,10 @@ POSTGRES_CONNECTION_STRING=Host=${POSTGRES_HOST};Port=${POSTGRES_PORT};Database=
 # ========================================
 MYSQL_HOST=localhost
 MYSQL_PORT=3306
-MYSQL_DB=jerp_development
-MYSQL_USER=jerp_user
-MYSQL_PASSWORD=DevPassword123!
-MYSQL_ROOT_PASSWORD=RootPassword123!
+MYSQL_DB=jerp
+MYSQL_USER=root
+MYSQL_PASSWORD=NewStrongPassword!
+MYSQL_ROOT_PASSWORD=NewStrongPassword!
 
 # Full connection string
 MYSQL_CONNECTION_STRING=Server=${MYSQL_HOST};Port=${MYSQL_PORT};Database=${MYSQL_DB};Uid=${MYSQL_USER};Pwd=${MYSQL_PASSWORD};CharSet=utf8mb4;
@@ -45,9 +45,9 @@ MYSQL_CONNECTION_STRING=Server=${MYSQL_HOST};Port=${MYSQL_PORT};Database=${MYSQL
 # ========================================
 SQLSERVER_HOST=localhost
 SQLSERVER_PORT=1433
-SQLSERVER_DB=jerp_development
-SQLSERVER_USER=sa
-SQLSERVER_PASSWORD=YourStrong!Passw0rd
+SQLSERVER_DB=master
+SQLSERVER_USER=root
+SQLSERVER_PASSWORD=NewStrongPassword
 
 # Windows Authentication (set to 'true' to use Windows auth instead of username/password)
 SQLSERVER_USE_WINDOWS_AUTH=false
