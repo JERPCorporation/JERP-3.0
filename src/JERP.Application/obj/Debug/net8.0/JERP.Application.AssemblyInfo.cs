@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JERP.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a02e7e5588c38518977c92ad01341c7dffdda39")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+872e35bc9b195e1169f5bc239efe65ef595acbda")]
 [assembly: System.Reflection.AssemblyProductAttribute("JERP.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JERP.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,9 @@
+/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/Debug/net8.0/JERP.Api.csproj.AssemblyReference.cache
+/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/Debug/net8.0/rpswa.dswa.cache.json
+/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/Debug/net8.0/JERP.Api.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/Debug/net8.0/JERP.Api.AssemblyInfoInputs.cache
+/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/Debug/net8.0/JERP.Api.AssemblyInfo.cs
+/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/Debug/net8.0/JERP.Api.csproj.CoreCompileInputs.cache
+/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/Debug/net8.0/JERP.Api.MvcApplicationPartsAssemblyInfo.cs
+/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/Debug/net8.0/JERP.Api.MvcApplicationPartsAssemblyInfo.cache
+/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/Debug/net8.0/JERP.Api.sourcelink.json
