@@ -1,0 +1,79 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace JERP.Core.Entities;
+
+/// <summary>
+/// Represents an immutable audit log entry for tracking system changes
+/// </summary>
+public class AuditLog : BaseEntity
+{
+    /// <summary>
+    /// Foreign key to the user who performed the action
+    /// </summary>
+    [Required]
+    public Guid UserId { get; set; }
+
+    /// <summary>
+    /// Action performed (e.g., "Create", "Update", "Delete")
+    /// </summary>
+    [Required]
+    [MaxLength(100)]
+    public string Action { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Type of entity that was modified
+    /// </summary>
+    [Required]
+    [MaxLength(100)]
+    public string EntityType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// ID of the entity that was modified
+    /// </summary>
+    [Required]
+    public Guid EntityId { get; set; }
+
+    /// <summary>
+    /// JSON representation of values before the change
+    /// </summary>
+    public string? OldValues { get; set; }
+
+    /// <summary>
+    /// JSON representation of values after the change
+    /// </summary>
+    public string? NewValues { get; set; }
+
+    /// <summary>
+    /// IP address of the user who performed the action
+    /// </summary>
+    [MaxLength(50)]
+    public string? IpAddress { get; set; }
+
+    /// <summary>
+    /// User agent string from the client
+    /// </summary>
+    [MaxLength(500)]
+    public string? UserAgent { get; set; }
+
+    /// <summary>
+    /// Timestamp when the action occurred
+    /// </summary>
+    [Required]
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+
+    /// <summary>
+    /// Hash of the previous audit log entry for integrity verification
+    /// </summary>
+    [MaxLength(100)]
+    public string? PreviousHash { get; set; }
+
+    /// <summary>
+    /// Hash of this audit log entry for integrity verification
+    /// </summary>
+    [Required]
+    [MaxLength(100)]
+    public string CurrentHash { get; set; } = string.Empty;
+
+    // Navigation properties
+    public User User { get; set; } = null!;
+}

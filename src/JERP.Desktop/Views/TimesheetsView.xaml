@@ -1,0 +1,84 @@
+<UserControl x:Class="JERP.Desktop.Views.TimesheetsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Timesheets" FontSize="28" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <!-- Filter Bar -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                <TextBlock Text="Start Date" Margin="0,0,0,5"/>
+                <DatePicker SelectedDate="{Binding StartDate}" Width="150"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                <TextBlock Text="End Date" Margin="0,0,0,5"/>
+                <DatePicker SelectedDate="{Binding EndDate}" Width="150"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Margin="0,0,15,0">
+                <TextBlock Text="Status" Margin="0,0,0,5"/>
+                <ComboBox ItemsSource="{Binding StatusOptions}" 
+                          SelectedItem="{Binding StatusFilter}" 
+                          Width="120"/>
+            </StackPanel>
+
+            <Button Grid.Column="3" Content="Filter" Command="{Binding LoadTimesheetsCommand}" 
+                    Height="35" MinWidth="80" Margin="0,20,0,0"/>
+
+            <Button Grid.Column="5" Content="Add Timesheet" Command="{Binding AddTimesheetCommand}" 
+                    Height="35" MinWidth="120" Margin="0,20,0,0"
+                    Style="{StaticResource AccentButtonStyle}"/>
+        </Grid>
+
+        <!-- Timesheets DataGrid -->
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Timesheets}" 
+                  SelectedItem="{Binding SelectedTimesheet}"
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False" CanUserDeleteRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Employee" Binding="{Binding EmployeeName}" Width="200"/>
+                <DataGridTextColumn Header="Work Date" Binding="{Binding WorkDate, StringFormat=\{0:MM/dd/yyyy\}}" Width="120"/>
+                <DataGridTextColumn Header="Clock In" Binding="{Binding ClockIn, StringFormat=\{0:hh\\:mm\}}" Width="100"/>
+                <DataGridTextColumn Header="Clock Out" Binding="{Binding ClockOut, StringFormat=\{0:hh\\:mm\}}" Width="100"/>
+                <DataGridTextColumn Header="Regular Hours" Binding="{Binding RegularHours, StringFormat=F2}" Width="120"/>
+                <DataGridTextColumn Header="OT Hours" Binding="{Binding OvertimeHours, StringFormat=F2}" Width="100"/>
+                <DataGridTextColumn Header="Total Hours" Binding="{Binding TotalHours, StringFormat=F2}" Width="120"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                <DataGridTemplateColumn Header="Actions" Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Edit" Command="{Binding DataContext.EditTimesheetCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" Margin="0,0,5,0" Padding="8,5"/>
+                                <Button Content="Submit" Command="{Binding DataContext.SubmitTimesheetCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" Margin="0,0,5,0" Padding="8,5"/>
+                                <Button Content="Approve" Command="{Binding DataContext.ApproveTimesheetCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" Padding="8,5"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,85 @@
+<UserControl x:Class="JERP.Desktop.Views.EmployeesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Employees" FontSize="28" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <!-- Search and Actions Bar -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                     ui:ControlHelper.PlaceholderText="Search employees..." 
+                     Height="35" FontSize="14" VerticalContentAlignment="Center">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
+                <Button Content="Search" Command="{Binding SearchCommand}" 
+                        Height="35" MinWidth="80" Margin="0,0,10,0"/>
+                <Button Content="Add Employee" Command="{Binding AddEmployeeCommand}" 
+                        Height="35" MinWidth="120" Style="{StaticResource AccentButtonStyle}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Employees DataGrid -->
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Employees}" 
+                  SelectedItem="{Binding SelectedEmployee}"
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False" CanUserDeleteRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Employee #" Binding="{Binding EmployeeNumber}" Width="120"/>
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="150"/>
+                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="150"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"/>
+                <DataGridTextColumn Header="Department" Binding="{Binding Department}" Width="150"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                <DataGridTextColumn Header="Hire Date" Binding="{Binding HireDate, StringFormat=\{0:MM/dd/yyyy\}}" Width="120"/>
+                <DataGridTextColumn Header="Hourly Rate" Binding="{Binding HourlyRate, StringFormat=C}" Width="120"/>
+                <DataGridTemplateColumn Header="Actions" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Edit" Command="{Binding DataContext.EditEmployeeCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" Margin="0,0,5,0" Padding="10,5"/>
+                                <Button Content="Delete" Command="{Binding DataContext.DeleteEmployeeCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" Padding="10,5"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Pagination -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+            <Button Content="Previous" Command="{Binding PreviousPageCommand}" 
+                    Height="35" MinWidth="100" Margin="0,0,10,0"
+                    IsEnabled="{Binding CurrentPage, Converter={StaticResource GreaterThanConverter}, ConverterParameter=1}"/>
+            <TextBlock VerticalAlignment="Center" Margin="10,0" FontSize="14">
+                <Run Text="Page"/>
+                <Run Text="{Binding CurrentPage, Mode=OneWay}"/>
+                <Run Text="of"/>
+                <Run Text="{Binding TotalPages, Mode=OneWay}"/>
+            </TextBlock>
+            <Button Content="Next" Command="{Binding NextPageCommand}" 
+                    Height="35" MinWidth="100" Margin="10,0,0,0"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

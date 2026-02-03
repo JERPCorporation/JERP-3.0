@@ -1,2 +1,8 @@
 <Solution>
+  <Project Path="src\JERP.Api\JERP.Api.csproj" />
+  <Project Path="src\JERP.Application\JERP.Application.csproj" />
+  <Project Path="src\JERP.Compliance\JERP.Compliance.csproj" />
+  <Project Path="src\JERP.Core\JERP.Core.csproj" />
+  <Project Path="src\JERP.Desktop\JERP.Desktop.csproj" />
+  <Project Path="src\JERP.Infrastructure\JERP.Infrastructure.csproj" />
 </Solution>

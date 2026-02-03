@@ -1,0 +1,44 @@
+END USER LICENSE AGREEMENT (EULA)
+JERP 2.0 - Enterprise Resource Planning System
+
+Copyright (c) 2024 JERP Corporation. All rights reserved.
+
+GRANT OF LICENSE
+This EULA grants you the following rights:
+- Installation and use of the Software on a single computer or network
+- Make backup copies for archival purposes
+- Use the Software for commercial purposes within your organization
+
+TRIAL TERMS
+This software may be evaluated free of charge for 30 days. After the trial period,
+you must purchase a license to continue using the software.
+
+COPYRIGHT
+All title and copyrights in and to the Software (including but not limited to any
+images, photographs, animations, video, audio, music, text, and "applets" incorporated
+into the Software), the accompanying printed materials, and any copies of the Software
+are owned by JERP Corporation.
+
+WARRANTY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+LIABILITY
+IN NO EVENT SHALL JERP CORPORATION BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+DATA PRIVACY
+The Software collects and stores employee and payroll data. You are responsible for
+ensuring compliance with all applicable data protection laws.
+
+TERMINATION
+This license is effective until terminated. Your rights under this license will
+terminate automatically without notice if you fail to comply with any term(s) of
+this license.
+
+GOVERNING LAW
+This agreement shall be governed by the laws of the State of California.
+
+For questions regarding this EULA, please contact: support@jerp.com

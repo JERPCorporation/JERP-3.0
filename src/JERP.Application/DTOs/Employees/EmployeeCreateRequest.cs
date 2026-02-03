@@ -1,0 +1,30 @@
+using JERP.Core.Enums;
+
+namespace JERP.Application.DTOs.Employees;
+
+/// <summary>
+/// Request to create a new employee
+/// </summary>
+public class EmployeeCreateRequest
+{
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required string Email { get; set; }
+    public string? Phone { get; set; }
+    public DateTime? DateOfBirth { get; set; }
+    public string? SSN { get; set; }
+    public string? Address { get; set; }
+    public string? City { get; set; }
+    public string? State { get; set; }
+    public string? ZipCode { get; set; }
+    public required string EmployeeNumber { get; set; }
+    public Guid CompanyId { get; set; }
+    public Guid? DepartmentId { get; set; }
+    public Guid? ManagerId { get; set; }
+    public DateTime HireDate { get; set; }
+    public EmploymentType EmploymentType { get; set; }
+    public EmployeeClassification Classification { get; set; }
+    public decimal? HourlyRate { get; set; }
+    public decimal? SalaryAmount { get; set; }
+    public PayFrequency PayFrequency { get; set; }
+}
