@@ -1,0 +1,211 @@
+# ========================================
+# JERP 2.0 Environment Configuration
+# Local Development Settings
+# ========================================
+
+# ========================================
+# ENVIRONMENT
+# ========================================
+ASPNETCORE_ENVIRONMENT=Development
+DOTNET_ENVIRONMENT=Development
+
+# ========================================
+# DATABASE SELECTION
+# Choose ONE: PostgreSQL, MySQL, or SqlServer
+# ========================================
+DATABASE_PROVIDER=PostgreSQL
+
+# ========================================
+# POSTGRESQL CONFIGURATION
+# ========================================
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=jerp_development
+POSTGRES_USER=jerp_user
+POSTGRES_PASSWORD=DevPassword123!
+
+# Full connection string (auto-generated, but you can override)
+POSTGRES_CONNECTION_STRING=Host=${POSTGRES_HOST};Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+
+# ========================================
+# MYSQL CONFIGURATION
+# ========================================
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_DB=jerp_development
+MYSQL_USER=jerp_user
+MYSQL_PASSWORD=DevPassword123!
+MYSQL_ROOT_PASSWORD=RootPassword123!
+
+# Full connection string
+MYSQL_CONNECTION_STRING=Server=${MYSQL_HOST};Port=${MYSQL_PORT};Database=${MYSQL_DB};Uid=${MYSQL_USER};Pwd=${MYSQL_PASSWORD};CharSet=utf8mb4;
+
+# ========================================
+# SQL SERVER CONFIGURATION
+# ========================================
+SQLSERVER_HOST=localhost
+SQLSERVER_PORT=1433
+SQLSERVER_DB=jerp_development
+SQLSERVER_USER=sa
+SQLSERVER_PASSWORD=YourStrong!Passw0rd
+
+# Windows Authentication (set to 'true' to use Windows auth instead of username/password)
+SQLSERVER_USE_WINDOWS_AUTH=false
+
+# Connection strings
+SQLSERVER_CONNECTION_STRING=Server=${SQLSERVER_HOST},${SQLSERVER_PORT};Database=${SQLSERVER_DB};User Id=${SQLSERVER_USER};Password=${SQLSERVER_PASSWORD};TrustServerCertificate=True;
+SQLSERVER_WINDOWS_AUTH_CONNECTION_STRING=Server=${SQLSERVER_HOST};Database=${SQLSERVER_DB};Integrated Security=True;TrustServerCertificate=True;
+
+# SQL Server LocalDB (for development without installing SQL Server)
+SQLSERVER_LOCALDB_CONNECTION_STRING=Server=(localdb)\\mssqllocaldb;Database=jerp_development;Integrated Security=True;
+
+# ========================================
+# API CONFIGURATION
+# ========================================
+API_PORT=5000
+API_HTTPS_PORT=5001
+API_BASE_URL=http://localhost:${API_PORT}
+API_CORS_ORIGINS=http://localhost:3000,http://localhost:8080,http://localhost:5173
+
+# Enable Swagger in development
+ENABLE_SWAGGER=true
+
+# Enable detailed errors (only in development!)
+ENABLE_DETAILED_ERRORS=true
+
+# ========================================
+# JWT AUTHENTICATION
+# ========================================
+# IMPORTANT: Generate a secure random key for production!
+# Must be at least 32 characters
+JWT_SECRET_KEY=SuperSecretDevelopmentKeyForLocalTestingOnly123456!
+JWT_ISSUER=JERP-API-Development
+JWT_AUDIENCE=JERP-Desktop
+JWT_EXPIRATION_MINUTES=480
+JWT_REFRESH_TOKEN_EXPIRATION_DAYS=7
+
+# ========================================
+# ADMIN USER (Initial Setup)
+# ========================================
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=Admin@123
+ADMIN_EMAIL=admin@jerp.local
+ADMIN_FIRSTNAME=System
+ADMIN_LASTNAME=Administrator
+
+# ========================================
+# PAYROLL SETTINGS
+# ========================================
+# Tax year for payroll calculations
+TAX_YEAR=2026
+
+# Default state for tax calculations
+DEFAULT_STATE=CA
+
+# Minimum wages
+MINIMUM_WAGE_FEDERAL=7.25
+MINIMUM_WAGE_CALIFORNIA=16.00
+
+# Tax rates (2024 values)
+SOCIAL_SECURITY_RATE=0.062
+SOCIAL_SECURITY_WAGE_BASE=168600.00
+MEDICARE_RATE=0.0145
+ADDITIONAL_MEDICARE_RATE=0.009
+ADDITIONAL_MEDICARE_THRESHOLD=200000.00
+
+# ========================================
+# COMPLIANCE SETTINGS
+# ========================================
+ENABLE_REAL_TIME_COMPLIANCE=true
+AUDIT_LOG_RETENTION_DAYS=2555
+ENABLE_LABOR_LAW_COMPLIANCE=true
+ENABLE_FINANCIAL_COMPLIANCE=true
+
+# California Labor Law Rules
+CA_DAILY_OVERTIME_THRESHOLD=8
+CA_DOUBLE_TIME_THRESHOLD=12
+CA_MEAL_BREAK_HOURS=5
+CA_REST_BREAK_HOURS=4
+
+# Federal FLSA Rules
+FEDERAL_WEEKLY_OVERTIME_THRESHOLD=40
+
+# ========================================
+# LOGGING
+# ========================================
+LOG_LEVEL=Information
+LOG_TO_FILE=true
+LOG_FILE_PATH=logs/jerp-.log
+LOG_FILE_RETENTION_DAYS=30
+
+# ========================================
+# DOCKER CONFIGURATION
+# ========================================
+# Compose project name
+COMPOSE_PROJECT_NAME=jerp
+
+# Docker network
+DOCKER_NETWORK=jerp-network
+
+# Restart policy
+RESTART_POLICY=unless-stopped
+
+# ========================================
+# DESKTOP CLIENT CONFIGURATION
+# ========================================
+DESKTOP_API_URL=http://localhost:${API_PORT}/api/v1
+DESKTOP_TIMEOUT_SECONDS=30
+
+# ========================================
+# FILE STORAGE
+# ========================================
+STORAGE_PATH=./storage
+REPORTS_PATH=${STORAGE_PATH}/reports
+PAYSTUBS_PATH=${STORAGE_PATH}/paystubs
+BACKUPS_PATH=${STORAGE_PATH}/backups
+UPLOADS_PATH=${STORAGE_PATH}/uploads
+
+# ========================================
+# EMAIL SETTINGS (Optional - for future use)
+# ========================================
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USE_SSL=true
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+SMTP_FROM_EMAIL=noreply@jerp.local
+SMTP_FROM_NAME=JERP System
+
+# ========================================
+# HEALTH CHECKS
+# ========================================
+HEALTH_CHECK_ENABLED=true
+HEALTH_CHECK_PATH=/health
+
+# ========================================
+# RATE LIMITING (Optional)
+# ========================================
+RATE_LIMIT_ENABLED=false
+RATE_LIMIT_REQUESTS_PER_MINUTE=100
+
+# ========================================
+# FEATURE FLAGS
+# ========================================
+FEATURE_PAYROLL_MODULE=true
+FEATURE_COMPLIANCE_ENGINE=true
+FEATURE_PDF_GENERATION=true
+FEATURE_EMAIL_NOTIFICATIONS=false
+FEATURE_TWO_FACTOR_AUTH=false
+FEATURE_AUDIT_LOGGING=true
+
+# ========================================
+# DEVELOPMENT TOOLS
+# ========================================
+# Seed sample data on startup
+SEED_SAMPLE_DATA=true
+
+# Auto-run migrations on startup
+AUTO_RUN_MIGRATIONS=true
+
+# Enable SQL query logging
+LOG_SQL_QUERIES=false
