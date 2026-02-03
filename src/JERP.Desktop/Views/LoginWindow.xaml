@@ -1,0 +1,85 @@
+<Window x:Class="JERP.Desktop.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:converters="clr-namespace:JERP.Desktop.Converters"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="JERP - Login"
+        Height="450" Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    
+    <Window.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <converters:InverseBooleanConverter x:Key="InverseBool"/>
+        <converters:StringToVisibilityConverter x:Key="StringToVis"/>
+    </Window.Resources>
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,30">
+            <TextBlock Text="JERP" FontSize="36" FontWeight="Bold" 
+                       HorizontalAlignment="Center" Foreground="{DynamicResource SystemControlForegroundAccentBrush}"/>
+            <TextBlock Text="Just Employee Resource Planning" FontSize="14" 
+                       HorizontalAlignment="Center" Opacity="0.7" Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <!-- Login Form -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+            <!-- Error Message -->
+            <Border Background="{DynamicResource SystemControlErrorTextForegroundBrush}" 
+                    Padding="10" Margin="0,0,0,15" CornerRadius="4"
+                    Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVis}}">
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="White" TextWrapping="Wrap"/>
+            </Border>
+
+            <!-- Username -->
+            <TextBlock Text="Username" Margin="0,0,0,5"/>
+            <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
+                     Height="35" FontSize="14"
+                     IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBool}}"/>
+
+            <!-- Password -->
+            <TextBlock Text="Password" Margin="0,15,0,5"/>
+            <PasswordBox x:Name="PasswordBox" Height="35" FontSize="14"
+                        IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBool}}"/>
+
+            <!-- Remember Me -->
+            <CheckBox Content="Remember me" IsChecked="{Binding RememberMe}" 
+                     Margin="0,15,0,0"
+                     IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBool}}"/>
+
+            <!-- Login Button -->
+            <Button Content="Login" Height="40" Margin="0,25,0,0"
+                    Command="{Binding LoginCommand}"
+                    CommandParameter="{Binding ElementName=PasswordBox}"
+                    Style="{StaticResource AccentButtonStyle}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBool}}">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="Login" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}, ConverterParameter=Inverse}"/>
+                            <ui:ProgressRing Width="20" Height="20" IsActive="{Binding IsLoading}" 
+                                           Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}"/>
+                        </Grid>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+
+            <!-- Cancel Button -->
+            <Button Content="Cancel" Height="35" Margin="0,10,0,0"
+                    Command="{Binding CancelCommand}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBool}}"/>
+        </StackPanel>
+
+        <!-- Footer -->
+        <TextBlock Grid.Row="2" Text="© 2024 JERP. All rights reserved." 
+                   HorizontalAlignment="Center" Opacity="0.5" FontSize="11"/>
+    </Grid>
+</Window>

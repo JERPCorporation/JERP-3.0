@@ -1,0 +1,123 @@
+<UserControl x:Class="JERP.Desktop.Views.ComplianceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+            <TextBlock Text="Compliance" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
+            <Button Content="Refresh" Command="{Binding RefreshCommand}" 
+                    Height="35" Margin="20,0,0,0" MinWidth="100"/>
+        </StackPanel>
+
+        <!-- Compliance Score -->
+        <Border Grid.Row="1" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                Padding="20" CornerRadius="8" Margin="0,0,0,20">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="Overall Compliance Score" FontSize="18" FontWeight="SemiBold" 
+                           HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                <TextBlock FontSize="64" FontWeight="Bold" HorizontalAlignment="Center">
+                    <TextBlock.Text>
+                        <Binding Path="ComplianceScore" StringFormat="{}{0:F1}%"/>
+                    </TextBlock.Text>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="True" Value="True">
+                                    <Setter Property="Foreground" Value="Gray"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <!-- Filter Bar -->
+        <Grid Grid.Row="2" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,15,0">
+                <TextBlock Text="Severity:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <ComboBox ItemsSource="{Binding SeverityOptions}" 
+                          SelectedItem="{Binding SeverityFilter}" 
+                          Width="120"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBlock Text="Status:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <ComboBox ItemsSource="{Binding StatusOptions}" 
+                          SelectedItem="{Binding StatusFilter}" 
+                          Width="120"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Violations DataGrid -->
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Violations}" 
+                  SelectedItem="{Binding SelectedViolation}"
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False" CanUserDeleteRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Severity" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border CornerRadius="4" Padding="8,4">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Severity}" Value="Critical">
+                                                <Setter Property="Background" Value="#8B0000"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Severity}" Value="High">
+                                                <Setter Property="Background" Value="#FF6347"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Severity}" Value="Medium">
+                                                <Setter Property="Background" Value="#FFA500"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Severity}" Value="Low">
+                                                <Setter Property="Background" Value="#FFD700"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <TextBlock Text="{Binding Severity}" Foreground="White" 
+                                           HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Type" Binding="{Binding ViolationType}" Width="150"/>
+                <DataGridTextColumn Header="Rule Name" Binding="{Binding RuleName}" Width="200"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                <DataGridTextColumn Header="Employee" Binding="{Binding EmployeeName}" Width="150"/>
+                <DataGridTextColumn Header="Detected Date" Binding="{Binding DetectedDate, StringFormat=\{0:MM/dd/yyyy\}}" Width="120"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                <DataGridTemplateColumn Header="Actions" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Resolve" Command="{Binding DataContext.ResolveViolationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" Margin="0,0,5,0" Padding="10,5"/>
+                                <Button Content="Details" Command="{Binding DataContext.ViewViolationDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                        CommandParameter="{Binding}" Padding="10,5"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

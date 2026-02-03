@@ -1,0 +1,141 @@
+<UserControl x:Class="JERP.Desktop.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+                <TextBlock Text="Dashboard" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Button Content="Refresh" Command="{Binding RefreshCommand}" 
+                        Height="35" Margin="20,0,0,0" MinWidth="100"/>
+            </StackPanel>
+
+            <!-- Compliance Score Card -->
+            <Border Grid.Row="1" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                    Padding="20" CornerRadius="8" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Compliance Score" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                    <TextBlock FontSize="48" FontWeight="Bold">
+                        <TextBlock.Text>
+                            <Binding Path="ComplianceScore" StringFormat="{}{0:F1}%"/>
+                        </TextBlock.Text>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ComplianceScore}" Value="{x:Null}">
+                                        <Setter Property="Foreground" Value="Gray"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="True">
+                                        <DataTrigger.Value>
+                                            <Binding Path="ComplianceScore" Converter="{StaticResource GreaterThanConverter}" ConverterParameter="90"/>
+                                        </DataTrigger.Value>
+                                        <Setter Property="Foreground" Value="Green"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <!-- Statistics Cards -->
+            <UniformGrid Grid.Row="2" Columns="4" Rows="2" Margin="0,0,0,20">
+                <!-- Critical Violations -->
+                <Border Background="#8B0000" Padding="15" Margin="0,0,5,5" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Critical" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding CriticalViolationCount}" FontSize="36" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                        <TextBlock Text="Violations" FontSize="12" Foreground="White" Opacity="0.8"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- High Violations -->
+                <Border Background="#FF6347" Padding="15" Margin="5,0,5,5" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="High" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding HighViolationCount}" FontSize="36" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                        <TextBlock Text="Violations" FontSize="12" Foreground="White" Opacity="0.8"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Medium Violations -->
+                <Border Background="#FFA500" Padding="15" Margin="5,0,5,5" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Medium" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding MediumViolationCount}" FontSize="36" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                        <TextBlock Text="Violations" FontSize="12" Foreground="White" Opacity="0.8"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Low Violations -->
+                <Border Background="#FFD700" Padding="15" Margin="5,0,0,5" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Low" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding LowViolationCount}" FontSize="36" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                        <TextBlock Text="Violations" FontSize="12" Foreground="White" Opacity="0.8"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Active Employees -->
+                <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" 
+                        Padding="15" Margin="0,5,5,0" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Active Employees" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding ActiveEmployeeCount}" FontSize="36" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Pending Timesheets -->
+                <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" 
+                        Padding="15" Margin="5,5,5,0" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Pending Timesheets" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding PendingTimesheetCount}" FontSize="36" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- Recent Violations -->
+            <Border Grid.Row="3" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                    Padding="15" CornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Recent Violations" FontSize="18" 
+                               FontWeight="SemiBold" Margin="0,0,0,15"/>
+
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding RecentViolations}" 
+                              AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Severity" Binding="{Binding Severity}" Width="100"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding ViolationType}" Width="150"/>
+                            <DataGridTextColumn Header="Rule" Binding="{Binding RuleName}" Width="200"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                            <DataGridTextColumn Header="Detected" Binding="{Binding DetectedDate, StringFormat=\{0:MM/dd/yyyy\}}" Width="100"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
