@@ -141,4 +141,5 @@ public class Customer : BaseEntity
     // Navigation properties
     public Company Company { get; set; } = null!;
     public Account? AccountsReceivableAccount { get; set; }
+    public ICollection<CustomerInvoice> Invoices { get; set; } = new List<CustomerInvoice>();
 }

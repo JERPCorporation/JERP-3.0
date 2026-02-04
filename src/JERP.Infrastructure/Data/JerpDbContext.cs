@@ -67,6 +67,11 @@ public class JerpDbContext : DbContext
     public DbSet<Vendor> Vendors => Set<Vendor>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<VendorBill> VendorBills => Set<VendorBill>();
+    public DbSet<BillLineItem> BillLineItems => Set<BillLineItem>();
+    public DbSet<BillPayment> BillPayments => Set<BillPayment>();
+    public DbSet<CustomerInvoice> CustomerInvoices => Set<CustomerInvoice>();
+    public DbSet<InvoiceLineItem> InvoiceLineItems => Set<InvoiceLineItem>();
+    public DbSet<InvoicePayment> InvoicePayments => Set<InvoicePayment>();
     
     // Inventory module DbSets
     public DbSet<Product> Products => Set<Product>();
