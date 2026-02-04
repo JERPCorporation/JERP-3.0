@@ -27,19 +27,48 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
 
         builder.HasKey(al => al.Id);
 
+        // Required fields for hash-chain audit log
+        builder.Property(al => al.CompanyId)
+            .IsRequired();
+
+        builder.Property(al => al.Timestamp)
+            .IsRequired();
+
         builder.Property(al => al.UserId)
             .IsRequired();
+
+        builder.Property(al => al.UserEmail)
+            .IsRequired()
+            .HasMaxLength(255);
 
         builder.Property(al => al.Action)
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(al => al.EntityType)
+        builder.Property(al => al.Resource)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(500);
 
-        builder.Property(al => al.EntityId)
+        builder.Property(al => al.Details)
+            .HasMaxLength(2000);
+
+        builder.Property(al => al.IpAddress)
+            .HasMaxLength(50);
+
+        builder.Property(al => al.PreviousHash)
+            .IsRequired()
+            .HasMaxLength(64);
+
+        builder.Property(al => al.CurrentHash)
+            .IsRequired()
+            .HasMaxLength(64);
+
+        builder.Property(al => al.SequenceNumber)
             .IsRequired();
+
+        // Legacy fields - optional
+        builder.Property(al => al.EntityType)
+            .HasMaxLength(100);
 
         builder.Property(al => al.OldValues)
             .HasColumnType("jsonb");
@@ -47,32 +76,25 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
         builder.Property(al => al.NewValues)
             .HasColumnType("jsonb");
 
-        builder.Property(al => al.IpAddress)
-            .HasMaxLength(45);
-
         builder.Property(al => al.UserAgent)
             .HasMaxLength(500);
 
-        builder.Property(al => al.Timestamp)
-            .IsRequired();
-
-        builder.Property(al => al.PreviousHash)
-            .HasMaxLength(64);
-
-        builder.Property(al => al.CurrentHash)
-            .IsRequired()
-            .HasMaxLength(64);
-
-        // Indexes
-        builder.HasIndex(al => al.UserId);
-
-        builder.HasIndex(al => al.EntityType);
-
-        builder.HasIndex(al => al.EntityId);
+        // Indexes for efficient querying
+        builder.HasIndex(al => new { al.CompanyId, al.SequenceNumber })
+            .IsUnique();
 
         builder.HasIndex(al => al.Timestamp);
 
+        builder.HasIndex(al => al.Action);
+
+        builder.HasIndex(al => al.UserId);
+
         // Relationships
+        builder.HasOne(al => al.Company)
+            .WithMany()
+            .HasForeignKey(al => al.CompanyId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(al => al.User)
             .WithMany()
             .HasForeignKey(al => al.UserId)
