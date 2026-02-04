@@ -1,50 +1,7 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:16-alpine
-    container_name: jerp-postgres
-    environment:
-      POSTGRES_DB: jerp_production
-      POSTGRES_USER: jerp_user
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-YourSecurePassword123!}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U jerp_user -d jerp_production"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - jerp-network
-
-  # MySQL Database (Alternative)
-  mysql:
-    image: mysql:8.0
-    container_name: jerp-mysql
-    environment:
-      MYSQL_DATABASE: jerp_production
-      MYSQL_USER: jerp_user
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-YourSecurePassword123!}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-RootPassword123!}
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - jerp-network
-    profiles:
-      - mysql
-
-  # SQL Server (Alternative)
+  # SQL Server Database
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: jerp-sqlserver
@@ -63,8 +20,6 @@ services:
       retries: 5
     networks:
       - jerp-network
-    profiles:
-      - sqlserver
 
   # JERP API
   api:
@@ -75,14 +30,14 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:80
-      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=jerp_production;Username=jerp_user;Password=${POSTGRES_PASSWORD:-YourSecurePassword123!}"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=JERP3_DB;User Id=sa;Password=${SQLSERVER_PASSWORD:-YourStrong!Passw0rd};TrustServerCertificate=True;MultipleActiveResultSets=true"
       Jwt__SecretKey: ${JWT_SECRET_KEY:-YourSuperSecretKeyForJWTTokenGenerationMinimum32Characters!}
       Jwt__Issuer: JERP-API
       Jwt__Audience: JERP-Client
     ports:
       - "5000:80"
     depends_on:
-      postgres:
+      sqlserver:
         condition: service_healthy
     volumes:
       - ./logs:/app/logs
@@ -108,8 +63,6 @@ services:
       - production
 
 volumes:
-  postgres_data:
-  mysql_data:
   sqlserver_data:
 
 networks:
