@@ -10,7 +10,7 @@
         "projectUniqueName": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/JERP.Api.csproj",
         "projectName": "JERP.Api",
         "projectPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/JERP.Api.csproj",
-        "packagesPath": "/home/runner/work/JERP-3.0/.codeql-scratch/dbs/csharp/working/packages",
+        "packagesPath": "/home/runner/.nuget/packages/",
         "outputPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Api/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -143,24 +143,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -179,7 +161,7 @@
         "projectUniqueName": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Application/JERP.Application.csproj",
         "projectName": "JERP.Application",
         "projectPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Application/JERP.Application.csproj",
-        "packagesPath": "/home/runner/work/JERP-3.0/.codeql-scratch/dbs/csharp/working/packages",
+        "packagesPath": "/home/runner/.nuget/packages/",
         "outputPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Application/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -271,20 +253,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -300,7 +268,7 @@
         "projectUniqueName": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Compliance/JERP.Compliance.csproj",
         "projectName": "JERP.Compliance",
         "projectPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Compliance/JERP.Compliance.csproj",
-        "packagesPath": "/home/runner/work/JERP-3.0/.codeql-scratch/dbs/csharp/working/packages",
+        "packagesPath": "/home/runner/.nuget/packages/",
         "outputPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Compliance/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -361,20 +329,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -390,7 +344,7 @@
         "projectUniqueName": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Core/JERP.Core.csproj",
         "projectName": "JERP.Core",
         "projectPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Core/JERP.Core.csproj",
-        "packagesPath": "/home/runner/work/JERP-3.0/.codeql-scratch/dbs/csharp/working/packages",
+        "packagesPath": "/home/runner/.nuget/packages/",
         "outputPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -434,20 +388,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -463,7 +403,7 @@
         "projectUniqueName": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Infrastructure/JERP.Infrastructure.csproj",
         "projectName": "JERP.Infrastructure",
         "projectPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Infrastructure/JERP.Infrastructure.csproj",
-        "packagesPath": "/home/runner/work/JERP-3.0/.codeql-scratch/dbs/csharp/working/packages",
+        "packagesPath": "/home/runner/.nuget/packages/",
         "outputPath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Infrastructure/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -539,20 +479,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.23, 8.0.23]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
