@@ -17,10 +17,8 @@ using JERP.Core.Entities.Inventory;
 using JERP.Infrastructure.Data.Configurations;
 using JERP.Infrastructure.Data.Configurations.Finance;
 using JERP.Infrastructure.Data.Configurations.Inventory;
-using JERP.Infrastructure.Data.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Configuration;
 
 namespace JERP.Infrastructure.Data;
 
@@ -29,19 +27,8 @@ namespace JERP.Infrastructure.Data;
 /// </summary>
 public class JerpDbContext : DbContext
 {
-    private readonly IConfiguration? _configuration;
-    private readonly string _databaseProvider;
-
     public JerpDbContext(DbContextOptions<JerpDbContext> options) : base(options)
     {
-        _databaseProvider = "PostgreSQL"; // Default when configuration is not available
-    }
-
-    public JerpDbContext(DbContextOptions<JerpDbContext> options, IConfiguration configuration)
-        : base(options)
-    {
-        _configuration = configuration;
-        _databaseProvider = configuration["DatabaseSettings:Provider"] ?? "PostgreSQL";
     }
 
     // DbSets for all entities
@@ -97,10 +84,10 @@ public class JerpDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // Apply provider-specific configurations
-        ApplyProviderSpecificConfigurations(modelBuilder);
-
+        
+        // Set default schema
+        modelBuilder.HasDefaultSchema("dbo");
+        
         // Apply all entity configurations
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
@@ -142,65 +129,31 @@ public class JerpDbContext : DbContext
         modelBuilder.ApplyConfiguration(new StockTransferConfiguration());
         modelBuilder.ApplyConfiguration(new StockTransferLineConfiguration());
         modelBuilder.ApplyConfiguration(new InventoryTransactionConfiguration());
-    }
-
-    /// <summary>
-    /// Applies provider-specific model configurations
-    /// </summary>
-    private void ApplyProviderSpecificConfigurations(ModelBuilder modelBuilder)
-    {
-        switch (_databaseProvider.ToUpper())
-        {
-            case "POSTGRESQL":
-                ConfigureForPostgreSQL(modelBuilder);
-                break;
-            case "MYSQL":
-                ConfigureForMySQL(modelBuilder);
-                break;
-            case "SQLSERVER":
-                ConfigureForSqlServer(modelBuilder);
-                break;
-        }
-    }
-
-    /// <summary>
-    /// Applies PostgreSQL-specific configurations
-    /// </summary>
-    private void ConfigureForPostgreSQL(ModelBuilder modelBuilder)
-    {
-        // PostgreSQL-specific: Use JSONB for JSON columns
-        // PostgreSQL handles UUIDs natively and efficiently
-    }
-
-    /// <summary>
-    /// Applies MySQL-specific configurations
-    /// </summary>
-    private void ConfigureForMySQL(ModelBuilder modelBuilder)
-    {
-        // MySQL-specific: Set character set and ensure max length for strings
-        foreach (var entity in modelBuilder.Model.GetEntityTypes())
-        {
-            foreach (var property in entity.GetProperties())
-            {
-                if (property.ClrType == typeof(string))
-                {
-                    property.SetIsUnicode(true);
-                    if (property.GetMaxLength() == null)
-                    {
-                        property.SetMaxLength(255);
-                    }
-                }
-            }
-        }
+        
+        // SQL Server specific optimizations
+        ConfigureSqlServerSpecifics(modelBuilder);
     }
 
     /// <summary>
     /// Applies SQL Server-specific configurations
     /// </summary>
-    private void ConfigureForSqlServer(ModelBuilder modelBuilder)
+    private void ConfigureSqlServerSpecifics(ModelBuilder modelBuilder)
     {
-        // SQL Server-specific: Use NVARCHAR for strings
-        // Could enable temporal tables here if needed
+        // Set default string lengths to prevent nvarchar(max)
+        foreach (var property in modelBuilder.Model.GetEntityTypes()
+            .SelectMany(t => t.GetProperties())
+            .Where(p => p.ClrType == typeof(string) && p.GetMaxLength() == null))
+        {
+            property.SetMaxLength(256);
+        }
+        
+        // Use datetime2 instead of datetime for better precision
+        foreach (var property in modelBuilder.Model.GetEntityTypes()
+            .SelectMany(t => t.GetProperties())
+            .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?)))
+        {
+            property.SetColumnType("datetime2");
+        }
     }
 
     /// <summary>

@@ -52,7 +52,7 @@ public class ComplianceViolationConfiguration : IEntityTypeConfiguration<Complia
             .HasMaxLength(500);
 
         builder.Property(cv => cv.Details)
-            .HasColumnType("jsonb");
+            .HasColumnType("nvarchar(max)");
 
         builder.Property(cv => cv.FinancialImpact)
             .HasPrecision(18, 2);

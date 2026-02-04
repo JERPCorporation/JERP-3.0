@@ -57,10 +57,10 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
             .HasMaxLength(1000);
 
         builder.Property(al => al.OldValues)
-            .HasColumnType("jsonb");
+            .HasColumnType("nvarchar(max)");
 
         builder.Property(al => al.NewValues)
-            .HasColumnType("jsonb");
+            .HasColumnType("nvarchar(max)");
 
         builder.Property(al => al.IpAddress)
             .HasMaxLength(45);

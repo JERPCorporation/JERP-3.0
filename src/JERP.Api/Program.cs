@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using QuestPDF.Infrastructure;
 using Serilog;
 using System.Text;
@@ -24,6 +23,7 @@ using JERP.Application;
 using JERP.Compliance;
 using JERP.Infrastructure;
 using JERP.Infrastructure.Data;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 // Configure QuestPDF License
 QuestPDF.Settings.License = LicenseType.Community;
@@ -60,37 +60,27 @@ try
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
-    // Configure Database with multi-provider support
-    var databaseProvider = builder.Configuration["DatabaseSettings:Provider"] ?? "PostgreSQL";
-    var useWindowsAuth = builder.Configuration.GetValue<bool>("DatabaseSettings:UseWindowsAuthentication");
-
-    var connectionString = databaseProvider.ToUpper() switch
+    // Database Configuration - SQL Server Only
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    if (string.IsNullOrEmpty(connectionString))
     {
-        "SQLSERVER" when useWindowsAuth => 
-            builder.Configuration.GetConnectionString("SqlServerWindowsAuth"),
-        _ => 
-            builder.Configuration.GetConnectionString(databaseProvider) 
-            ?? builder.Configuration.GetConnectionString("DefaultConnection")
-    };
+        throw new InvalidOperationException("Connection string 'DefaultConnection' not found in configuration.");
+    }
 
     builder.Services.AddDbContext<JerpDbContext>(options =>
-    {
-        switch (databaseProvider.ToUpper())
+        options.UseSqlServer(connectionString, sqlOptions =>
         {
-            case "POSTGRESQL":
-                options.UseNpgsql(connectionString);
-                break;
-            case "MYSQL":
-                var serverVersion = ServerVersion.AutoDetect(connectionString);
-                options.UseMySql(connectionString, serverVersion);
-                break;
-            case "SQLSERVER":
-                options.UseSqlServer(connectionString);
-                break;
-            default:
-                throw new InvalidOperationException($"Unsupported database provider: {databaseProvider}");
-        }
-    });
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 3,
+                maxRetryDelay: TimeSpan.FromSeconds(5),
+                errorNumbersToAdd: null);
+            sqlOptions.CommandTimeout(30);
+            sqlOptions.MigrationsAssembly("JERP.Infrastructure");
+            sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+        })
+        .EnableSensitiveDataLogging(builder.Environment.IsDevelopment())
+        .EnableDetailedErrors(builder.Environment.IsDevelopment())
+    );
 
     // Add Application Services
     builder.Services.AddApplicationServices();
@@ -98,7 +88,7 @@ try
 
     // Configure JWT Authentication
     var jwtSettings = builder.Configuration.GetSection("Jwt");
-    var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey not configured");
+    var secretKey = jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key not configured");
     
     builder.Services.AddAuthentication(options =>
     {
@@ -133,22 +123,14 @@ try
         });
     });
 
-    // Add Health Checks based on provider
-    switch (databaseProvider.ToUpper())
-    {
-        case "POSTGRESQL":
-            builder.Services.AddHealthChecks()
-                .AddNpgSql(connectionString!, name: "database");
-            break;
-        case "MYSQL":
-            builder.Services.AddHealthChecks()
-                .AddMySql(connectionString!, name: "database");
-            break;
-        case "SQLSERVER":
-            builder.Services.AddHealthChecks()
-                .AddSqlServer(connectionString!, name: "database");
-            break;
-    }
+    // Add Health Checks for SQL Server
+    builder.Services.AddHealthChecks()
+        .AddSqlServer(
+            connectionString: connectionString,
+            healthQuery: "SELECT 1;",
+            name: "SQL Server",
+            failureStatus: HealthStatus.Degraded,
+            tags: new[] { "db", "sql", "sqlserver" });
 
     // Configure Swagger/OpenAPI
     builder.Services.AddEndpointsApiExplorer();
