@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "F2yn4dy9S7c=",
+  "dgSpecHash": "RVDnKs9hRyg=",
   "success": true,
   "projectFilePath": "/home/runner/work/JERP-3.0/JERP-3.0/src/JERP.Core/JERP.Core.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/runner/work/JERP-3.0/.codeql-scratch/dbs/csharp/working/packages/microsoft.netcore.app.ref/8.0.23/microsoft.netcore.app.ref.8.0.23.nupkg.sha512",
+    "/home/runner/work/JERP-3.0/.codeql-scratch/dbs/csharp/working/packages/microsoft.windowsdesktop.app.ref/8.0.23/microsoft.windowsdesktop.app.ref.8.0.23.nupkg.sha512",
+    "/home/runner/work/JERP-3.0/.codeql-scratch/dbs/csharp/working/packages/microsoft.aspnetcore.app.ref/8.0.23/microsoft.aspnetcore.app.ref.8.0.23.nupkg.sha512"
+  ],
   "logs": []
 }

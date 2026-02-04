@@ -18,6 +18,8 @@ namespace JERP.Api.Controllers;
 
 /// <summary>
 /// Controller for admin operations including audit log management
+/// TODO: Add role-based authorization [Authorize(Roles = "Admin,SuperAdmin")] or 
+/// policy-based authorization [Authorize(Policy = "AdminOnly")] to restrict access
 /// </summary>
 [Authorize]
 public class AdminController : BaseApiController

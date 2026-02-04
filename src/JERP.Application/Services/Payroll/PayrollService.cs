@@ -156,15 +156,17 @@ public class PayrollService : IPayrollService
         // Audit log the payroll processing
         try
         {
+            // TODO: Retrieve actual user context from HTTP context or authentication service
+            // Current placeholder values will be replaced with proper user identification
             await _auditLogService.LogAction(
                 payPeriod.CompanyId,
-                Guid.Empty, // TODO: Get from current user context
-                "system@jerp.io", // TODO: Get from current user context
-                "System", // TODO: Get from current user context
+                Guid.Empty, // Replace with actual userId from context
+                "system@jerp.io", // Replace with actual user email
+                "System", // Replace with actual user name
                 "payroll_processed",
                 $"PayPeriod:{payPeriodId}",
                 $"Processed {result.ProcessedCount} employee records. Gross: ${result.TotalGrossPay:N2}, Net: ${result.TotalNetPay:N2}",
-                null);
+                null); // Replace with actual IP address
         }
         catch (Exception ex)
         {

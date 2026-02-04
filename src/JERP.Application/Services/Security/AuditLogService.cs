@@ -42,7 +42,10 @@ public class AuditLogService : IAuditLogService
         string details,
         string? ipAddress = null)
     {
-        // Use a lock to ensure sequence numbers are assigned correctly
+        // Note: Using synchronous lock for simplicity. In production with multiple instances,
+        // consider using distributed locking (e.g., Redis) or database-level optimistic concurrency
+        AuditLog auditLog;
+        
         lock (_lockObject)
         {
             // Get the last audit log entry for this company
@@ -55,7 +58,7 @@ public class AuditLogService : IAuditLogService
             var previousHash = lastEntry?.CurrentHash ?? "GENESIS";
 
             // Create the new audit log entry
-            var auditLog = new AuditLog
+            auditLog = new AuditLog
             {
                 CompanyId = companyId,
                 UserId = userId,
@@ -76,10 +79,12 @@ public class AuditLogService : IAuditLogService
             auditLog.CurrentHash = CalculateHash(auditLog);
 
             _context.AuditLogs.Add(auditLog);
-            _context.SaveChanges();
-
-            return auditLog;
         }
+        
+        // Save asynchronously outside the lock
+        await _context.SaveChangesAsync();
+
+        return auditLog;
     }
 
     /// <inheritdoc/>
@@ -229,7 +234,10 @@ public class AuditLogService : IAuditLogService
     /// <summary>
     /// Calculates SHA256 hash for an audit log entry
     /// Format: CompanyId|Timestamp|UserId|Action|Resource|Details|IpAddress|PreviousHash|SequenceNumber
-    /// Returns first 12 characters of the hash
+    /// Returns first 12 characters of the hash as specified in requirements
+    /// Note: 12-char hash provides 48-bit space (2^48 ≈ 281 trillion combinations).
+    /// This is sufficient for most use cases but may have collision risk in very large systems.
+    /// For enhanced security, consider extending to 16-20 characters.
     /// </summary>
     private string CalculateHash(AuditLog log)
     {
@@ -247,7 +255,7 @@ public class AuditLogService : IAuditLogService
         var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(data));
         var fullHash = Convert.ToHexString(hashBytes);
         
-        // Return first 12 characters as specified
+        // Return first 12 characters as specified in requirements
         return fullHash.Substring(0, 12);
     }
 
