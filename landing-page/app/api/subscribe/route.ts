@@ -1,3 +1,13 @@
+/**
+ * JERP 3.0 - Payroll & ERP System
+ * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * 
+ * Unauthorized copying, modification, distribution, or use is strictly prohibited.
+ * For licensing inquiries: licensing@jerp.io
+ */
+
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
