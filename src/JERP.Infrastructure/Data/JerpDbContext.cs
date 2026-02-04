@@ -13,7 +13,10 @@
 using System.Text.Json;
 using JERP.Core.Entities;
 using JERP.Core.Entities.Finance;
+using JERP.Core.Entities.Inventory;
 using JERP.Infrastructure.Data.Configurations;
+using JERP.Infrastructure.Data.Configurations.Finance;
+using JERP.Infrastructure.Data.Configurations.Inventory;
 using JERP.Infrastructure.Data.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -61,6 +64,27 @@ public class JerpDbContext : DbContext
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<JournalEntry> JournalEntries => Set<JournalEntry>();
     public DbSet<GeneralLedgerEntry> GeneralLedgerEntries => Set<GeneralLedgerEntry>();
+    public DbSet<Vendor> Vendors => Set<Vendor>();
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<VendorBill> VendorBills => Set<VendorBill>();
+    
+    // Inventory module DbSets
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
+    public DbSet<ProductBatch> ProductBatches => Set<ProductBatch>();
+    public DbSet<Warehouse> Warehouses => Set<Warehouse>();
+    public DbSet<InventoryLevel> InventoryLevels => Set<InventoryLevel>();
+    public DbSet<PurchaseOrder> PurchaseOrders => Set<PurchaseOrder>();
+    public DbSet<PurchaseOrderLine> PurchaseOrderLines => Set<PurchaseOrderLine>();
+    public DbSet<StockReceipt> StockReceipts => Set<StockReceipt>();
+    public DbSet<StockReceiptLine> StockReceiptLines => Set<StockReceiptLine>();
+    public DbSet<InventoryAdjustment> InventoryAdjustments => Set<InventoryAdjustment>();
+    public DbSet<InventoryAdjustmentLine> InventoryAdjustmentLines => Set<InventoryAdjustmentLine>();
+    public DbSet<PhysicalCount> PhysicalCounts => Set<PhysicalCount>();
+    public DbSet<PhysicalCountLine> PhysicalCountLines => Set<PhysicalCountLine>();
+    public DbSet<StockTransfer> StockTransfers => Set<StockTransfer>();
+    public DbSet<StockTransferLine> StockTransferLines => Set<StockTransferLine>();
+    public DbSet<InventoryTransaction> InventoryTransactions => Set<InventoryTransaction>();
 
     /// <summary>
     /// Configures entity mappings and relationships
@@ -92,6 +116,27 @@ public class JerpDbContext : DbContext
         modelBuilder.ApplyConfiguration(new AccountConfiguration());
         modelBuilder.ApplyConfiguration(new JournalEntryConfiguration());
         modelBuilder.ApplyConfiguration(new GeneralLedgerEntryConfiguration());
+        modelBuilder.ApplyConfiguration(new VendorConfiguration());
+        modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+        modelBuilder.ApplyConfiguration(new VendorBillConfiguration());
+        
+        // Apply inventory module configurations
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductBatchConfiguration());
+        modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
+        modelBuilder.ApplyConfiguration(new InventoryLevelConfiguration());
+        modelBuilder.ApplyConfiguration(new PurchaseOrderConfiguration());
+        modelBuilder.ApplyConfiguration(new PurchaseOrderLineConfiguration());
+        modelBuilder.ApplyConfiguration(new StockReceiptConfiguration());
+        modelBuilder.ApplyConfiguration(new StockReceiptLineConfiguration());
+        modelBuilder.ApplyConfiguration(new InventoryAdjustmentConfiguration());
+        modelBuilder.ApplyConfiguration(new InventoryAdjustmentLineConfiguration());
+        modelBuilder.ApplyConfiguration(new PhysicalCountConfiguration());
+        modelBuilder.ApplyConfiguration(new PhysicalCountLineConfiguration());
+        modelBuilder.ApplyConfiguration(new StockTransferConfiguration());
+        modelBuilder.ApplyConfiguration(new StockTransferLineConfiguration());
+        modelBuilder.ApplyConfiguration(new InventoryTransactionConfiguration());
     }
 
     /// <summary>
