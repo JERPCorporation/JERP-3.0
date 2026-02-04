@@ -408,7 +408,7 @@ export const mockInvoices: Invoice[] = [
     dueDate: '2025-02-08',
     amount: 15600,
     paidAmount: 0,
-    status: 'Open',
+    status: 'Sent',
     description: 'Monthly wholesale order',
     invoiceNumber: 'INV-503',
     items: [
@@ -424,7 +424,7 @@ export const mockInvoices: Invoice[] = [
     dueDate: '2025-02-12',
     amount: 9840,
     paidAmount: 0,
-    status: 'Open',
+    status: 'Sent',
     description: 'Organic products',
     invoiceNumber: 'INV-504',
     items: [
@@ -439,7 +439,7 @@ export const mockInvoices: Invoice[] = [
     dueDate: '2025-02-15',
     amount: 18900,
     paidAmount: 0,
-    status: 'Open',
+    status: 'Sent',
     description: 'Premium product order',
     invoiceNumber: 'INV-505',
     items: [
@@ -455,7 +455,7 @@ export const mockInvoices: Invoice[] = [
     dueDate: '2025-02-16',
     amount: 22450,
     paidAmount: 0,
-    status: 'Open',
+    status: 'Sent',
     description: 'Large wholesale order',
     invoiceNumber: 'INV-506',
     items: [
