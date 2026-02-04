@@ -15,6 +15,63 @@ using System.ComponentModel.DataAnnotations;
 namespace JERP.Core.Entities;
 
 /// <summary>
+/// User roles in the system
+/// </summary>
+public enum UserRole
+{
+    /// <summary>
+    /// Super administrator with full system access
+    /// </summary>
+    SuperAdmin = 0,
+
+    /// <summary>
+    /// Company administrator
+    /// </summary>
+    Admin = 1,
+
+    /// <summary>
+    /// Payroll manager with payroll-specific permissions
+    /// </summary>
+    PayrollManager = 2,
+
+    /// <summary>
+    /// HR manager with employee management permissions
+    /// </summary>
+    HRManager = 3,
+
+    /// <summary>
+    /// Accountant with financial permissions
+    /// </summary>
+    Accountant = 4,
+
+    /// <summary>
+    /// Regular employee with limited access
+    /// </summary>
+    Employee = 5
+}
+
+/// <summary>
+/// User account status
+/// </summary>
+public enum UserStatus
+{
+    /// <summary>
+    /// Account is active and can be used
+    /// </summary>
+    Active = 0,
+
+    /// <summary>
+    /// Account is temporarily suspended
+    /// </summary>
+    Suspended = 1,
+
+    /// <summary>
+    /// Account is inactive
+    /// </summary>
+    Inactive = 2
+}
+
+/// <summary>
 /// Represents a system user
 /// </summary>
 public class User : BaseEntity
@@ -61,9 +118,37 @@ public class User : BaseEntity
     public bool IsActive { get; set; } = true;
 
     /// <summary>
+    /// User's role in the system
+    /// </summary>
+    [Required]
+    public UserRole Role { get; set; } = UserRole.Employee;
+
+    /// <summary>
+    /// Current status of the user account
+    /// </summary>
+    [Required]
+    public UserStatus Status { get; set; } = UserStatus.Active;
+
+    /// <summary>
     /// Timestamp of the user's last login
     /// </summary>
     public DateTime? LastLoginAt { get; set; }
+
+    /// <summary>
+    /// IP address of the user's last login
+    /// </summary>
+    [MaxLength(50)]
+    public string? LastLoginIp { get; set; }
+
+    /// <summary>
+    /// Number of consecutive failed login attempts
+    /// </summary>
+    public int FailedLoginAttempts { get; set; } = 0;
+
+    /// <summary>
+    /// Timestamp until which the account is locked out (null if not locked)
+    /// </summary>
+    public DateTime? LockoutUntil { get; set; }
 
     // Navigation properties
     public ICollection<Role> Roles { get; set; } = new List<Role>();

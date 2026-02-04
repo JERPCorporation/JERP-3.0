@@ -20,10 +20,28 @@ namespace JERP.Core.Entities;
 public class AuditLog : BaseEntity
 {
     /// <summary>
+    /// Foreign key to the company this audit log entry belongs to
+    /// </summary>
+    [Required]
+    public Guid CompanyId { get; set; }
+
+    /// <summary>
     /// Foreign key to the user who performed the action
     /// </summary>
     [Required]
     public Guid UserId { get; set; }
+
+    /// <summary>
+    /// Email address of the user who performed the action
+    /// </summary>
+    [MaxLength(255)]
+    public string? UserEmail { get; set; }
+
+    /// <summary>
+    /// Name of the user who performed the action
+    /// </summary>
+    [MaxLength(200)]
+    public string? UserName { get; set; }
 
     /// <summary>
     /// Action performed (e.g., "Create", "Update", "Delete")
@@ -33,17 +51,29 @@ public class AuditLog : BaseEntity
     public string Action { get; set; } = string.Empty;
 
     /// <summary>
-    /// Type of entity that was modified
+    /// Type of entity that was modified (also referred to as Resource)
     /// </summary>
     [Required]
     [MaxLength(100)]
     public string EntityType { get; set; } = string.Empty;
 
     /// <summary>
+    /// Resource type (alias for EntityType for compatibility)
+    /// </summary>
+    [MaxLength(100)]
+    public string? Resource { get; set; }
+
+    /// <summary>
     /// ID of the entity that was modified
     /// </summary>
     [Required]
     public Guid EntityId { get; set; }
+
+    /// <summary>
+    /// Descriptive details about the action performed
+    /// </summary>
+    [MaxLength(1000)]
+    public string? Details { get; set; }
 
     /// <summary>
     /// JSON representation of values before the change
@@ -86,6 +116,13 @@ public class AuditLog : BaseEntity
     [MaxLength(100)]
     public string CurrentHash { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Sequential number for ordering audit log entries within a company
+    /// </summary>
+    [Required]
+    public long SequenceNumber { get; set; }
+
     // Navigation properties
+    public Company Company { get; set; } = null!;
     public User User { get; set; } = null!;
 }

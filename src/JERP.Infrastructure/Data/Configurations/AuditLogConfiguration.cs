@@ -27,8 +27,17 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
 
         builder.HasKey(al => al.Id);
 
+        builder.Property(al => al.CompanyId)
+            .IsRequired();
+
         builder.Property(al => al.UserId)
             .IsRequired();
+
+        builder.Property(al => al.UserEmail)
+            .HasMaxLength(255);
+
+        builder.Property(al => al.UserName)
+            .HasMaxLength(200);
 
         builder.Property(al => al.Action)
             .IsRequired()
@@ -38,8 +47,14 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
             .IsRequired()
             .HasMaxLength(100);
 
+        builder.Property(al => al.Resource)
+            .HasMaxLength(100);
+
         builder.Property(al => al.EntityId)
             .IsRequired();
+
+        builder.Property(al => al.Details)
+            .HasMaxLength(1000);
 
         builder.Property(al => al.OldValues)
             .HasColumnType("jsonb");
@@ -63,7 +78,17 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
             .IsRequired()
             .HasMaxLength(64);
 
+        builder.Property(al => al.SequenceNumber)
+            .IsRequired();
+
         // Indexes
+        builder.HasIndex(al => al.CompanyId);
+
+        builder.HasIndex(al => new { al.CompanyId, al.Timestamp });
+
+        builder.HasIndex(al => new { al.CompanyId, al.SequenceNumber })
+            .IsUnique();
+
         builder.HasIndex(al => al.UserId);
 
         builder.HasIndex(al => al.EntityType);
@@ -73,6 +98,11 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
         builder.HasIndex(al => al.Timestamp);
 
         // Relationships
+        builder.HasOne(al => al.Company)
+            .WithMany()
+            .HasForeignKey(al => al.CompanyId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(al => al.User)
             .WithMany()
             .HasForeignKey(al => al.UserId)
