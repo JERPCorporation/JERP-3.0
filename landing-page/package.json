@@ -1,7 +1,10 @@
 {
   "name": "jerp-landing-page",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": "ninoyerbas",
+  "description": "JERP 3.0 Landing Page - Proprietary Software",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -40,6 +40,8 @@ bld/
 publish/
 dist/
 installer/output/
+.next/
+out/
 
 # Database
 *.db
@@ -55,6 +57,11 @@ appsettings.Development.json
 appsettings.Production.json
 *.pfx
 *.key
+*.pem
+.env
+.env.local
+.env.production
+secrets/
 
 # Temporary files
 tmp/
