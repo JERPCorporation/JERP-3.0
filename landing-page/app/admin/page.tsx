@@ -156,7 +156,7 @@ function UserManagementTable({ users }: { users: typeof mockUsers }) {
                   fontSize: "12px",
                   fontWeight: "500"
                 }}>
-                  {user.role.replace("_", " ").toUpperCase()}
+                  {user.role.replace(/_/g, " ").toUpperCase()}
                 </span>
               </td>
               <td style={{ padding: "16px" }}>
@@ -265,7 +265,7 @@ function AuditLogPanel({ logs }: { logs: typeof mockAuditLogs }) {
                     fontSize: "11px",
                     fontWeight: "500"
                   }}>
-                    {log.action.replace("_", " ").toUpperCase()}
+                    {log.action.replace(/_/g, " ").toUpperCase()}
                   </span>
                 </td>
                 <td style={{ padding: "12px", color: "#94a3b8", fontSize: "13px" }}>{log.resource}</td>
