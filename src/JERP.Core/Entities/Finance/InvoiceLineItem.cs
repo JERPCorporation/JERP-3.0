@@ -1,0 +1,63 @@
+/*
+ * JERP 3.0 - Payroll & ERP System
+ * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * 
+ * This source code is the confidential and proprietary information of ninoyerbas.
+ * Unauthorized copying, modification, distribution, or use is strictly prohibited.
+ * 
+ * For licensing inquiries: licensing@jerp.io
+ */
+
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace JERP.Core.Entities.Finance;
+
+/// <summary>
+/// Represents a line item in a customer invoice
+/// </summary>
+public class InvoiceLineItem : BaseEntity
+{
+    /// <summary>
+    /// Foreign key to the invoice
+    /// </summary>
+    [Required]
+    public Guid InvoiceId { get; set; }
+    
+    /// <summary>
+    /// Foreign key to the revenue account
+    /// </summary>
+    [Required]
+    public Guid AccountId { get; set; }
+    
+    /// <summary>
+    /// Description of the line item
+    /// </summary>
+    [Required]
+    [MaxLength(500)]
+    public string Description { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Quantity
+    /// </summary>
+    [Column(TypeName = "decimal(18,4)")]
+    public decimal Quantity { get; set; }
+    
+    /// <summary>
+    /// Unit price
+    /// </summary>
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal UnitPrice { get; set; }
+    
+    /// <summary>
+    /// Line total amount
+    /// </summary>
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Amount { get; set; }
+    
+    // Navigation properties
+    public CustomerInvoice Invoice { get; set; } = null!;
+    public Account Account { get; set; } = null!;
+}

@@ -17,9 +17,9 @@ using JERP.Core.Enums;
 namespace JERP.Core.Entities.Finance;
 
 /// <summary>
-/// Represents a vendor bill/invoice in accounts payable
+/// Represents a customer invoice in accounts receivable
 /// </summary>
-public class VendorBill : BaseEntity
+public class CustomerInvoice : BaseEntity
 {
     /// <summary>
     /// Foreign key to the company
@@ -28,28 +28,22 @@ public class VendorBill : BaseEntity
     public Guid CompanyId { get; set; }
     
     /// <summary>
-    /// Foreign key to the vendor
+    /// Foreign key to the customer
     /// </summary>
     [Required]
-    public Guid VendorId { get; set; }
+    public Guid CustomerId { get; set; }
     
     /// <summary>
-    /// Bill number (auto-generated)
+    /// Invoice number (auto-generated)
     /// </summary>
     [Required]
     [MaxLength(20)]
-    public string BillNumber { get; set; } = string.Empty;
+    public string InvoiceNumber { get; set; } = string.Empty;
     
     /// <summary>
-    /// Vendor's invoice number
+    /// Invoice date
     /// </summary>
-    [MaxLength(50)]
-    public string? VendorInvoiceNumber { get; set; }
-    
-    /// <summary>
-    /// Bill date
-    /// </summary>
-    public DateTime BillDate { get; set; }
+    public DateTime InvoiceDate { get; set; }
     
     /// <summary>
     /// Due date
@@ -87,12 +81,12 @@ public class VendorBill : BaseEntity
     public decimal AmountRemaining => TotalAmount - AmountPaid;
     
     /// <summary>
-    /// Bill status
+    /// Invoice status
     /// </summary>
-    public BillStatus Status { get; set; } = BillStatus.Draft;
+    public InvoiceStatus Status { get; set; } = InvoiceStatus.Draft;
     
     /// <summary>
-    /// Whether bill is paid
+    /// Whether invoice is paid
     /// </summary>
     public bool IsPaid { get; set; }
     
@@ -114,8 +108,8 @@ public class VendorBill : BaseEntity
     
     // Navigation properties
     public Company Company { get; set; } = null!;
-    public Vendor Vendor { get; set; } = null!;
+    public Customer Customer { get; set; } = null!;
     public JournalEntry? JournalEntry { get; set; }
-    public ICollection<BillLineItem> LineItems { get; set; } = new List<BillLineItem>();
-    public ICollection<BillPayment> Payments { get; set; } = new List<BillPayment>();
+    public ICollection<InvoiceLineItem> LineItems { get; set; } = new List<InvoiceLineItem>();
+    public ICollection<InvoicePayment> Payments { get; set; } = new List<InvoicePayment>();
 }
