@@ -12,6 +12,7 @@
 
 using System.Text.Json;
 using JERP.Core.Entities;
+using JERP.Core.Entities.Finance;
 using JERP.Infrastructure.Data.Configurations;
 using JERP.Infrastructure.Data.Providers;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,11 @@ public class JerpDbContext : DbContext
     public DbSet<Deduction> Deductions => Set<Deduction>();
     public DbSet<ComplianceViolation> ComplianceViolations => Set<ComplianceViolation>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    
+    // Finance module DbSets
+    public DbSet<Account> Accounts => Set<Account>();
+    public DbSet<JournalEntry> JournalEntries => Set<JournalEntry>();
+    public DbSet<GeneralLedgerEntry> GeneralLedgerEntries => Set<GeneralLedgerEntry>();
 
     /// <summary>
     /// Configures entity mappings and relationships
@@ -81,6 +87,11 @@ public class JerpDbContext : DbContext
         modelBuilder.ApplyConfiguration(new DeductionConfiguration());
         modelBuilder.ApplyConfiguration(new ComplianceViolationConfiguration());
         modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
+        
+        // Apply finance module configurations
+        modelBuilder.ApplyConfiguration(new AccountConfiguration());
+        modelBuilder.ApplyConfiguration(new JournalEntryConfiguration());
+        modelBuilder.ApplyConfiguration(new GeneralLedgerEntryConfiguration());
     }
 
     /// <summary>

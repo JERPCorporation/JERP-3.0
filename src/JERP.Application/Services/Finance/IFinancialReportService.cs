@@ -1,0 +1,31 @@
+/*
+ * JERP 3.0 - Payroll & ERP System
+ * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * 
+ * This source code is the confidential and proprietary information of ninoyerbas.
+ * Unauthorized copying, modification, distribution, or use is strictly prohibited.
+ * 
+ * For licensing inquiries: licensing@jerp.io
+ */
+
+using JERP.Application.DTOs.Finance;
+
+namespace JERP.Application.Services.Finance;
+
+/// <summary>
+/// Interface for generating financial reports
+/// </summary>
+public interface IFinancialReportService
+{
+    /// <summary>
+    /// Generates a Profit and Loss (Income Statement) report
+    /// </summary>
+    Task<ProfitAndLossReportDto> GenerateProfitAndLossReportAsync(Guid companyId, DateTime startDate, DateTime endDate);
+
+    /// <summary>
+    /// Generates a Balance Sheet report
+    /// </summary>
+    Task<BalanceSheetReportDto> GenerateBalanceSheetReportAsync(Guid companyId, DateTime asOfDate);
+}
