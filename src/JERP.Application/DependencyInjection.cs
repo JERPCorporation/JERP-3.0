@@ -14,6 +14,7 @@ using FluentValidation;
 using JERP.Application.Authorization;
 using JERP.Application.Services.Auth;
 using JERP.Application.Services.Employees;
+using JERP.Application.Services.Finance;
 using JERP.Application.Services.Payroll;
 using JERP.Application.Services.Payroll.Pdf;
 using JERP.Application.Services.Payroll.Tax;
@@ -44,6 +45,11 @@ public static class DependencyInjection
         services.AddScoped<IPayrollService, PayrollService>();
         services.AddScoped<ITaxCalculationService, TaxCalculationService>();
         services.AddScoped<IPdfGenerationService, PdfGenerationService>();
+
+        // Register Finance services
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IGeneralLedgerService, GeneralLedgerService>();
+        services.AddScoped<IPayrollToFinanceService, PayrollToFinanceService>();
 
         // Register authorization handlers
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
