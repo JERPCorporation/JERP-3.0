@@ -11,7 +11,6 @@
  */
 
 using JERP.Application.DTOs.Payroll;
-using JERP.Application.Services.Finance;
 using JERP.Application.Services.Payroll.Tax;
 using JERP.Compliance.Services;
 using JERP.Core.Entities;
@@ -30,21 +29,18 @@ public class PayrollService : IPayrollService
     private readonly JerpDbContext _context;
     private readonly ITaxCalculationService _taxCalculationService;
     private readonly IComplianceEngine _complianceEngine;
-    private readonly IPayrollToFinanceService? _payrollToFinanceService;
     private readonly ILogger<PayrollService> _logger;
 
     public PayrollService(
         JerpDbContext context,
         ITaxCalculationService taxCalculationService,
         IComplianceEngine complianceEngine,
-        ILogger<PayrollService> logger,
-        IPayrollToFinanceService? payrollToFinanceService = null)
+        ILogger<PayrollService> logger)
     {
         _context = context;
         _taxCalculationService = taxCalculationService;
         _complianceEngine = complianceEngine;
         _logger = logger;
-        _payrollToFinanceService = payrollToFinanceService;
     }
 
     /// <inheritdoc/>
@@ -181,22 +177,6 @@ public class PayrollService : IPayrollService
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Payroll approved: {PayPeriodId}", payPeriodId);
-
-        // Automatically post to general ledger if finance service is available
-        if (_payrollToFinanceService != null)
-        {
-            try
-            {
-                _logger.LogInformation("Posting payroll to general ledger: {PayPeriodId}", payPeriodId);
-                await _payrollToFinanceService.PostPayrollToGeneralLedgerAsync(payPeriodId);
-                _logger.LogInformation("Payroll successfully posted to general ledger: {PayPeriodId}", payPeriodId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to post payroll to general ledger: {PayPeriodId}", payPeriodId);
-                // Don't fail the approval if GL posting fails - log and continue
-            }
-        }
 
         return MapPayPeriodToDto(payPeriod);
     }
