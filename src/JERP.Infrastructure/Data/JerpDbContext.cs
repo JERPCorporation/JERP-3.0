@@ -12,9 +12,7 @@
 
 using System.Text.Json;
 using JERP.Core.Entities;
-using JERP.Core.Entities.Finance;
 using JERP.Infrastructure.Data.Configurations;
-using JERP.Infrastructure.Data.Configurations.Finance;
 using JERP.Infrastructure.Data.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -58,22 +56,6 @@ public class JerpDbContext : DbContext
     public DbSet<ComplianceViolation> ComplianceViolations => Set<ComplianceViolation>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
-    // Finance DbSets
-    public DbSet<Account> Accounts => Set<Account>();
-    public DbSet<JournalEntry> JournalEntries => Set<JournalEntry>();
-    public DbSet<GeneralLedgerEntry> GeneralLedgerEntries => Set<GeneralLedgerEntry>();
-    public DbSet<Vendor> Vendors => Set<Vendor>();
-    public DbSet<Customer> Customers => Set<Customer>();
-    public DbSet<Bill> Bills => Set<Bill>();
-    public DbSet<BillLineItem> BillLineItems => Set<BillLineItem>();
-    public DbSet<BillPayment> BillPayments => Set<BillPayment>();
-    public DbSet<Invoice> Invoices => Set<Invoice>();
-    public DbSet<InvoiceLineItem> InvoiceLineItems => Set<InvoiceLineItem>();
-    public DbSet<InvoicePayment> InvoicePayments => Set<InvoicePayment>();
-    public DbSet<Payment> Payments => Set<Payment>();
-    public DbSet<BankAccount> BankAccounts => Set<BankAccount>();
-    public DbSet<CashReconciliation> CashReconciliations => Set<CashReconciliation>();
-
     /// <summary>
     /// Configures entity mappings and relationships
     /// </summary>
@@ -99,22 +81,6 @@ public class JerpDbContext : DbContext
         modelBuilder.ApplyConfiguration(new DeductionConfiguration());
         modelBuilder.ApplyConfiguration(new ComplianceViolationConfiguration());
         modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
-
-        // Apply Finance entity configurations
-        modelBuilder.ApplyConfiguration(new AccountConfiguration());
-        modelBuilder.ApplyConfiguration(new JournalEntryConfiguration());
-        modelBuilder.ApplyConfiguration(new GeneralLedgerEntryConfiguration());
-        modelBuilder.ApplyConfiguration(new VendorConfiguration());
-        modelBuilder.ApplyConfiguration(new CustomerConfiguration());
-        modelBuilder.ApplyConfiguration(new BillConfiguration());
-        modelBuilder.ApplyConfiguration(new BillLineItemConfiguration());
-        modelBuilder.ApplyConfiguration(new BillPaymentConfiguration());
-        modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
-        modelBuilder.ApplyConfiguration(new InvoiceLineItemConfiguration());
-        modelBuilder.ApplyConfiguration(new InvoicePaymentConfiguration());
-        modelBuilder.ApplyConfiguration(new PaymentConfiguration());
-        modelBuilder.ApplyConfiguration(new BankAccountConfiguration());
-        modelBuilder.ApplyConfiguration(new CashReconciliationConfiguration());
     }
 
     /// <summary>
