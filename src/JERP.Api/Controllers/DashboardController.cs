@@ -12,6 +12,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using JERP.Application.Services.Reports;
 using JERP.Infrastructure.Data;
 using JERP.Core.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -26,14 +27,41 @@ namespace JERP.Api.Controllers;
 public class DashboardController : BaseApiController
 {
     private readonly JerpDbContext _context;
+    private readonly IDashboardService _dashboardService;
     private readonly ILogger<DashboardController> _logger;
 
     public DashboardController(
         JerpDbContext context,
+        IDashboardService dashboardService,
         ILogger<DashboardController> logger)
     {
         _context = context;
+        _dashboardService = dashboardService;
         _logger = logger;
+    }
+
+    /// <summary>
+    /// Get comprehensive dashboard KPIs
+    /// </summary>
+    [HttpGet("kpis")]
+    public async Task<IActionResult> GetKPIs([FromQuery] Guid companyId, [FromQuery] DateTime? asOfDate = null)
+    {
+        var kpis = await _dashboardService.GetDashboardKPIsAsync(companyId, asOfDate);
+        
+        _logger.LogInformation("Retrieved dashboard KPIs for company {CompanyId}", companyId);
+        
+        return Ok(kpis);
+    }
+
+    /// <summary>
+    /// Get alerts and notifications
+    /// </summary>
+    [HttpGet("alerts")]
+    public async Task<IActionResult> GetAlerts([FromQuery] Guid companyId)
+    {
+        var alerts = await _dashboardService.GetAlertsAsync(companyId);
+        
+        return Ok(alerts);
     }
 
     /// <summary>
