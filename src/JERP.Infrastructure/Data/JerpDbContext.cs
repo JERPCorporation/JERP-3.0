@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using JERP.Core.Entities;
 using JERP.Core.Entities.Finance;
 using JERP.Core.Entities.Inventory;
+using JERP.Core.Entities.SalesOrders;
 
 namespace JERP.Infrastructure.Data
 {
@@ -65,6 +66,14 @@ namespace JERP.Infrastructure.Data
         public DbSet<StockTransfer> StockTransfers => Set<StockTransfer>();
         public DbSet<StockTransferLine> StockTransferLines => Set<StockTransferLine>();
         public DbSet<InventoryTransaction> InventoryTransactions => Set<InventoryTransaction>();
+        
+        // DbSets - Sales Orders
+        public DbSet<SalesOrder> SalesOrders => Set<SalesOrder>();
+        public DbSet<SalesOrderLine> SalesOrderLines => Set<SalesOrderLine>();
+        public DbSet<SOShipment> SOShipments => Set<SOShipment>();
+        public DbSet<SOShipmentLine> SOShipmentLines => Set<SOShipmentLine>();
+        public DbSet<SalesReturn> SalesReturns => Set<SalesReturn>();
+        public DbSet<SalesReturnLine> SalesReturnLines => Set<SalesReturnLine>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
