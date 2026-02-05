@@ -98,6 +98,19 @@
                             </Style>
                         </Button.Style>
                     </Button>
+
+                    <Button Content="Finance" Height="45" HorizontalContentAlignment="Left" 
+                            Command="{Binding ShowFinanceCommand}" Margin="0,2">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMenuItem}" Value="Finance">
+                                        <Setter Property="Background" Value="{DynamicResource SystemControlHighlightAccentBrush}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
 
                 <!-- Logout Button -->

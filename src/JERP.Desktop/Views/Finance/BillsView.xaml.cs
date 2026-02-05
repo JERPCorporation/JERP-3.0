@@ -15,7 +15,7 @@ using JERP.Desktop.ViewModels.Finance;
 
 namespace JERP.Desktop.Views.Finance;
 
-public partial class BillsView : UserControl
+public partial class BillsView : System.Windows.Controls.UserControl
 {
     public BillsView(BillsViewModel billsViewModel)
     {

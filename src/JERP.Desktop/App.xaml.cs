@@ -16,7 +16,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using JERP.Desktop.Services;
 using JERP.Desktop.ViewModels;
+using JERP.Desktop.ViewModels.Finance;
 using JERP.Desktop.Views;
+using JERP.Desktop.Views.Finance;
 
 namespace JERP.Desktop;
 
@@ -67,6 +69,15 @@ public partial class App : Application
         services.AddTransient<TimesheetsViewModel>();
         services.AddTransient<PayrollViewModel>();
         services.AddTransient<ComplianceViewModel>();
+        
+        // Finance ViewModels
+        services.AddTransient<FinanceViewModel>();
+        services.AddTransient<ChartOfAccountsViewModel>();
+        services.AddTransient<JournalEntriesViewModel>();
+        services.AddTransient<VendorsViewModel>();
+        services.AddTransient<BillsViewModel>();
+        services.AddTransient<CustomersViewModel>();
+        services.AddTransient<InvoicesViewModel>();
 
         services.AddTransient<LoginWindow>();
         services.AddTransient<MainWindow>();
@@ -75,5 +86,14 @@ public partial class App : Application
         services.AddTransient<TimesheetsView>();
         services.AddTransient<PayrollView>();
         services.AddTransient<ComplianceView>();
+        
+        // Finance Views
+        services.AddTransient<FinanceView>();
+        services.AddTransient<ChartOfAccountsView>();
+        services.AddTransient<JournalEntriesView>();
+        services.AddTransient<VendorsView>();
+        services.AddTransient<BillsView>();
+        services.AddTransient<CustomersView>();
+        services.AddTransient<InvoicesView>();
     }
 }

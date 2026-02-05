@@ -24,25 +24,25 @@
 
         <TextBlock Grid.Row="0" Text="Finance" FontSize="28" FontWeight="Bold" Margin="0,0,0,20"/>
 
-        <ui:TabControl Grid.Row="1">
-            <ui:TabItem Header="Chart of Accounts">
+        <TabControl Grid.Row="1">
+            <TabItem Header="Chart of Accounts">
                 <local:ChartOfAccountsView/>
-            </ui:TabItem>
-            <ui:TabItem Header="Journal Entries">
+            </TabItem>
+            <TabItem Header="Journal Entries">
                 <local:JournalEntriesView/>
-            </ui:TabItem>
-            <ui:TabItem Header="Vendors">
+            </TabItem>
+            <TabItem Header="Vendors">
                 <local:VendorsView/>
-            </ui:TabItem>
-            <ui:TabItem Header="Bills">
+            </TabItem>
+            <TabItem Header="Bills">
                 <local:BillsView/>
-            </ui:TabItem>
-            <ui:TabItem Header="Customers">
+            </TabItem>
+            <TabItem Header="Customers">
                 <local:CustomersView/>
-            </ui:TabItem>
-            <ui:TabItem Header="Invoices">
+            </TabItem>
+            <TabItem Header="Invoices">
                 <local:InvoicesView/>
-            </ui:TabItem>
-        </ui:TabControl>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

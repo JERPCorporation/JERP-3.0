@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.Input;
 using JERP.Application.DTOs;
 using JERP.Desktop.Services;
 using JERP.Desktop.Views;
+using JERP.Desktop.Views.Finance;
 
 namespace JERP.Desktop.ViewModels;
 
@@ -83,6 +84,14 @@ public partial class MainViewModel : ViewModelBase
         SelectedMenuItem = "Compliance";
         var complianceView = _serviceProvider.GetService(typeof(ComplianceView)) as ComplianceView;
         CurrentView = complianceView;
+    }
+
+    [RelayCommand]
+    private void ShowFinance()
+    {
+        SelectedMenuItem = "Finance";
+        var financeView = _serviceProvider.GetService(typeof(FinanceView)) as FinanceView;
+        CurrentView = financeView;
     }
 
     [RelayCommand]

@@ -15,7 +15,7 @@ using JERP.Desktop.ViewModels.Finance;
 
 namespace JERP.Desktop.Views.Finance;
 
-public partial class ChartOfAccountsView : UserControl
+public partial class ChartOfAccountsView : System.Windows.Controls.UserControl
 {
     public ChartOfAccountsView(ChartOfAccountsViewModel chartViewModel)
     {

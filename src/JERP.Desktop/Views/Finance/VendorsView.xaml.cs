@@ -15,7 +15,7 @@ using JERP.Desktop.ViewModels.Finance;
 
 namespace JERP.Desktop.Views.Finance;
 
-public partial class VendorsView : UserControl
+public partial class VendorsView : System.Windows.Controls.UserControl
 {
     public VendorsView(VendorsViewModel vendorsViewModel)
     {

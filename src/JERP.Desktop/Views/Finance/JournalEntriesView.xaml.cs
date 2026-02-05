@@ -15,7 +15,7 @@ using JERP.Desktop.ViewModels.Finance;
 
 namespace JERP.Desktop.Views.Finance;
 
-public partial class JournalEntriesView : UserControl
+public partial class JournalEntriesView : System.Windows.Controls.UserControl
 {
     public JournalEntriesView(JournalEntriesViewModel journalViewModel)
     {
