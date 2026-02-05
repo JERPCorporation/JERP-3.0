@@ -39,7 +39,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
             .IsRequired()
             .HasConversion<string>();
 
-builder.Property(a => a.Balance)
+        builder.Property(a => a.Balance)
             .HasPrecision(18, 2);
 
         builder.Property(a => a.TaxCategory)
