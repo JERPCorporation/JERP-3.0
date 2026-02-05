@@ -1,0 +1,916 @@
+{
+  "code": "construction",
+  "name": "Construction & Contracting",
+  "description": "Tailored for contractors with job costing, construction in progress, and progress billing",
+  "industry": "Construction",
+  "accountCount": 90,
+  "breakdown": {
+    "assets": 22,
+    "liabilities": 15,
+    "equity": 5,
+    "revenue": 13,
+    "expenses": 35
+  },
+  "accounts": [
+    {
+      "accountNumber": "1000",
+      "accountName": "Cash in Bank",
+      "type": "Asset",
+      "fasbTopicCode": "305",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 305-10",
+      "normalBalance": "Debit",
+      "description": "Primary operating bank account"
+    },
+    {
+      "accountNumber": "1010",
+      "accountName": "Payroll Account",
+      "type": "Asset",
+      "fasbTopicCode": "305",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 305-10",
+      "normalBalance": "Debit",
+      "description": "Dedicated payroll bank account"
+    },
+    {
+      "accountNumber": "1020",
+      "accountName": "Petty Cash",
+      "type": "Asset",
+      "fasbTopicCode": "305",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 305-10",
+      "normalBalance": "Debit",
+      "description": "Small cash fund for job sites"
+    },
+    {
+      "accountNumber": "1100",
+      "accountName": "Accounts Receivable",
+      "type": "Asset",
+      "fasbTopicCode": "310",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 310-10",
+      "normalBalance": "Debit",
+      "description": "Money owed by customers"
+    },
+    {
+      "accountNumber": "1110",
+      "accountName": "Retainage Receivable",
+      "type": "Asset",
+      "fasbTopicCode": "310",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 310-10",
+      "normalBalance": "Debit",
+      "description": "Amounts held back by customers until completion"
+    },
+    {
+      "accountNumber": "1120",
+      "accountName": "Allowance for Doubtful Accounts",
+      "type": "Asset",
+      "fasbTopicCode": "310",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 310-10",
+      "normalBalance": "Credit",
+      "description": "Estimated uncollectible receivables"
+    },
+    {
+      "accountNumber": "1200",
+      "accountName": "Unbilled Receivables",
+      "type": "Asset",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Debit",
+      "description": "Work completed but not yet billed"
+    },
+    {
+      "accountNumber": "1300",
+      "accountName": "Materials Inventory",
+      "type": "Asset",
+      "fasbTopicCode": "330",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 330-10",
+      "normalBalance": "Debit",
+      "description": "Construction materials on hand"
+    },
+    {
+      "accountNumber": "1400",
+      "accountName": "Construction in Progress",
+      "type": "Asset",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Job costs accumulated on active projects"
+    },
+    {
+      "accountNumber": "1500",
+      "accountName": "Prepaid Expenses",
+      "type": "Asset",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Expenses paid in advance"
+    },
+    {
+      "accountNumber": "1510",
+      "accountName": "Prepaid Insurance",
+      "type": "Asset",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Insurance premiums paid in advance"
+    },
+    {
+      "accountNumber": "1600",
+      "accountName": "Land",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Debit",
+      "description": "Land owned by the company"
+    },
+    {
+      "accountNumber": "1700",
+      "accountName": "Buildings",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Debit",
+      "description": "Office and warehouse buildings"
+    },
+    {
+      "accountNumber": "1710",
+      "accountName": "Accumulated Depreciation - Buildings",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Credit",
+      "description": "Accumulated depreciation on buildings"
+    },
+    {
+      "accountNumber": "1800",
+      "accountName": "Construction Equipment",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Debit",
+      "description": "Heavy equipment and machinery"
+    },
+    {
+      "accountNumber": "1810",
+      "accountName": "Accumulated Depreciation - Equipment",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Credit",
+      "description": "Accumulated depreciation on equipment"
+    },
+    {
+      "accountNumber": "1900",
+      "accountName": "Vehicles & Trucks",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Debit",
+      "description": "Company vehicles and trucks"
+    },
+    {
+      "accountNumber": "1910",
+      "accountName": "Accumulated Depreciation - Vehicles",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Credit",
+      "description": "Accumulated depreciation on vehicles"
+    },
+    {
+      "accountNumber": "1950",
+      "accountName": "Tools & Small Equipment",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Debit",
+      "description": "Hand tools and small equipment"
+    },
+    {
+      "accountNumber": "1960",
+      "accountName": "Office Equipment",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Debit",
+      "description": "Office furniture and computers"
+    },
+    {
+      "accountNumber": "1970",
+      "accountName": "Accumulated Depreciation - Office Equipment",
+      "type": "Asset",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Credit",
+      "description": "Accumulated depreciation on office equipment"
+    },
+    {
+      "accountNumber": "1980",
+      "accountName": "Security Deposits",
+      "type": "Asset",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Lease and utility deposits"
+    },
+    {
+      "accountNumber": "2000",
+      "accountName": "Accounts Payable",
+      "type": "Liability",
+      "fasbTopicCode": "405",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 405-10",
+      "normalBalance": "Credit",
+      "description": "Money owed to suppliers"
+    },
+    {
+      "accountNumber": "2010",
+      "accountName": "Subcontractors Payable",
+      "type": "Liability",
+      "fasbTopicCode": "405",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 405-10",
+      "normalBalance": "Credit",
+      "description": "Amounts owed to subcontractors"
+    },
+    {
+      "accountNumber": "2020",
+      "accountName": "Credit Card Payable",
+      "type": "Liability",
+      "fasbTopicCode": "405",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 405-10",
+      "normalBalance": "Credit",
+      "description": "Business credit card balances"
+    },
+    {
+      "accountNumber": "2100",
+      "accountName": "Accrued Expenses",
+      "type": "Liability",
+      "fasbTopicCode": "405",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 405-10",
+      "normalBalance": "Credit",
+      "description": "Expenses incurred but not yet paid"
+    },
+    {
+      "accountNumber": "2110",
+      "accountName": "Accrued Payroll",
+      "type": "Liability",
+      "fasbTopicCode": "405",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 405-10",
+      "normalBalance": "Credit",
+      "description": "Wages owed to employees"
+    },
+    {
+      "accountNumber": "2120",
+      "accountName": "Union Benefits Payable",
+      "type": "Liability",
+      "fasbTopicCode": "405",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 405-10",
+      "normalBalance": "Credit",
+      "description": "Union benefits and dues owed"
+    },
+    {
+      "accountNumber": "2200",
+      "accountName": "Sales Tax Payable",
+      "type": "Liability",
+      "fasbTopicCode": "405",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 405-10",
+      "normalBalance": "Credit",
+      "description": "Sales tax collected"
+    },
+    {
+      "accountNumber": "2210",
+      "accountName": "Payroll Taxes Payable",
+      "type": "Liability",
+      "fasbTopicCode": "405",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 405-10",
+      "normalBalance": "Credit",
+      "description": "Employer payroll taxes owed"
+    },
+    {
+      "accountNumber": "2300",
+      "accountName": "Billings in Excess of Costs",
+      "type": "Liability",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Progress billings exceeding costs incurred"
+    },
+    {
+      "accountNumber": "2310",
+      "accountName": "Customer Deposits",
+      "type": "Liability",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Deposits received from customers"
+    },
+    {
+      "accountNumber": "2400",
+      "accountName": "Retainage Payable",
+      "type": "Liability",
+      "fasbTopicCode": "405",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 405-10",
+      "normalBalance": "Credit",
+      "description": "Amounts withheld from subcontractors"
+    },
+    {
+      "accountNumber": "2500",
+      "accountName": "Short-term Loans",
+      "type": "Liability",
+      "fasbTopicCode": "470",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 470-10",
+      "normalBalance": "Credit",
+      "description": "Loans due within one year"
+    },
+    {
+      "accountNumber": "2600",
+      "accountName": "Long-term Loans",
+      "type": "Liability",
+      "fasbTopicCode": "470",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 470-10",
+      "normalBalance": "Credit",
+      "description": "Loans due after one year"
+    },
+    {
+      "accountNumber": "2700",
+      "accountName": "Equipment Financing",
+      "type": "Liability",
+      "fasbTopicCode": "470",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 470-10",
+      "normalBalance": "Credit",
+      "description": "Equipment loans and leases"
+    },
+    {
+      "accountNumber": "2800",
+      "accountName": "Line of Credit",
+      "type": "Liability",
+      "fasbTopicCode": "470",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 470-10",
+      "normalBalance": "Credit",
+      "description": "Revolving line of credit"
+    },
+    {
+      "accountNumber": "2900",
+      "accountName": "Notes Payable",
+      "type": "Liability",
+      "fasbTopicCode": "470",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 470-10",
+      "normalBalance": "Credit",
+      "description": "Promissory notes payable"
+    },
+    {
+      "accountNumber": "3000",
+      "accountName": "Owner's Equity",
+      "type": "Equity",
+      "fasbTopicCode": "505",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 505-10",
+      "normalBalance": "Credit",
+      "description": "Owner's investment in the business"
+    },
+    {
+      "accountNumber": "3010",
+      "accountName": "Owner's Drawings",
+      "type": "Equity",
+      "fasbTopicCode": "505",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 505-10",
+      "normalBalance": "Debit",
+      "description": "Owner withdrawals from the business"
+    },
+    {
+      "accountNumber": "3100",
+      "accountName": "Retained Earnings",
+      "type": "Equity",
+      "fasbTopicCode": "505",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 505-10",
+      "normalBalance": "Credit",
+      "description": "Accumulated business profits"
+    },
+    {
+      "accountNumber": "3200",
+      "accountName": "Current Year Earnings",
+      "type": "Equity",
+      "fasbTopicCode": "505",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 505-10",
+      "normalBalance": "Credit",
+      "description": "Current year profit or loss"
+    },
+    {
+      "accountNumber": "3300",
+      "accountName": "Common Stock",
+      "type": "Equity",
+      "fasbTopicCode": "505",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 505-10",
+      "normalBalance": "Credit",
+      "description": "Common stock issued"
+    },
+    {
+      "accountNumber": "4000",
+      "accountName": "Contract Revenue",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Revenue from construction contracts"
+    },
+    {
+      "accountNumber": "4010",
+      "accountName": "Residential Construction Revenue",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Revenue from residential projects"
+    },
+    {
+      "accountNumber": "4020",
+      "accountName": "Commercial Construction Revenue",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Revenue from commercial projects"
+    },
+    {
+      "accountNumber": "4030",
+      "accountName": "Remodeling Revenue",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Revenue from remodeling work"
+    },
+    {
+      "accountNumber": "4100",
+      "accountName": "Change Order Revenue",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Additional revenue from contract changes"
+    },
+    {
+      "accountNumber": "4200",
+      "accountName": "Service & Repair Revenue",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Revenue from repair services"
+    },
+    {
+      "accountNumber": "4300",
+      "accountName": "Equipment Rental Income",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Income from equipment rentals"
+    },
+    {
+      "accountNumber": "4400",
+      "accountName": "Materials Markup",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Markup on materials sold to customers"
+    },
+    {
+      "accountNumber": "4500",
+      "accountName": "Other Income",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Miscellaneous income"
+    },
+    {
+      "accountNumber": "4600",
+      "accountName": "Interest Income",
+      "type": "Revenue",
+      "fasbTopicCode": "835",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 835-10",
+      "normalBalance": "Credit",
+      "description": "Interest earned"
+    },
+    {
+      "accountNumber": "4700",
+      "accountName": "Gain on Sale of Equipment",
+      "type": "Revenue",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Credit",
+      "description": "Gains from equipment sales"
+    },
+    {
+      "accountNumber": "4800",
+      "accountName": "Insurance Claim Proceeds",
+      "type": "Revenue",
+      "fasbTopicCode": "606",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 606-10",
+      "normalBalance": "Credit",
+      "description": "Insurance claim recoveries"
+    },
+    {
+      "accountNumber": "5000",
+      "accountName": "Direct Job Costs",
+      "type": "Expense",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Direct costs assigned to jobs"
+    },
+    {
+      "accountNumber": "5010",
+      "accountName": "Direct Labor",
+      "type": "Expense",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Direct labor costs on jobs"
+    },
+    {
+      "accountNumber": "5020",
+      "accountName": "Direct Materials",
+      "type": "Expense",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Materials used on jobs"
+    },
+    {
+      "accountNumber": "5030",
+      "accountName": "Subcontractor Costs",
+      "type": "Expense",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Payments to subcontractors"
+    },
+    {
+      "accountNumber": "5040",
+      "accountName": "Equipment Rental - Jobs",
+      "type": "Expense",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Equipment rental for specific jobs"
+    },
+    {
+      "accountNumber": "5050",
+      "accountName": "Job Permits & Fees",
+      "type": "Expense",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Permits and inspection fees per job"
+    },
+    {
+      "accountNumber": "5060",
+      "accountName": "Job Site Utilities",
+      "type": "Expense",
+      "fasbTopicCode": "340",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 340-10",
+      "normalBalance": "Debit",
+      "description": "Temporary utilities for job sites"
+    },
+    {
+      "accountNumber": "5100",
+      "accountName": "Field Supervision",
+      "type": "Expense",
+      "fasbTopicCode": "710",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 710-10",
+      "normalBalance": "Debit",
+      "description": "Job site supervisor salaries"
+    },
+    {
+      "accountNumber": "5110",
+      "accountName": "Administrative Salaries",
+      "type": "Expense",
+      "fasbTopicCode": "710",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 710-10",
+      "normalBalance": "Debit",
+      "description": "Office staff salaries"
+    },
+    {
+      "accountNumber": "5120",
+      "accountName": "Payroll Taxes",
+      "type": "Expense",
+      "fasbTopicCode": "710",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 710-10",
+      "normalBalance": "Debit",
+      "description": "Employer payroll tax expenses"
+    },
+    {
+      "accountNumber": "5130",
+      "accountName": "Employee Benefits",
+      "type": "Expense",
+      "fasbTopicCode": "710",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 710-10",
+      "normalBalance": "Debit",
+      "description": "Health insurance and benefits"
+    },
+    {
+      "accountNumber": "5140",
+      "accountName": "Workers Compensation",
+      "type": "Expense",
+      "fasbTopicCode": "710",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 710-10",
+      "normalBalance": "Debit",
+      "description": "Workers compensation insurance"
+    },
+    {
+      "accountNumber": "5200",
+      "accountName": "Equipment Operations",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Equipment operating costs"
+    },
+    {
+      "accountNumber": "5210",
+      "accountName": "Equipment Maintenance & Repairs",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Equipment maintenance costs"
+    },
+    {
+      "accountNumber": "5220",
+      "accountName": "Fuel & Oil",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Fuel and oil for equipment and vehicles"
+    },
+    {
+      "accountNumber": "5230",
+      "accountName": "Small Tools & Supplies",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Small tools and consumables"
+    },
+    {
+      "accountNumber": "5300",
+      "accountName": "Vehicle Expenses",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Vehicle maintenance and fuel"
+    },
+    {
+      "accountNumber": "5400",
+      "accountName": "Office Rent",
+      "type": "Expense",
+      "fasbTopicCode": "842",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 842-10",
+      "normalBalance": "Debit",
+      "description": "Office and yard rent"
+    },
+    {
+      "accountNumber": "5500",
+      "accountName": "Office Utilities",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Office utilities"
+    },
+    {
+      "accountNumber": "5600",
+      "accountName": "Office Supplies",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Office supplies and materials"
+    },
+    {
+      "accountNumber": "5700",
+      "accountName": "Advertising & Marketing",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Marketing and promotional expenses"
+    },
+    {
+      "accountNumber": "5800",
+      "accountName": "Estimating Costs",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Bid preparation and estimating costs"
+    },
+    {
+      "accountNumber": "5900",
+      "accountName": "Insurance Expense",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Business insurance premiums"
+    },
+    {
+      "accountNumber": "6000",
+      "accountName": "Bonding Costs",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Performance and payment bond costs"
+    },
+    {
+      "accountNumber": "6100",
+      "accountName": "Licenses & Permits",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Business licenses and permits"
+    },
+    {
+      "accountNumber": "6200",
+      "accountName": "Professional Fees",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Legal and accounting fees"
+    },
+    {
+      "accountNumber": "6300",
+      "accountName": "Depreciation Expense",
+      "type": "Expense",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Debit",
+      "description": "Depreciation on fixed assets"
+    },
+    {
+      "accountNumber": "6400",
+      "accountName": "Safety Equipment & Training",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Safety equipment and training costs"
+    },
+    {
+      "accountNumber": "6500",
+      "accountName": "Telecommunications",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Phone and internet services"
+    },
+    {
+      "accountNumber": "6600",
+      "accountName": "Bank Charges",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Banking fees"
+    },
+    {
+      "accountNumber": "6700",
+      "accountName": "Interest Expense",
+      "type": "Expense",
+      "fasbTopicCode": "835",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 835-10",
+      "normalBalance": "Debit",
+      "description": "Interest on loans and debt"
+    },
+    {
+      "accountNumber": "6800",
+      "accountName": "Bad Debt Expense",
+      "type": "Expense",
+      "fasbTopicCode": "310",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 310-10",
+      "normalBalance": "Debit",
+      "description": "Uncollectible accounts expense"
+    },
+    {
+      "accountNumber": "6900",
+      "accountName": "Loss on Sale of Equipment",
+      "type": "Expense",
+      "fasbTopicCode": "360",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 360-10",
+      "normalBalance": "Debit",
+      "description": "Losses from equipment sales"
+    },
+    {
+      "accountNumber": "7000",
+      "accountName": "Printing & Postage",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Printing and mailing costs"
+    },
+    {
+      "accountNumber": "7100",
+      "accountName": "Miscellaneous Expense",
+      "type": "Expense",
+      "fasbTopicCode": "720",
+      "fasbSubtopicCode": "10",
+      "fasbReference": "ASC 720-10",
+      "normalBalance": "Debit",
+      "description": "Other miscellaneous expenses"
+    }
+  ]
+}

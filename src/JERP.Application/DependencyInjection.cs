@@ -21,6 +21,7 @@ using JERP.Application.Services.Payroll.Tax;
 using JERP.Application.Services.Reports;
 using JERP.Application.Services.SalesOrders;
 using JERP.Application.Services.PurchaseOrders;
+using JERP.Application.Services.Finance;
 using JERP.Application.Services.Security;
 using JERP.Application.Services.Timesheets;
 using Microsoft.AspNetCore.Authorization;
@@ -68,8 +69,11 @@ public static class DependencyInjection
         services.AddScoped<ISOShipmentService, SOShipmentService>();
         services.AddScoped<ISalesReturnService, SalesReturnService>();
 
+        // Register Finance services
+        services.AddScoped<Services.Finance.IAccountTemplateService, Services.Finance.AccountTemplateService>();
+
         // Register report services
-        services.AddScoped<IFinancialReportService, FinancialReportService>();
+        services.AddScoped<Services.Reports.IFinancialReportService, Services.Reports.FinancialReportService>();
         services.AddScoped<IInventoryReportService, InventoryReportService>();
         services.AddScoped<ISalesReportService, SalesReportService>();
         services.AddScoped<IPayrollReportService, PayrollReportService>();

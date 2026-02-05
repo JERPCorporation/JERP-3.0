@@ -27,4 +27,8 @@
     <ProjectReference Include="..\JERP.Compliance\JERP.Compliance.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Data\Templates\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
