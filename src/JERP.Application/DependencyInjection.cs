@@ -18,6 +18,7 @@ using JERP.Application.Services.Inventory;
 using JERP.Application.Services.Payroll;
 using JERP.Application.Services.Payroll.Pdf;
 using JERP.Application.Services.Payroll.Tax;
+using JERP.Application.Services.Reports;
 using JERP.Application.Services.SalesOrders;
 using JERP.Application.Services.PurchaseOrders;
 using JERP.Application.Services.Security;
@@ -66,6 +67,14 @@ public static class DependencyInjection
         services.AddScoped<ISalesOrderService, SalesOrderService>();
         services.AddScoped<ISOShipmentService, SOShipmentService>();
         services.AddScoped<ISalesReturnService, SalesReturnService>();
+
+        // Register report services
+        services.AddScoped<IFinancialReportService, FinancialReportService>();
+        services.AddScoped<IInventoryReportService, InventoryReportService>();
+        services.AddScoped<ISalesReportService, SalesReportService>();
+        services.AddScoped<IPayrollReportService, PayrollReportService>();
+        services.AddScoped<IComplianceReportService, ComplianceReportService>();
+        services.AddScoped<IDashboardService, DashboardService>();
 
         // Register authorization handlers
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
