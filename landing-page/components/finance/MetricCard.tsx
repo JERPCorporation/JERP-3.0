@@ -21,45 +21,20 @@ export function MetricCard({ title, value, change, icon, color }: MetricCardProp
   const isNegative = change && change.startsWith('-');
   
   return (
-    <div style={{
-      background: "linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%)",
-      borderRadius: "12px",
-      padding: "24px",
-      border: "1px solid rgba(71, 85, 105, 0.3)",
-      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    }}>
-      <div style={{ 
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "space-between", 
-        marginBottom: "16px" 
-      }}>
-        <span style={{ 
-          fontSize: "14px", 
-          color: "#94a3b8", 
-          fontWeight: "500",
-          textTransform: "uppercase",
-          letterSpacing: "0.05em"
-        }}>
+    <div className="glass-effect rounded-xl p-6 metric-card-glow card-hover-effect">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-sm text-slate-400 font-medium uppercase tracking-wider">
           {title}
         </span>
-        <div style={{ fontSize: "24px" }}>{icon}</div>
+        <div className="text-2xl">{icon}</div>
       </div>
-      <div style={{ 
-        fontSize: "32px", 
-        fontWeight: "700", 
-        color: "#f1f5f9", 
-        marginBottom: "8px",
-        fontVariantNumeric: "tabular-nums"
-      }}>
+      <div className="text-3xl font-bold text-slate-50 mb-2 tabular-nums">
         {value}
       </div>
       {change && (
-        <div style={{ 
-          fontSize: "12px", 
-          color: isPositive ? "#10b981" : isNegative ? "#ef4444" : "#94a3b8",
-          fontWeight: "500"
-        }}>
+        <div className={`text-xs font-medium ${
+          isPositive ? 'text-emerald-400' : isNegative ? 'text-red-400' : 'text-slate-400'
+        }`}>
           {change}
         </div>
       )}
