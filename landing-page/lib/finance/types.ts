@@ -176,3 +176,13 @@ export interface Tax280EData {
   grossProfit: number;
   netIncome: number;
 }
+
+export interface AgingReportLine {
+  name: string;
+  current: number;
+  days1_30: number;
+  days31_60: number;
+  days61_90: number;
+  days90Plus: number;
+  total: number;
+}
