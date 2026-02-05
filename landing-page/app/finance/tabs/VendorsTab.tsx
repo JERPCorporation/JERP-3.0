@@ -19,13 +19,12 @@ import { formatCurrency } from '@/lib/finance/utils';
 
 type Vendor = typeof mockVendors[0];
 
-export default function VendorsTab() {
+export function VendorsTab() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredVendors = mockVendors.filter(vendor => 
-    vendor.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    vendor.contactPerson.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    vendor.vendorNumber.toLowerCase().includes(searchQuery.toLowerCase())
+    vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    vendor.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleNewVendor = () => {
@@ -154,17 +153,16 @@ export default function VendorsTab() {
                       color: '#4b5563',
                       fontWeight: '500'
                     }}>
-                      {vendor.vendorNumber}
+                      {vendor.id}
                     </span>
                   </td>
                   <td style={cellStyle}>
                     <span style={{ fontWeight: '500', color: '#1a1a1a' }}>
-                      {vendor.companyName}
+                      {vendor.name}
                     </span>
                   </td>
                   <td style={cellStyle}>
                     <span style={{ color: '#4b5563' }}>
-                      {vendor.contactPerson}
                     </span>
                   </td>
                   <td style={cellStyle}>
@@ -184,10 +182,10 @@ export default function VendorsTab() {
                   <td style={{ ...cellStyle, textAlign: 'right' }}>
                     <span style={{ 
                       fontWeight: '600',
-                      color: vendor.currentBalance > 0 ? '#dc2626' : '#059669',
+                      color: vendor.balance > 0 ? '#dc2626' : '#059669',
                       fontSize: '14px'
                     }}>
-                      {formatCurrency(vendor.currentBalance)}
+                      {formatCurrency(vendor.balance)}
                     </span>
                   </td>
                   <td style={cellStyle}>
@@ -199,10 +197,10 @@ export default function VendorsTab() {
                       fontWeight: '600',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
-                      background: vendor.status === 'Active' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                      color: vendor.status === 'Active' ? '#10b981' : '#ef4444'
+                      background: 'rgba(16, 185, 129, 0.15)',
+                      color: '#10b981'
                     }}>
-                      {vendor.status}
+                      Active
                     </span>
                   </td>
                 </tr>
@@ -240,7 +238,7 @@ export default function VendorsTab() {
           </span>
           <span style={{ fontSize: '14px', color: '#1a1a1a', fontWeight: '600' }}>
             Total Outstanding: {formatCurrency(
-              filteredVendors.reduce((sum, v) => sum + v.currentBalance, 0)
+              filteredVendors.reduce((sum, v) => sum + v.balance, 0)
             )}
           </span>
         </div>

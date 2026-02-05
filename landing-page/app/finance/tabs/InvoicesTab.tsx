@@ -20,7 +20,7 @@ import { formatCurrency, formatDate } from '@/lib/finance/utils';
 type Invoice = typeof mockInvoices[0];
 type FilterStatus = 'All' | 'Draft' | 'Sent' | 'Paid' | 'Overdue' | 'Partial';
 
-export default function InvoicesTab() {
+export function InvoicesTab() {
   const [selectedFilter, setSelectedFilter] = useState<FilterStatus>('All');
 
   const computeDaysOverdue = (dueDate: string, status: string): number => {
@@ -37,7 +37,7 @@ export default function InvoicesTab() {
   const applyFilter = (invoice: Invoice): boolean => {
     if (selectedFilter === 'All') return true;
     if (selectedFilter === 'Overdue') return determineIfOverdue(invoice.dueDate, invoice.status);
-    if (selectedFilter === 'Partial') return invoice.amountDue > 0 && invoice.amountDue < invoice.totalAmount;
+    if (selectedFilter === 'Partial') return (invoice.amount - invoice.paidAmount) > 0 && (invoice.amount - invoice.paidAmount) < invoice.amount;
     return invoice.status === selectedFilter;
   };
 
@@ -48,7 +48,7 @@ export default function InvoicesTab() {
   const countByStatus = (status: FilterStatus): number => {
     if (status === 'All') return mockInvoices.length;
     if (status === 'Overdue') return mockInvoices.filter(inv => determineIfOverdue(inv.dueDate, inv.status)).length;
-    if (status === 'Partial') return mockInvoices.filter(inv => inv.amountDue > 0 && inv.amountDue < inv.totalAmount).length;
+    if (status === 'Partial') return mockInvoices.filter(inv => (inv.amount - inv.paidAmount) > 0 && (inv.amount - inv.paidAmount) < inv.amount).length;
     return mockInvoices.filter(inv => inv.status === status).length;
   };
 
@@ -176,7 +176,7 @@ export default function InvoicesTab() {
               {displayedInvoices.map((invoice) => {
                 const overdueDays = computeDaysOverdue(invoice.dueDate, invoice.status);
                 const pastDue = determineIfOverdue(invoice.dueDate, invoice.status);
-                const isPartial = invoice.amountDue > 0 && invoice.amountDue < invoice.totalAmount;
+                const isPartial = (invoice.amount - invoice.paidAmount) > 0 && (invoice.amount - invoice.paidAmount) < invoice.amount;
                 
                 return (
                   <tr 
@@ -215,7 +215,7 @@ export default function InvoicesTab() {
                     </td>
                     <td style={tdStyle}>
                       <span style={{ color: '#64748b', fontSize: '14px' }}>
-                        {formatDate(invoice.invoiceDate)}
+                        {formatDate(invoice.date)}
                       </span>
                     </td>
                     <td style={tdStyle}>
@@ -229,16 +229,16 @@ export default function InvoicesTab() {
                     </td>
                     <td style={{ ...tdStyle, textAlign: 'right' }}>
                       <span style={{ fontWeight: '600', color: '#1e293b', fontSize: '14px' }}>
-                        {formatCurrency(invoice.totalAmount)}
+                        {formatCurrency(invoice.amount)}
                       </span>
                     </td>
                     <td style={{ ...tdStyle, textAlign: 'right' }}>
                       <span style={{ 
                         fontWeight: '700',
-                        color: invoice.amountDue > 0 ? '#059669' : '#94a3b8',
+                        color: (invoice.amount - invoice.paidAmount) > 0 ? '#059669' : '#94a3b8',
                         fontSize: '15px'
                       }}>
-                        {formatCurrency(invoice.amountDue)}
+                        {formatCurrency((invoice.amount - invoice.paidAmount))}
                       </span>
                     </td>
                     <td style={tdStyle}>
@@ -336,7 +336,7 @@ export default function InvoicesTab() {
               Total Outstanding
             </div>
             <div style={{ fontSize: '24px', fontWeight: '800', color: '#059669' }}>
-              {formatCurrency(displayedInvoices.reduce((total, inv) => total + inv.amountDue, 0))}
+              {formatCurrency(displayedInvoices.reduce((total, inv) => total + (inv.amount - inv.paidAmount), 0))}
             </div>
           </div>
           <div style={{ flex: '1', minWidth: '180px' }}>

@@ -20,7 +20,7 @@ import { formatCurrency, formatDate } from '@/lib/finance/utils';
 type Bill = typeof mockBills[0];
 type BillStatus = 'All' | 'Draft' | 'Approved' | 'Paid' | 'Overdue';
 
-export default function BillsTab() {
+export function BillsTab() {
   const [activeFilter, setActiveFilter] = useState<BillStatus>('All');
 
   const calculateDaysPastDue = (dueDate: string, status: string): number => {
@@ -185,7 +185,7 @@ export default function BillsTab() {
                         fontWeight: '600',
                         color: '#1e40af'
                       }}>
-                        {bill.billNumber}
+                        {bill.id}
                       </span>
                     </td>
                     <td style={dataStyle}>
@@ -195,7 +195,7 @@ export default function BillsTab() {
                     </td>
                     <td style={dataStyle}>
                       <span style={{ color: '#4b5563' }}>
-                        {formatDate(bill.billDate)}
+                        {formatDate(bill.date)}
                       </span>
                     </td>
                     <td style={dataStyle}>
@@ -208,16 +208,16 @@ export default function BillsTab() {
                     </td>
                     <td style={{ ...dataStyle, textAlign: 'right' }}>
                       <span style={{ fontWeight: '500', color: '#1a1a1a' }}>
-                        {formatCurrency(bill.totalAmount)}
+                        {formatCurrency(bill.amount)}
                       </span>
                     </td>
                     <td style={{ ...dataStyle, textAlign: 'right' }}>
                       <span style={{ 
                         fontWeight: '600',
-                        color: bill.amountDue > 0 ? '#dc2626' : '#059669',
+                        color: (bill.amount - bill.paidAmount) > 0 ? '#dc2626' : '#059669',
                         fontSize: '14px'
                       }}>
-                        {formatCurrency(bill.amountDue)}
+                        {formatCurrency((bill.amount - bill.paidAmount))}
                       </span>
                     </td>
                     <td style={dataStyle}>
@@ -307,7 +307,7 @@ export default function BillsTab() {
               Total Amount Due
             </div>
             <div style={{ fontSize: '18px', fontWeight: '700', color: '#dc2626' }}>
-              {formatCurrency(filteredBills.reduce((sum, b) => sum + b.amountDue, 0))}
+              {formatCurrency(filteredBills.reduce((sum, b) => sum + (b.amount - b.paidAmount), 0))}
             </div>
           </div>
           <div>

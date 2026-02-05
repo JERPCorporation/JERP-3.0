@@ -97,7 +97,7 @@ interface BalanceSheet {
   isBalanced: boolean;
 }
 
-export default function FinancialReportsTab() {
+export function FinancialReportsTab() {
   const [profitLoss, setProfitLoss] = useState<ProfitLossStatement | null>(null);
   const [balanceSheet, setBalanceSheet] = useState<BalanceSheet | null>(null);
   const [loadingPL, setLoadingPL] = useState(true);

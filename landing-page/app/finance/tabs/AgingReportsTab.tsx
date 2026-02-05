@@ -28,7 +28,7 @@ interface AgingEntry {
   totalBalance: number;
 }
 
-export default function AgingReportsTab() {
+export function AgingReportsTab() {
   const [reportType, setReportType] = useState<AgingType>('AR');
   const [agingData, setAgingData] = useState<AgingEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);

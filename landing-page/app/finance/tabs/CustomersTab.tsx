@@ -18,13 +18,12 @@ import { formatCurrency } from '@/lib/finance/utils';
 
 type Customer = typeof mockCustomers[0];
 
-export default function CustomersTab() {
+export function CustomersTab() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const matchingCustomers = mockCustomers.filter(customer => 
-    customer.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.customerNumber.toLowerCase().includes(searchTerm.toLowerCase())
+    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    customer.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const calculateAvailableCredit = (creditLimit: number, currentBalance: number): number => {
@@ -36,7 +35,7 @@ export default function CustomersTab() {
     return (currentBalance / creditLimit) * 100;
   };
 
-  const totalReceivables = matchingCustomers.reduce((acc, cust) => acc + cust.currentBalance, 0);
+  const totalReceivables = matchingCustomers.reduce((acc, cust) => acc + cust.balance, 0);
   const totalCreditLimit = matchingCustomers.reduce((acc, cust) => acc + cust.creditLimit, 0);
 
   return (
@@ -170,8 +169,8 @@ export default function CustomersTab() {
             </thead>
             <tbody>
               {matchingCustomers.map((customer) => {
-                const availableCredit = calculateAvailableCredit(customer.creditLimit, customer.currentBalance);
-                const utilization = getCreditUtilization(customer.creditLimit, customer.currentBalance);
+                const availableCredit = calculateAvailableCredit(customer.creditLimit, customer.balance);
+                const utilization = getCreditUtilization(customer.creditLimit, customer.balance);
                 const isHighUtilization = utilization > 80;
                 
                 return (
@@ -202,26 +201,25 @@ export default function CustomersTab() {
                         borderRadius: '6px',
                         display: 'inline-block'
                       }}>
-                        {customer.customerNumber}
+                        {customer.id}
                       </div>
                     </td>
                     <td style={tableCellStyle}>
                       <span style={{ fontWeight: '600', color: '#111827', fontSize: '15px' }}>
-                        {customer.companyName}
+                        {customer.name}
                       </span>
                     </td>
                     <td style={tableCellStyle}>
                       <span style={{ color: '#6b7280', fontSize: '14px' }}>
-                        {customer.contactPerson}
                       </span>
                     </td>
                     <td style={{ ...tableCellStyle, textAlign: 'right' }}>
                       <span style={{ 
                         fontWeight: '700',
-                        color: customer.currentBalance > 0 ? '#059669' : '#9ca3af',
+                        color: customer.balance > 0 ? '#059669' : '#9ca3af',
                         fontSize: '15px'
                       }}>
-                        {formatCurrency(customer.currentBalance)}
+                        {formatCurrency(customer.balance)}
                       </span>
                     </td>
                     <td style={{ ...tableCellStyle, textAlign: 'right' }}>
