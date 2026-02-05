@@ -24,6 +24,22 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  
+  .glass-effect {
+    @apply bg-slate-800/30 backdrop-blur-xl border border-slate-700/40;
+  }
+  
+  .card-hover-effect {
+    @apply transition-all duration-200 hover:scale-[1.01] hover:shadow-xl;
+  }
+  
+  .gradient-text-blue-purple {
+    @apply bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent;
+  }
+  
+  .metric-card-glow {
+    @apply shadow-lg hover:shadow-2xl transition-shadow duration-300;
+  }
 }
 
 /* Custom scrollbar */
