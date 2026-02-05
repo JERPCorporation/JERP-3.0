@@ -14,6 +14,7 @@ using FluentValidation;
 using JERP.Application.Authorization;
 using JERP.Application.Services.Auth;
 using JERP.Application.Services.Employees;
+using JERP.Application.Services.Inventory;
 using JERP.Application.Services.Payroll;
 using JERP.Application.Services.Payroll.Pdf;
 using JERP.Application.Services.Payroll.Tax;
@@ -52,6 +53,13 @@ public static class DependencyInjection
         services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
         services.AddScoped<IPOReceiptService, POReceiptService>();
         services.AddScoped<IVendorBillService, VendorBillService>();
+
+        // Register Inventory services
+        services.AddScoped<IInventoryItemService, InventoryItemService>();
+        services.AddScoped<IBatchLotService, BatchLotService>();
+        services.AddScoped<IStockMovementService, StockMovementService>();
+        services.AddScoped<IStockAdjustmentService, StockAdjustmentService>();
+        services.AddScoped<IInventoryValuationService, InventoryValuationService>();
 
         // Register authorization handlers
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
