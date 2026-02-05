@@ -1,5 +1,64 @@
 # JERP 3.0
 
+**Just Enough Resource Planning** - Enterprise-grade ERP system designed for the cannabis industry.
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| **[Architecture Documentation](docs/architecture/README.md)** | Complete system architecture, technology stack, security, and deployment |
+| **[Scope of Work (SOW)](docs/SOW.md)** | Project scope, features, timeline, and resource requirements |
+| **[Developer Onboarding](docs/ONBOARDING.md)** | Setup instructions, development workflow, and common tasks |
+| **[API Documentation](API-DOCUMENTATION.md)** | API endpoints and usage |
+| **[Finance Module](FINANCE-MODULE-IMPLEMENTATION.md)** | Finance module implementation details |
+| **[Inventory Module](INVENTORY-MODULE-IMPLEMENTATION.md)** | Inventory module implementation details |
+| **[Testing Guide](TESTING-GUIDE.md)** | Testing strategy and guidelines |
+
+## 🚀 Quick Start
+
+### For Developers
+See the [Developer Onboarding Guide](docs/ONBOARDING.md) for complete setup instructions.
+
+**Quick Setup:**
+```bash
+# 1. Clone repository
+git clone https://github.com/ninoyerbas/JERP-3.0.git
+cd JERP-3.0
+
+# 2. Setup backend
+cd src/JERP.Api
+dotnet restore
+dotnet ef database update --project ../JERP.Infrastructure
+dotnet run
+
+# 3. Setup frontend (in new terminal)
+cd landing-page
+npm install
+npm run dev
+```
+
+### For Business Users
+- **Demo:** Contact sales@jerp.io
+- **Pricing:** https://jerp.io/pricing
+- **Support:** support@jerp.io
+
+## 💡 Key Features
+
+- **Finance Management** - Chart of Accounts, AP/AR, 280E compliance
+- **Inventory Management** - Real-time tracking, batch/lot tracking, METRC integration
+- **Point of Sale** - Cannabis-specific POS with age verification and purchase limits
+- **Compliance** - METRC API integration, audit trails, state reporting
+- **Human Resources** - Employee management, time tracking, role-based access
+- **Analytics** - Custom reports, dashboards, KPI tracking
+
+## 🏗️ Technology Stack
+
+**Frontend:** Next.js 16, React 18, TypeScript, TailwindCSS  
+**Backend:** ASP.NET Core 8.0, C#, Entity Framework Core  
+**Database:** Microsoft SQL Server 2019+  
+**Authentication:** JWT, NextAuth.js  
+**Cloud:** Azure / AWS (Docker ready)
+
 Enterprise Resource Planning with Payroll Module
 
 ## 📜 License & Copyright
