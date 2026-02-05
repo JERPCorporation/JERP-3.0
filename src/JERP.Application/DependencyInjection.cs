@@ -17,6 +17,7 @@ using JERP.Application.Services.Employees;
 using JERP.Application.Services.Payroll;
 using JERP.Application.Services.Payroll.Pdf;
 using JERP.Application.Services.Payroll.Tax;
+using JERP.Application.Services.SalesOrders;
 using JERP.Application.Services.Security;
 using JERP.Application.Services.Timesheets;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +47,11 @@ public static class DependencyInjection
         services.AddScoped<ITaxCalculationService, TaxCalculationService>();
         services.AddScoped<IPdfGenerationService, PdfGenerationService>();
         services.AddScoped<IAuditLogService, AuditLogService>();
+
+        // Register Sales Order services
+        services.AddScoped<ISalesOrderService, SalesOrderService>();
+        services.AddScoped<ISOShipmentService, SOShipmentService>();
+        services.AddScoped<ISalesReturnService, SalesReturnService>();
 
         // Register authorization handlers
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
