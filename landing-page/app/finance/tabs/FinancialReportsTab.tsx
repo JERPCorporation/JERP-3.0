@@ -104,12 +104,99 @@ export default function FinancialReportsTab() {
 
   const loadFinancialReports = async () => {
     try {
-      const [plData, bsData] = await Promise.all([
-        financeAPI.generateProfitLossStatement(),
-        financeAPI.generateBalanceSheet()
+      const currentDate = new Date();
+      const yearStart = `${currentDate.getFullYear()}-01-01`;
+      const today = currentDate.toISOString().split('T')[0];
+      
+      const [plResponse, bsResponse] = await Promise.all([
+        financeAPI.generateProfitLossStatement(yearStart, today),
+        financeAPI.generateBalanceSheet(today)
       ]);
-      setProfitLoss(plData);
-      setBalanceSheet(bsData);
+      
+      // Transform API response to component format
+      const plTransformed: ProfitLossStatement = {
+        revenue: {
+          salesRevenue: plResponse.data.revenueLines[0]?.amount || 0,
+          serviceRevenue: plResponse.data.revenueLines[1]?.amount || 0,
+          otherRevenue: plResponse.data.revenueLines[2]?.amount || 0,
+          totalRevenue: plResponse.data.totalRevenue
+        },
+        costOfGoodsSold: {
+          materials: plResponse.data.cogsLines[0]?.amount || 0,
+          labor: plResponse.data.cogsLines[1]?.amount || 0,
+          overhead: plResponse.data.cogsLines[2]?.amount || 0,
+          totalCOGS: plResponse.data.totalCOGS
+        },
+        grossProfit: plResponse.data.grossProfit,
+        grossMargin: plResponse.data.grossMargin,
+        operatingExpenses: {
+          salaries: plResponse.data.expenseLines.find(e => e.accountName.includes('Payroll'))?.amount || 0,
+          rent: plResponse.data.expenseLines.find(e => e.accountName.includes('Rent'))?.amount || 0,
+          utilities: plResponse.data.expenseLines.find(e => e.accountName.includes('Utilities'))?.amount || 0,
+          marketing: plResponse.data.expenseLines.find(e => e.accountName.includes('Marketing'))?.amount || 0,
+          insurance: 0,
+          depreciation: 0,
+          otherExpenses: 0,
+          totalOperatingExpenses: plResponse.data.totalExpenses
+        },
+        operatingIncome: plResponse.data.netIncome,
+        operatingMargin: plResponse.data.netMargin,
+        otherIncomeExpense: {
+          interestIncome: 0,
+          interestExpense: 0,
+          otherIncome: 0,
+          totalOtherIncomeExpense: 0
+        },
+        netIncome: plResponse.data.netIncome,
+        netMargin: plResponse.data.netMargin
+      };
+      
+      const bsTransformed: BalanceSheet = {
+        assets: {
+          currentAssets: {
+            cash: bsResponse.data.assets.currentAssets[0]?.amount || 0,
+            accountsReceivable: bsResponse.data.assets.currentAssets[2]?.amount || 0,
+            inventory: bsResponse.data.assets.currentAssets[3]?.amount || 0,
+            prepaidExpenses: 0,
+            totalCurrentAssets: bsResponse.data.assets.totalCurrentAssets
+          },
+          fixedAssets: {
+            propertyPlantEquipment: bsResponse.data.assets.fixedAssets[0]?.amount || 0,
+            accumulatedDepreciation: 0,
+            netFixedAssets: bsResponse.data.assets.totalFixedAssets
+          },
+          otherAssets: {
+            intangibleAssets: 0,
+            investments: 0,
+            totalOtherAssets: 0
+          },
+          totalAssets: bsResponse.data.assets.totalAssets
+        },
+        liabilities: {
+          currentLiabilities: {
+            accountsPayable: bsResponse.data.liabilities.currentLiabilities[0]?.amount || 0,
+            shortTermDebt: 0,
+            accruedExpenses: bsResponse.data.liabilities.currentLiabilities[1]?.amount || 0,
+            totalCurrentLiabilities: bsResponse.data.liabilities.totalCurrentLiabilities
+          },
+          longTermLiabilities: {
+            longTermDebt: bsResponse.data.liabilities.longTermLiabilities[0]?.amount || 0,
+            deferredTaxes: 0,
+            totalLongTermLiabilities: bsResponse.data.liabilities.totalLongTermLiabilities
+          },
+          totalLiabilities: bsResponse.data.liabilities.totalLiabilities
+        },
+        equity: {
+          commonStock: bsResponse.data.equity.equityAccounts[0]?.amount || 0,
+          retainedEarnings: bsResponse.data.equity.equityAccounts[1]?.amount || 0,
+          totalEquity: bsResponse.data.equity.totalEquity
+        },
+        totalLiabilitiesAndEquity: bsResponse.data.totalLiabilitiesAndEquity,
+        isBalanced: bsResponse.data.isBalanced
+      };
+      
+      setProfitLoss(plTransformed);
+      setBalanceSheet(bsTransformed);
     } catch (error) {
       console.error('Failed to load financial reports:', error);
     } finally {

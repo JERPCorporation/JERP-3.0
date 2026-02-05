@@ -10,7 +10,7 @@
 import { useState } from 'react';
 import { mockVendors } from '@/lib/finance/mock-data';
 import { formatCurrency } from '@/lib/finance/utils';
-import { StatusIndicator } from '@/components/finance/StatusIndicator';
+
 
 type Vendor = typeof mockVendors[0];
 
@@ -186,7 +186,19 @@ export default function VendorsTab() {
                     </span>
                   </td>
                   <td style={cellStyle}>
-                    <StatusIndicator status={vendor.status} />
+                    <span style={{
+                      display: 'inline-block',
+                      padding: '4px 12px',
+                      borderRadius: '12px',
+                      fontSize: '11px',
+                      fontWeight: '600',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      background: vendor.status === 'Active' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                      color: vendor.status === 'Active' ? '#10b981' : '#ef4444'
+                    }}>
+                      {vendor.status}
+                    </span>
                   </td>
                 </tr>
               ))}

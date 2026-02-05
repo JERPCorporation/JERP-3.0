@@ -14,13 +14,13 @@ import { formatCurrency } from '@/lib/finance/utils';
 type AgingType = 'AP' | 'AR';
 
 interface AgingEntry {
-  name: string;
-  current: number;
-  days1to30: number;
-  days31to60: number;
-  days61to90: number;
-  days90plus: number;
-  total: number;
+  entity: string;
+  notDue: number;
+  period1: number;
+  period2: number;
+  period3: number;
+  period4: number;
+  totalBalance: number;
 }
 
 export default function AgingReportsTab() {
@@ -35,8 +35,9 @@ export default function AgingReportsTab() {
   const loadAgingData = async () => {
     setIsLoading(true);
     try {
-      const data = await financeAPI.generateAgingSummary(reportType);
-      setAgingData(data);
+      const reportTypeName = reportType === 'AP' ? 'AccountsPayable' : 'AccountsReceivable';
+      const response = await financeAPI.generateAgingSummary(reportTypeName);
+      setAgingData(response.data);
     } catch (error) {
       console.error('Failed to load aging data:', error);
       setAgingData([]);
@@ -52,14 +53,14 @@ export default function AgingReportsTab() {
   const computeTotals = () => {
     return agingData.reduce(
       (totals, entry) => ({
-        current: totals.current + entry.current,
-        days1to30: totals.days1to30 + entry.days1to30,
-        days31to60: totals.days31to60 + entry.days31to60,
-        days61to90: totals.days61to90 + entry.days61to90,
-        days90plus: totals.days90plus + entry.days90plus,
-        total: totals.total + entry.total
+        notDue: totals.notDue + entry.notDue,
+        period1: totals.period1 + entry.period1,
+        period2: totals.period2 + entry.period2,
+        period3: totals.period3 + entry.period3,
+        period4: totals.period4 + entry.period4,
+        totalBalance: totals.totalBalance + entry.totalBalance
       }),
-      { current: 0, days1to30: 0, days31to60: 0, days61to90: 0, days90plus: 0, total: 0 }
+      { notDue: 0, period1: 0, period2: 0, period3: 0, period4: 0, totalBalance: 0 }
     );
   };
 
@@ -67,20 +68,20 @@ export default function AgingReportsTab() {
 
   const getAmountColor = (amount: number, column: string): string => {
     if (amount === 0) return '#9ca3af';
-    if (column === 'current') return '#059669';
-    if (column === 'days1to30') return '#d97706';
-    if (column === 'days31to60') return '#ea580c';
-    if (column === 'days61to90') return '#dc2626';
-    if (column === 'days90plus') return '#991b1b';
+    if (column === 'notDue') return '#059669';
+    if (column === 'period1') return '#d97706';
+    if (column === 'period2') return '#ea580c';
+    if (column === 'period3') return '#dc2626';
+    if (column === 'period4') return '#991b1b';
     return '#1f2937';
   };
 
   const getColumnBackground = (column: string): string => {
-    if (column === 'current') return 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)';
-    if (column === 'days1to30') return 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)';
-    if (column === 'days31to60') return 'linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%)';
-    if (column === 'days61to90') return 'linear-gradient(135deg, #fef2f2 0%, #fecaca 100%)';
-    if (column === 'days90plus') return 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)';
+    if (column === 'notDue') return 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)';
+    if (column === 'period1') return 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)';
+    if (column === 'period2') return 'linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%)';
+    if (column === 'period3') return 'linear-gradient(135deg, #fef2f2 0%, #fecaca 100%)';
+    if (column === 'period4') return 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)';
     return 'white';
   };
 
@@ -264,62 +265,62 @@ export default function AgingReportsTab() {
                   >
                     <td style={nameColumnStyle}>
                       <span style={{ fontWeight: '600', color: '#111827', fontSize: '14px' }}>
-                        {entry.name}
+                        {entry.entity}
                       </span>
                     </td>
                     <td style={{ 
                       ...amountColumnStyle, 
-                      background: getColumnBackground('current')
+                      background: getColumnBackground('notDue')
                     }}>
                       <span style={{ 
-                        color: getAmountColor(entry.current, 'current'),
+                        color: getAmountColor(entry.notDue, 'notDue'),
                         fontWeight: '700'
                       }}>
-                        {formatCurrency(entry.current)}
+                        {formatCurrency(entry.notDue)}
                       </span>
                     </td>
                     <td style={{ 
                       ...amountColumnStyle, 
-                      background: getColumnBackground('days1to30')
+                      background: getColumnBackground('period1')
                     }}>
                       <span style={{ 
-                        color: getAmountColor(entry.days1to30, 'days1to30'),
+                        color: getAmountColor(entry.period1, 'period1'),
                         fontWeight: '700'
                       }}>
-                        {formatCurrency(entry.days1to30)}
+                        {formatCurrency(entry.period1)}
                       </span>
                     </td>
                     <td style={{ 
                       ...amountColumnStyle, 
-                      background: getColumnBackground('days31to60')
+                      background: getColumnBackground('period2')
                     }}>
                       <span style={{ 
-                        color: getAmountColor(entry.days31to60, 'days31to60'),
+                        color: getAmountColor(entry.period2, 'period2'),
                         fontWeight: '700'
                       }}>
-                        {formatCurrency(entry.days31to60)}
+                        {formatCurrency(entry.period2)}
                       </span>
                     </td>
                     <td style={{ 
                       ...amountColumnStyle, 
-                      background: getColumnBackground('days61to90')
+                      background: getColumnBackground('period3')
                     }}>
                       <span style={{ 
-                        color: getAmountColor(entry.days61to90, 'days61to90'),
+                        color: getAmountColor(entry.period3, 'period3'),
                         fontWeight: '700'
                       }}>
-                        {formatCurrency(entry.days61to90)}
+                        {formatCurrency(entry.period3)}
                       </span>
                     </td>
                     <td style={{ 
                       ...amountColumnStyle, 
-                      background: getColumnBackground('days90plus')
+                      background: getColumnBackground('period4')
                     }}>
                       <span style={{ 
-                        color: getAmountColor(entry.days90plus, 'days90plus'),
+                        color: getAmountColor(entry.period4, 'period4'),
                         fontWeight: '700'
                       }}>
-                        {formatCurrency(entry.days90plus)}
+                        {formatCurrency(entry.period4)}
                       </span>
                     </td>
                     <td style={totalColumnStyle}>
@@ -328,7 +329,7 @@ export default function AgingReportsTab() {
                         fontWeight: '800',
                         fontSize: '15px'
                       }}>
-                        {formatCurrency(entry.total)}
+                        {formatCurrency(entry.totalBalance)}
                       </span>
                     </td>
                   </tr>
@@ -345,67 +346,67 @@ export default function AgingReportsTab() {
                   </td>
                   <td style={{ 
                     ...amountColumnStyle, 
-                    background: getColumnBackground('current'),
+                    background: getColumnBackground('notDue'),
                     borderTop: '3px solid #86efac'
                   }}>
                     <span style={{ 
-                      color: getAmountColor(totals.current, 'current'),
+                      color: getAmountColor(totals.notDue, 'notDue'),
                       fontWeight: '800',
                       fontSize: '15px'
                     }}>
-                      {formatCurrency(totals.current)}
+                      {formatCurrency(totals.notDue)}
                     </span>
                   </td>
                   <td style={{ 
                     ...amountColumnStyle, 
-                    background: getColumnBackground('days1to30'),
+                    background: getColumnBackground('period1'),
                     borderTop: '3px solid #fcd34d'
                   }}>
                     <span style={{ 
-                      color: getAmountColor(totals.days1to30, 'days1to30'),
+                      color: getAmountColor(totals.period1, 'period1'),
                       fontWeight: '800',
                       fontSize: '15px'
                     }}>
-                      {formatCurrency(totals.days1to30)}
+                      {formatCurrency(totals.period1)}
                     </span>
                   </td>
                   <td style={{ 
                     ...amountColumnStyle, 
-                    background: getColumnBackground('days31to60'),
+                    background: getColumnBackground('period2'),
                     borderTop: '3px solid #fdba74'
                   }}>
                     <span style={{ 
-                      color: getAmountColor(totals.days31to60, 'days31to60'),
+                      color: getAmountColor(totals.period2, 'period2'),
                       fontWeight: '800',
                       fontSize: '15px'
                     }}>
-                      {formatCurrency(totals.days31to60)}
+                      {formatCurrency(totals.period2)}
                     </span>
                   </td>
                   <td style={{ 
                     ...amountColumnStyle, 
-                    background: getColumnBackground('days61to90'),
+                    background: getColumnBackground('period3'),
                     borderTop: '3px solid #fca5a5'
                   }}>
                     <span style={{ 
-                      color: getAmountColor(totals.days61to90, 'days61to90'),
+                      color: getAmountColor(totals.period3, 'period3'),
                       fontWeight: '800',
                       fontSize: '15px'
                     }}>
-                      {formatCurrency(totals.days61to90)}
+                      {formatCurrency(totals.period3)}
                     </span>
                   </td>
                   <td style={{ 
                     ...amountColumnStyle, 
-                    background: getColumnBackground('days90plus'),
+                    background: getColumnBackground('period4'),
                     borderTop: '3px solid #f87171'
                   }}>
                     <span style={{ 
-                      color: getAmountColor(totals.days90plus, 'days90plus'),
+                      color: getAmountColor(totals.period4, 'period4'),
                       fontWeight: '800',
                       fontSize: '15px'
                     }}>
-                      {formatCurrency(totals.days90plus)}
+                      {formatCurrency(totals.period4)}
                     </span>
                   </td>
                   <td style={{ 
@@ -417,7 +418,7 @@ export default function AgingReportsTab() {
                       fontWeight: '900',
                       fontSize: '16px'
                     }}>
-                      {formatCurrency(totals.total)}
+                      {formatCurrency(totals.totalBalance)}
                     </span>
                   </td>
                 </tr>

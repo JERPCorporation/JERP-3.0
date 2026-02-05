@@ -10,7 +10,7 @@
 import { useState } from 'react';
 import { mockInvoices } from '@/lib/finance/mock-data';
 import { formatCurrency, formatDate } from '@/lib/finance/utils';
-import { StatusIndicator } from '@/components/finance/StatusIndicator';
+
 
 type Invoice = typeof mockInvoices[0];
 type FilterStatus = 'All' | 'Draft' | 'Sent' | 'Paid' | 'Overdue' | 'Partial';
@@ -237,9 +237,32 @@ export default function InvoicesTab() {
                       </span>
                     </td>
                     <td style={tdStyle}>
-                      <StatusIndicator 
-                        status={pastDue ? 'Overdue' : isPartial ? 'Partial' : invoice.status} 
-                      />
+                      {(() => {
+                        const displayStatus = pastDue ? 'Overdue' : isPartial ? 'Partial' : invoice.status;
+                        const getStatusColor = (status: string) => {
+                          if (status === 'Overdue') return { bg: 'rgba(239, 68, 68, 0.15)', text: '#ef4444' };
+                          if (status === 'Paid') return { bg: 'rgba(16, 185, 129, 0.15)', text: '#10b981' };
+                          if (status === 'Sent') return { bg: 'rgba(59, 130, 246, 0.15)', text: '#3b82f6' };
+                          if (status === 'Partial') return { bg: 'rgba(245, 158, 11, 0.15)', text: '#f59e0b' };
+                          return { bg: 'rgba(100, 116, 139, 0.15)', text: '#94a3b8' };
+                        };
+                        const colors = getStatusColor(displayStatus);
+                        return (
+                          <span style={{
+                            display: 'inline-block',
+                            padding: '4px 12px',
+                            borderRadius: '12px',
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            background: colors.bg,
+                            color: colors.text
+                          }}>
+                            {displayStatus}
+                          </span>
+                        );
+                      })()}
                     </td>
                     <td style={{ ...tdStyle, textAlign: 'center' }}>
                       {overdueDays > 0 ? (
