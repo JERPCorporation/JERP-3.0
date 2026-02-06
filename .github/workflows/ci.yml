@@ -44,7 +44,7 @@ if: always()  # Run all tests even if one fails
     
     - name: Build
       run: dotnet build --no-restore --configuration Release
-      working-directory: ./tests/
+      working-directory: ./src
     
     - name: Run unit tests
       run: |
@@ -97,3 +97,5 @@ if: always()  # Run all tests even if one fails
         # Health check would fail without database, so just check if container started
         docker ps | grep test-api || exit 1
         docker stop test-api || true
+
+        
