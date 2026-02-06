@@ -41,6 +41,33 @@ public class VendorDto
     public string? Notes { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    
+    // Display Properties
+    /// <summary>
+    /// Active status display
+    /// </summary>
+    public string IsActiveDisplay => IsActive ? "Active" : "Inactive";
+    
+    /// <summary>
+    /// Formatted balance (amount owed to vendor) for display
+    /// </summary>
+    public string BalanceDisplay => Balance.ToString("C2");
+    
+    /// <summary>
+    /// Status icon for visual representation
+    /// </summary>
+    public string StatusIcon => IsActive ? "✅" : "❌";
+    
+    // Computed Properties
+    /// <summary>
+    /// Indicates if vendor has outstanding balance
+    /// </summary>
+    public bool HasOutstandingBalance => Balance > 0;
+    
+    /// <summary>
+    /// Warning for high balance vendors
+    /// </summary>
+    public string BalanceWarning => Balance > 10000 ? "⚠️ High Balance" : "";
 }
 
 /// <summary>

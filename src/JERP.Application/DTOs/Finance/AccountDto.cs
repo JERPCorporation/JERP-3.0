@@ -41,6 +41,56 @@ public class AccountDto
     
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    
+    // Display Properties
+    /// <summary>
+    /// Display account number (already formatted)
+    /// </summary>
+    public string AccountNumberDisplay => AccountNumber;
+    
+    /// <summary>
+    /// Friendly account type display
+    /// </summary>
+    public string AccountTypeDisplay => Type switch
+    {
+        AccountType.Asset => "Asset",
+        AccountType.Liability => "Liability",
+        AccountType.Equity => "Equity",
+        AccountType.Revenue => "Revenue",
+        AccountType.Expense => "Expense",
+        _ => "Unknown"
+    };
+    
+    /// <summary>
+    /// Active status display
+    /// </summary>
+    public string IsActiveDisplay => IsActive ? "Active" : "Inactive";
+    
+    /// <summary>
+    /// Formatted balance for display
+    /// </summary>
+    public string BalanceDisplay => Balance.ToString("C2");
+    
+    /// <summary>
+    /// Status icon for visual representation
+    /// </summary>
+    public string StatusIcon => IsActive ? "✅" : "❌";
+    
+    // Computed Properties
+    /// <summary>
+    /// Indicates if this is a debit balance account
+    /// </summary>
+    public bool IsDebitBalance => Type == AccountType.Asset || Type == AccountType.Expense;
+    
+    /// <summary>
+    /// Indicates if this is a credit balance account
+    /// </summary>
+    public bool IsCreditBalance => Type == AccountType.Liability || Type == AccountType.Equity || Type == AccountType.Revenue;
+    
+    /// <summary>
+    /// Full display with number and name
+    /// </summary>
+    public string FullDisplay => $"{AccountNumber} - {AccountName}";
 }
 
 /// <summary>

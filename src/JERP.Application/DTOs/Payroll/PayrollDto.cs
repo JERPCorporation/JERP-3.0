@@ -34,6 +34,71 @@ public class PayrollDto
     public List<PayrollLineDto> Lines { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public DateTime? ProcessedAt { get; set; }
+    
+    // Display Properties
+    /// <summary>
+    /// Formatted pay period display
+    /// </summary>
+    public string PayPeriodDisplay => $"{PayPeriodStart:MM/dd} - {PayPeriodEnd:MM/dd}";
+    
+    /// <summary>
+    /// Formatted pay date for display
+    /// </summary>
+    public string PayDateDisplay => PayDate.ToString("MMM dd, yyyy");
+    
+    /// <summary>
+    /// Formatted total gross pay for display
+    /// </summary>
+    public string TotalGrossPayDisplay => TotalGrossPay.ToString("C2");
+    
+    /// <summary>
+    /// Formatted total deductions for display
+    /// </summary>
+    public string TotalDeductionsDisplay => TotalDeductions.ToString("C2");
+    
+    /// <summary>
+    /// Formatted total net pay for display
+    /// </summary>
+    public string TotalNetPayDisplay => TotalNetPay.ToString("C2");
+    
+    /// <summary>
+    /// Friendly status display
+    /// </summary>
+    public string StatusDisplay => Status switch
+    {
+        PayrollStatus.Draft => "Draft",
+        PayrollStatus.Calculated => "Calculated",
+        PayrollStatus.Submitted => "Submitted",
+        PayrollStatus.Approved => "Approved",
+        PayrollStatus.Paid => "Paid",
+        PayrollStatus.Rejected => "Rejected",
+        _ => "Unknown"
+    };
+    
+    // Computed Properties
+    /// <summary>
+    /// Deduction rate as percentage of gross pay
+    /// </summary>
+    public decimal DeductionRate => TotalGrossPay > 0 ? (TotalDeductions / TotalGrossPay) * 100 : 0;
+    
+    /// <summary>
+    /// Formatted deduction rate for display
+    /// </summary>
+    public string DeductionRateDisplay => $"{DeductionRate:F1}%";
+    
+    /// <summary>
+    /// Status icon for visual representation
+    /// </summary>
+    public string StatusIcon => Status switch
+    {
+        PayrollStatus.Draft => "📝",
+        PayrollStatus.Calculated => "🔢",
+        PayrollStatus.Submitted => "📤",
+        PayrollStatus.Approved => "✅",
+        PayrollStatus.Paid => "💰",
+        PayrollStatus.Rejected => "❌",
+        _ => ""
+    };
 }
 
 /// <summary>

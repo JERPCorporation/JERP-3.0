@@ -118,4 +118,52 @@ public class CustomerDto
     public DateTime CreatedAt { get; set; }
     
     public DateTime? UpdatedAt { get; set; }
+    
+    // Display Properties
+    /// <summary>
+    /// Active status display
+    /// </summary>
+    public string IsActiveDisplay => IsActive ? "Active" : "Inactive";
+    
+    /// <summary>
+    /// Formatted total receivable for display
+    /// </summary>
+    public string CurrentBalanceDisplay => CurrentBalance.ToString("C2");
+    
+    /// <summary>
+    /// Formatted credit limit for display
+    /// </summary>
+    public string CreditLimitDisplay => CreditLimit.ToString("C2");
+    
+    /// <summary>
+    /// Formatted available credit for display
+    /// </summary>
+    public string AvailableCreditDisplay => AvailableCredit.ToString("C2");
+    
+    /// <summary>
+    /// Status icon for visual representation
+    /// </summary>
+    public string StatusIcon => IsActive ? "✅" : "❌";
+    
+    // Computed Properties
+    /// <summary>
+    /// Indicates if customer has outstanding invoices
+    /// </summary>
+    public bool HasOutstandingInvoices => CurrentBalance > 0;
+    
+    /// <summary>
+    /// Receivable status display
+    /// </summary>
+    public string ReceivableStatus => CurrentBalance > 0 ? $"Owes: {CurrentBalance:C2}" : "Paid Up";
+    
+    /// <summary>
+    /// Credit utilization percentage
+    /// </summary>
+    public decimal CreditUtilization => CreditLimit > 0 ? (CurrentBalance / CreditLimit) * 100 : 0;
+    
+    /// <summary>
+    /// Credit warning for high utilization or credit hold
+    /// </summary>
+    public string CreditWarning => IsCreditHold ? "🚫 Credit Hold" : 
+                                   CreditUtilization > 90 ? "⚠️ Near Limit" : "";
 }

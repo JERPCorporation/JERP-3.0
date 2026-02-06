@@ -45,4 +45,65 @@ public class EmployeeDto
     public PayFrequency PayFrequency { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    
+    // Display Properties
+    /// <summary>
+    /// Full name combining first and last name
+    /// </summary>
+    public string FullName => $"{FirstName} {LastName}";
+    
+    /// <summary>
+    /// Formatted hire date for display
+    /// </summary>
+    public string HireDateDisplay => HireDate.ToString("MMM dd, yyyy");
+    
+    /// <summary>
+    /// Friendly status display
+    /// </summary>
+    public string StatusDisplay => Status switch
+    {
+        EmployeeStatus.Active => "Active",
+        EmployeeStatus.Inactive => "Inactive",
+        EmployeeStatus.OnLeave => "On Leave",
+        EmployeeStatus.Terminated => "Terminated",
+        _ => "Unknown"
+    };
+    
+    /// <summary>
+    /// Formatted hourly rate for display
+    /// </summary>
+    public string HourlyRateDisplay => HourlyRate.HasValue && HourlyRate > 0 ? HourlyRate.Value.ToString("C2") : "N/A";
+    
+    /// <summary>
+    /// Formatted salary for display
+    /// </summary>
+    public string SalaryDisplay => SalaryAmount.HasValue && SalaryAmount > 0 ? SalaryAmount.Value.ToString("C2") : "N/A";
+    
+    // Computed Properties
+    /// <summary>
+    /// Years of service with the company
+    /// </summary>
+    public int YearsOfService => (int)((DateTime.Now - HireDate).Days / 365.25);
+    
+    /// <summary>
+    /// Formatted tenure display
+    /// </summary>
+    public string TenureDisplay => YearsOfService == 1 ? "1 year" : $"{YearsOfService} years";
+    
+    /// <summary>
+    /// Indicates if employee is currently active
+    /// </summary>
+    public bool IsActive => Status == EmployeeStatus.Active;
+    
+    /// <summary>
+    /// Status icon for visual representation
+    /// </summary>
+    public string StatusIcon => Status switch
+    {
+        EmployeeStatus.Active => "✅",
+        EmployeeStatus.OnLeave => "⏸️",
+        EmployeeStatus.Terminated => "❌",
+        EmployeeStatus.Inactive => "⭕",
+        _ => ""
+    };
 }

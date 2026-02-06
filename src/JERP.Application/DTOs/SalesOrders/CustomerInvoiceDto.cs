@@ -57,4 +57,101 @@ public class CustomerInvoiceDto
     public DateTime? PostedAt { get; set; }
     
     public DateTime? PaidAt { get; set; }
+    
+    // Display Properties
+    /// <summary>
+    /// Formatted invoice number for display
+    /// </summary>
+    public string InvoiceNumberDisplay => $"INV-{InvoiceNumber}";
+    
+    /// <summary>
+    /// Formatted invoice date for display
+    /// </summary>
+    public string InvoiceDateDisplay => InvoiceDate.ToString("MMM dd, yyyy");
+    
+    /// <summary>
+    /// Formatted due date for display
+    /// </summary>
+    public string DueDateDisplay => DueDate.ToString("MMM dd, yyyy");
+    
+    /// <summary>
+    /// Friendly status display
+    /// </summary>
+    public string StatusDisplay => Status switch
+    {
+        "Draft" => "Draft",
+        "Sent" => "Sent",
+        "Paid" => "Paid",
+        "PartiallyPaid" => "Partially Paid",
+        "Overdue" => "Overdue",
+        "Cancelled" => "Cancelled",
+        "Void" => "Void",
+        _ => Status
+    };
+    
+    /// <summary>
+    /// Formatted subtotal for display
+    /// </summary>
+    public string SubTotalDisplay => SubTotal.ToString("C2");
+    
+    /// <summary>
+    /// Formatted tax amount for display
+    /// </summary>
+    public string TaxAmountDisplay => TaxAmount.ToString("C2");
+    
+    /// <summary>
+    /// Formatted shipping amount for display
+    /// </summary>
+    public string ShippingAmountDisplay => ShippingAmount.ToString("C2");
+    
+    /// <summary>
+    /// Formatted total amount for display
+    /// </summary>
+    public string TotalAmountDisplay => TotalAmount.ToString("C2");
+    
+    /// <summary>
+    /// Formatted amount paid for display
+    /// </summary>
+    public string AmountPaidDisplay => AmountPaid.ToString("C2");
+    
+    /// <summary>
+    /// Formatted amount due for display
+    /// </summary>
+    public string AmountDueDisplay => AmountDue.ToString("C2");
+    
+    // Computed Properties
+    /// <summary>
+    /// Indicates if invoice is overdue
+    /// </summary>
+    public bool IsOverdue => (Status == "Sent" || Status == "PartiallyPaid") && DueDate < DateTime.Now;
+    
+    /// <summary>
+    /// Indicates if invoice is fully paid
+    /// </summary>
+    public bool IsFullyPaid => Status == "Paid";
+    
+    /// <summary>
+    /// Percentage of invoice paid
+    /// </summary>
+    public decimal PercentPaid => TotalAmount > 0 ? (AmountPaid / TotalAmount) * 100 : 0;
+    
+    /// <summary>
+    /// Formatted percent paid for display
+    /// </summary>
+    public string PercentPaidDisplay => $"{PercentPaid:F0}%";
+    
+    /// <summary>
+    /// Status icon for visual representation
+    /// </summary>
+    public string StatusIcon => Status switch
+    {
+        "Draft" => "📝",
+        "Sent" => "📤",
+        "Paid" => "✅",
+        "PartiallyPaid" => "⏳",
+        "Overdue" => "⚠️",
+        "Cancelled" => "❌",
+        "Void" => "🚫",
+        _ => ""
+    };
 }

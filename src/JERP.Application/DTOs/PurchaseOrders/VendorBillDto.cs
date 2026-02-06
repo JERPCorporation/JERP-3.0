@@ -58,4 +58,88 @@ public class VendorBillDto
     public string? Notes { get; set; }
     
     public DateTime CreatedAt { get; set; }
+    
+    // Display Properties
+    /// <summary>
+    /// Formatted bill number for display
+    /// </summary>
+    public string BillNumberDisplay => $"BILL-{BillNumber}";
+    
+    /// <summary>
+    /// Formatted invoice date for display
+    /// </summary>
+    public string InvoiceDateDisplay => InvoiceDate.ToString("MMM dd, yyyy");
+    
+    /// <summary>
+    /// Formatted due date for display
+    /// </summary>
+    public string DueDateDisplay => DueDate.ToString("MMM dd, yyyy");
+    
+    /// <summary>
+    /// Friendly status display
+    /// </summary>
+    public string StatusDisplay => Status switch
+    {
+        "Draft" => "Draft",
+        "Pending" => "Pending",
+        "Approved" => "Approved",
+        "Paid" => "Paid",
+        "Void" => "Void",
+        _ => Status
+    };
+    
+    /// <summary>
+    /// Formatted subtotal for display
+    /// </summary>
+    public string SubTotalDisplay => SubTotal.ToString("C2");
+    
+    /// <summary>
+    /// Formatted tax amount for display
+    /// </summary>
+    public string TaxAmountDisplay => TaxAmount.ToString("C2");
+    
+    /// <summary>
+    /// Formatted total amount for display
+    /// </summary>
+    public string TotalAmountDisplay => TotalAmount.ToString("C2");
+    
+    /// <summary>
+    /// Formatted amount paid for display
+    /// </summary>
+    public string AmountPaidDisplay => AmountPaid.ToString("C2");
+    
+    /// <summary>
+    /// Formatted amount due for display
+    /// </summary>
+    public string AmountDueDisplay => AmountDue.ToString("C2");
+    
+    // Computed Properties
+    /// <summary>
+    /// Indicates if bill is overdue
+    /// </summary>
+    public bool IsOverdue => !IsPaid && Status != "Void" && DueDate < DateTime.Now;
+    
+    /// <summary>
+    /// Days until due date (negative if overdue)
+    /// </summary>
+    public int DaysUntilDue => (DueDate - DateTime.Now).Days;
+    
+    /// <summary>
+    /// Urgency indicator for overdue or soon-due bills
+    /// </summary>
+    public string UrgencyIndicator => IsOverdue ? "⚠️ OVERDUE" : 
+                                       DaysUntilDue <= 7 && DaysUntilDue > 0 ? "⏰ Due Soon" : "";
+    
+    /// <summary>
+    /// Status icon for visual representation
+    /// </summary>
+    public string StatusIcon => Status switch
+    {
+        "Draft" => "📝",
+        "Pending" => "⏳",
+        "Approved" => "✅",
+        "Paid" => "💰",
+        "Void" => "❌",
+        _ => ""
+    };
 }
