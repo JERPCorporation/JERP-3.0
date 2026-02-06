@@ -87,7 +87,7 @@ public partial class ChartOfAccountsViewModel : ViewModelBase
                 return;
             }
 
-            var requestPath = $"api/finance/accounts?companyId={companyIdentifier}&page={PageIndex}&pageSize={RecordsPerPage}";
+            var requestPath = $"api/v1/finance/accounts?companyId={companyIdentifier}&page={PageIndex}&pageSize={RecordsPerPage}";
             
             if (!string.IsNullOrWhiteSpace(QueryText))
             {
@@ -190,7 +190,7 @@ public partial class ChartOfAccountsViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/accounts/{accountRecord.Id}");
+            await _apiClient.DeleteAsync($"api/v1/finance/accounts/{accountRecord.Id}");
             await FetchAccountsDataAsync();
         }
         catch (Exception ex)
