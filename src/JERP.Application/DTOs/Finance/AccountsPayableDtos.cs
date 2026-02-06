@@ -56,22 +56,31 @@ public class BillDto
 {
     public Guid Id { get; set; }
     public Guid CompanyId { get; set; }
-    public required string BillNumber { get; set; }
+    public string BillNumber { get; set; } = string.Empty;
     public Guid VendorId { get; set; }
-    public required string VendorName { get; set; }
+    public string VendorName { get; set; } = string.Empty;
+    public string? VendorNumber { get; set; }
+    public string? VendorInvoiceNumber { get; set; }
     public DateTime BillDate { get; set; }
     public DateTime DueDate { get; set; }
-    public required string Status { get; set; }
+    public BillStatus StatusEnum { get; set; }
+    public string Status { get; set; } = string.Empty;
     public string? ReferenceNumber { get; set; }
     public string? Description { get; set; }
-    public List<BillLineDto> LineItems { get; set; } = new();
-    public decimal SubTotal { get; set; }
+    public decimal Subtotal { get; set; }
+    public decimal SubTotal { get; set; } // Alias for Subtotal
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }
     public decimal AmountPaid { get; set; }
     public decimal AmountDue { get; set; }
-    public string? Notes { get; set; }
+    public bool IsPaid { get; set; }
+    public DateTime? PaymentDate { get; set; }
     public DateTime? PaidAt { get; set; }
+    public Guid? JournalEntryId { get; set; }
+    public string? Notes { get; set; }
+    public List<BillLineItemDto> LineItems { get; set; } = new(); // Original for services
+    public List<BillLineDto> Lines { get; set; } = new(); // New for Desktop
+    public List<BillPaymentDto> Payments { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
@@ -82,12 +91,14 @@ public class BillDto
 public class BillListDto
 {
     public Guid Id { get; set; }
-    public required string BillNumber { get; set; }
+    public string BillNumber { get; set; } = string.Empty;
+    public string? VendorInvoiceNumber { get; set; }
     public Guid VendorId { get; set; }
-    public required string VendorName { get; set; }
+    public string VendorName { get; set; } = string.Empty;
     public DateTime BillDate { get; set; }
     public DateTime DueDate { get; set; }
-    public required string Status { get; set; } // Draft, Submitted, Approved, Paid
+    public BillStatus StatusEnum { get; set; }
+    public string Status { get; set; } = string.Empty; // Draft, Submitted, Approved, Paid
     public decimal SubTotal { get; set; }
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }

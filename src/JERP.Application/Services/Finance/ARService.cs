@@ -64,7 +64,8 @@ public class ARService : IARService
             TaxAmount = invoice.TaxAmount,
             TotalAmount = invoice.TotalAmount,
             AmountPaid = invoice.AmountPaid,
-            Status = invoice.Status,
+            StatusEnum = invoice.Status,
+            Status = invoice.Status.ToString(),
             IsPaid = invoice.IsPaid,
             PaymentDate = invoice.PaymentDate,
             JournalEntryId = invoice.JournalEntryId,
@@ -112,7 +113,8 @@ public class ARService : IARService
                 DueDate = i.DueDate,
                 TotalAmount = i.TotalAmount,
                 AmountPaid = i.AmountPaid,
-                Status = i.Status
+                StatusEnum = i.Status,
+                Status = i.Status.ToString()
             })
             .ToListAsync();
     }

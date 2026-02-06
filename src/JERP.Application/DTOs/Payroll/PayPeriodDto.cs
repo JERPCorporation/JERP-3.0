@@ -20,7 +20,9 @@ public class PayPeriodDto
     public DateTime EndDate { get; set; }
     public DateTime PayDate { get; set; }
     public PayFrequency PayFrequency { get; set; }
-    public required string Status { get; set; } // Draft, Processing, Approved, Paid, Closed
+    public PayFrequency Frequency { get; set; } // Alias for PayFrequency for backward compatibility
+    public PayrollStatus StatusEnum { get; set; }
+    public string Status { get; set; } = string.Empty; // Draft, Processing, Approved, Paid, Closed
     public int EmployeeCount { get; set; }
     public decimal TotalGrossPay { get; set; }
     public decimal TotalNetPay { get; set; }
