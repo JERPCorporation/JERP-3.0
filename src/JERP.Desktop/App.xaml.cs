@@ -10,6 +10,7 @@
  * For licensing inquiries: licensing@jerp.io
  */
 
+using System;
 using System.IO;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,7 @@ using JERP.Desktop.Views.Finance;
 
 namespace JERP.Desktop;
 
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
     public IServiceProvider ServiceProvider { get; private set; } = null!;
     public IConfiguration Configuration { get; private set; } = null!;
