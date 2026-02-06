@@ -3,11 +3,6 @@
  * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
- * 
- * This source code is the confidential and proprietary information of ninoyerbas.
- * Unauthorized copying, modification, distribution, or use is strictly prohibited.
- * 
- * For licensing inquiries: licensing@jerp.io
  */
 
 using JERP.Core.Enums;
@@ -22,16 +17,18 @@ public class PayrollRecordDto
     public Guid Id { get; set; }
     public Guid PayPeriodId { get; set; }
     public Guid EmployeeId { get; set; }
+    public string EmployeeNumber { get; set; } = string.Empty;
+    public string EmployeeName { get; set; } = string.Empty;
     public PayrollStatus Status { get; set; }
     public decimal RegularHours { get; set; }
     public decimal OvertimeHours { get; set; }
     public decimal DoubleTimeHours { get; set; }
-    public decimal GrossPay { get; set; }
     public decimal RegularPay { get; set; }
     public decimal OvertimePay { get; set; }
     public decimal DoubleTimePay { get; set; }
     public decimal BonusPay { get; set; }
     public decimal CommissionPay { get; set; }
+    public decimal GrossPay { get; set; }
     public decimal FederalTax { get; set; }
     public decimal StateTax { get; set; }
     public decimal SocialSecurityTax { get; set; }
@@ -49,6 +46,9 @@ public class PayrollRecordDto
     public decimal YTDNetPay { get; set; }
     public DateTime? CalculatedAt { get; set; }
     public DateTime? ApprovedAt { get; set; }
+    public DateTime? PaidAt { get; set; }
+    public string? PaymentMethod { get; set; }
+    public string? PaymentReference { get; set; }
     public List<PayrollRecordDetailDto> Details { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

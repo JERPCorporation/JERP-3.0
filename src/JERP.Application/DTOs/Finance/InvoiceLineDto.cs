@@ -1,0 +1,28 @@
+/*
+ * JERP 3.0 - Payroll & ERP System
+ * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ */
+
+namespace JERP.Application.DTOs.Finance;
+
+/// <summary>
+/// Invoice line item DTO
+/// </summary>
+public class InvoiceLineDto
+{
+    public Guid Id { get; set; }
+    public int LineNumber { get; set; }
+    public required string Description { get; set; }
+    public Guid? ProductId { get; set; }
+    public string? ProductCode { get; set; }
+    public Guid? AccountId { get; set; }
+    public string? AccountNumber { get; set; }
+    public decimal Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
+    public decimal Amount { get; set; }
+    public decimal TaxAmount { get; set; }
+    public decimal DiscountAmount { get; set; }
+    public decimal TotalAmount { get; set; }
+}

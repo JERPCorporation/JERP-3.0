@@ -13,7 +13,7 @@
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using JERP.Application.DTOs;
+using JERP.Application.DTOs.Users;
 using JERP.Desktop.Services;
 using JERP.Desktop.Views;
 using JERP.Desktop.Views.Finance;
