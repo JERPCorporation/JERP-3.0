@@ -45,6 +45,24 @@ public partial class ChartOfAccountsViewModel : ViewModelBase
     [ObservableProperty]
     private int _recordsPerPage = 25;
 
+    [ObservableProperty]
+    private bool _templateSelectorOpen;
+
+    [ObservableProperty]
+    private ObservableCollection<AccountTemplateSummaryDto> _availableTemplates = new();
+
+    [ObservableProperty]
+    private AccountTemplateSummaryDto? _selectedTemplate;
+
+    [ObservableProperty]
+    private bool _overwriteMode;
+
+    [ObservableProperty]
+    private string? _operationMessage;
+
+    [ObservableProperty]
+    private bool _processingImport;
+
     public ChartOfAccountsViewModel(IApiClient apiClient, IAuthenticationService authService)
     {
         _apiClient = apiClient;
@@ -198,6 +216,103 @@ public partial class ChartOfAccountsViewModel : ViewModelBase
         {
             PageIndex--;
             await FetchAccountsDataAsync();
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenTemplateSelectorAsync()
+    {
+        if (IsBusy) return;
+
+        IsBusy = true;
+        ErrorMessage = null;
+
+        try
+        {
+            var templateData = await _apiClient.GetAsync<List<AccountTemplateSummaryDto>>("api/v1/finance/account-templates");
+            
+            if (templateData != null)
+            {
+                AvailableTemplates.Clear();
+                foreach (var item in templateData)
+                {
+                    AvailableTemplates.Add(item);
+                }
+                TemplateSelectorOpen = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            SetError($"Failed loading templates: {ex.Message}");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    private void CloseTemplateSelector()
+    {
+        TemplateSelectorOpen = false;
+        SelectedTemplate = null;
+        OverwriteMode = false;
+        OperationMessage = null;
+    }
+
+    [RelayCommand]
+    private void ChooseTemplate(AccountTemplateSummaryDto? template)
+    {
+        SelectedTemplate = template;
+    }
+
+    [RelayCommand]
+    private async Task PerformTemplateImportAsync()
+    {
+        if (SelectedTemplate == null || ProcessingImport) return;
+
+        ProcessingImport = true;
+        ErrorMessage = null;
+        OperationMessage = null;
+
+        try
+        {
+            var organizationId = _authService.CurrentUser?.CompanyId;
+            if (organizationId == null)
+            {
+                SetError("Organization ID not available");
+                return;
+            }
+
+            var requestData = new
+            {
+                CompanyId = organizationId,
+                OverwriteExisting = OverwriteMode
+            };
+
+            var operationResult = await _apiClient.PostAsync<TemplateLoadResultDto>(
+                $"api/v1/finance/account-templates/{SelectedTemplate.Code}/load", 
+                requestData);
+
+            if (operationResult != null && operationResult.Success)
+            {
+                OperationMessage = $"Import successful: {operationResult.AccountsCreated} accounts created";
+                await Task.Delay(1500);
+                TemplateSelectorOpen = false;
+                await FetchAccountsDataAsync();
+            }
+            else if (operationResult != null)
+            {
+                SetError($"Import errors: {string.Join(", ", operationResult.Errors)}");
+            }
+        }
+        catch (Exception ex)
+        {
+            SetError($"Import operation failed: {ex.Message}");
+        }
+        finally
+        {
+            ProcessingImport = false;
         }
     }
 }

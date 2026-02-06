@@ -1,13 +1,20 @@
 <Application x:Class="JERP.Desktop.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ui="http://schemas.modernwpf.com/2019">
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:converters="clr-namespace:JERP.Desktop.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemeResources RequestedTheme="Dark" />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
+            
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:TemplateIconConverter x:Key="TemplateIconConverter"/>
+            <converters:CannabisIndicatorConverter x:Key="CannabisIndicatorConverter"/>
+            <converters:BreakdownHeightConverter x:Key="BreakdownHeightConverter"/>
+            <converters:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
