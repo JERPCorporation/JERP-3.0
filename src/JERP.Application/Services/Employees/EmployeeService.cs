@@ -333,7 +333,7 @@ public class EmployeeService : IEmployeeService
             EmployeeNumber = employee.EmployeeNumber,
             CompanyId = employee.CompanyId,
             DepartmentId = employee.DepartmentId,
-            Department = employee.Department?.DepartmentName,
+            Department = employee.Department?.Name,
             ManagerId = employee.ManagerId,
             HireDate = employee.HireDate,
             TerminationDate = employee.TerminationDate,
