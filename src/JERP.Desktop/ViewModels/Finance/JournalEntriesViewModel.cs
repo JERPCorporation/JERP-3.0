@@ -69,7 +69,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            var endpointUrl = $"api/finance/journal-entries?companyId={organizationId}&page={CurrentPageNumber}&pageSize={ItemsPerPage}";
+            var endpointUrl = $"api/v1/finance/journal-entries?companyId={organizationId}&page={CurrentPageNumber}&pageSize={ItemsPerPage}";
             
             if (!string.IsNullOrWhiteSpace(LookupText))
             {
@@ -195,7 +195,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.PostAsync<object>($"api/finance/journal-entries/{entryRecord.Id}/post", null);
+            await _apiClient.PostAsync<object>($"api/v1/finance/journal-entries/{entryRecord.Id}/post", null);
             await RetrieveJournalEntriesAsync();
         }
         catch (Exception ex)
@@ -225,7 +225,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.PostAsync<object>($"api/finance/journal-entries/{entryRecord.Id}/void", null);
+            await _apiClient.PostAsync<object>($"api/v1/finance/journal-entries/{entryRecord.Id}/void", null);
             await RetrieveJournalEntriesAsync();
         }
         catch (Exception ex)
@@ -252,7 +252,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/journal-entries/{entryRecord.Id}");
+            await _apiClient.DeleteAsync($"api/v1/finance/journal-entries/{entryRecord.Id}");
             await RetrieveJournalEntriesAsync();
         }
         catch (Exception ex)

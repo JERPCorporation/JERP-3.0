@@ -68,7 +68,7 @@ public partial class VendorsViewModel : ViewModelBase
                 return;
             }
 
-            var apiPath = $"api/finance/vendors?companyId={businessId}&page={PaginationIndex}&pageSize={ResultsPerPage}";
+            var apiPath = $"api/v1/vendors?companyId={businessId}&page={PaginationIndex}&pageSize={ResultsPerPage}";
             
             if (!string.IsNullOrWhiteSpace(FilterQuery))
             {
@@ -174,7 +174,7 @@ public partial class VendorsViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/vendors/{vendorRecord.Id}");
+            await _apiClient.DeleteAsync($"api/v1/vendors/{vendorRecord.Id}");
             await LoadVendorRecordsAsync();
         }
         catch (Exception ex)

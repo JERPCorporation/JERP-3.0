@@ -56,7 +56,7 @@ public partial class EmployeesViewModel : ViewModelBase
 
         try
         {
-            var query = $"api/employees?page={CurrentPage}&pageSize={PageSize}";
+            var query = $"api/v1/employees?page={CurrentPage}&pageSize={PageSize}";
             
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
@@ -135,7 +135,7 @@ public partial class EmployeesViewModel : ViewModelBase
 
         try
         {
-            await _apiClient.DeleteAsync($"api/employees/{employee.Id}");
+            await _apiClient.DeleteAsync($"api/v1/employees/{employee.Id}");
             await LoadEmployeesAsync();
         }
         catch (Exception ex)

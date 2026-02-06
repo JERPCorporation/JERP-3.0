@@ -69,7 +69,7 @@ public partial class InvoicesViewModel : ViewModelBase
                 return;
             }
 
-            var urlPath = $"api/finance/invoices?companyId={entityId}&page={CurrentPageIndex}&pageSize={RecordsPerView}";
+            var urlPath = $"api/v1/finance/invoices?companyId={entityId}&page={CurrentPageIndex}&pageSize={RecordsPerView}";
             
             if (!string.IsNullOrWhiteSpace(TextFilter))
             {
@@ -216,7 +216,7 @@ public partial class InvoicesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/invoices/{invoiceRecord.Id}");
+            await _apiClient.DeleteAsync($"api/v1/finance/invoices/{invoiceRecord.Id}");
             await AcquireInvoiceDataAsync();
         }
         catch (Exception ex)

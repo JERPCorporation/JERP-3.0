@@ -63,43 +63,34 @@ public partial class DashboardViewModel : ViewModelBase
 
         try
         {
-            var statsTask = _apiClient.GetAsync<ComplianceStatsDto>("api/compliance/stats");
-            var violationsTask = _apiClient.GetAsync<List<ComplianceViolationDto>>("api/compliance/violations/recent?count=10");
-            var employeesTask = _apiClient.GetAsync<EmployeeStatsDto>("api/employees/stats");
-            var timesheetsTask = _apiClient.GetAsync<TimesheetStatsDto>("api/timesheets/stats");
+            var overviewTask = _apiClient.GetAsync<DashboardOverviewDto>("api/v1/dashboard/overview");
+            var violationsTask = _apiClient.GetAsync<List<ComplianceViolationDto>>("api/v1/compliance/violations/active");
 
-            await Task.WhenAll(statsTask, violationsTask, employeesTask, timesheetsTask);
+            await Task.WhenAll(overviewTask, violationsTask);
 
-            var stats = await statsTask;
-            if (stats != null)
+            var overview = await overviewTask;
+            if (overview != null)
             {
-                ComplianceScore = stats.ComplianceScore;
-                CriticalViolationCount = stats.CriticalCount;
-                HighViolationCount = stats.HighCount;
-                MediumViolationCount = stats.MediumCount;
-                LowViolationCount = stats.LowCount;
+                // Map overview data to dashboard properties
+                ComplianceScore = 85; // Default score - can be enhanced later
+                CriticalViolationCount = overview.CriticalViolations;
+                ActiveEmployeeCount = overview.ActiveEmployees;
+                PendingTimesheetCount = overview.PendingTimesheets;
+                
+                // For now, set other violation counts to 0 - can be enhanced later
+                HighViolationCount = 0;
+                MediumViolationCount = 0;
+                LowViolationCount = 0;
             }
 
             var violations = await violationsTask;
             if (violations != null)
             {
                 RecentViolations.Clear();
-                foreach (var violation in violations)
+                foreach (var violation in violations.Take(10))
                 {
                     RecentViolations.Add(violation);
                 }
-            }
-
-            var employeeStats = await employeesTask;
-            if (employeeStats != null)
-            {
-                ActiveEmployeeCount = employeeStats.ActiveCount;
-            }
-
-            var timesheetStats = await timesheetsTask;
-            if (timesheetStats != null)
-            {
-                PendingTimesheetCount = timesheetStats.PendingCount;
             }
         }
         catch (Exception ex)

@@ -61,7 +61,7 @@ public partial class TimesheetsViewModel : ViewModelBase
 
         try
         {
-            var query = $"api/timesheets?startDate={StartDate:yyyy-MM-dd}&endDate={EndDate:yyyy-MM-dd}";
+            var query = $"api/v1/timesheets?startDate={StartDate:yyyy-MM-dd}&endDate={EndDate:yyyy-MM-dd}";
             
             if (SelectedEmployeeId.HasValue)
             {
@@ -114,7 +114,7 @@ public partial class TimesheetsViewModel : ViewModelBase
 
         try
         {
-            await _apiClient.PostAsync<object>($"api/timesheets/{timesheet.Id}/submit", new { });
+            await _apiClient.PostAsync<object>($"api/v1/timesheets/{timesheet.Id}/submit", new { });
             await LoadTimesheetsAsync();
         }
         catch (Exception ex)
@@ -130,7 +130,7 @@ public partial class TimesheetsViewModel : ViewModelBase
 
         try
         {
-            await _apiClient.PostAsync<object>($"api/timesheets/{timesheet.Id}/approve", new { });
+            await _apiClient.PostAsync<object>($"api/v1/timesheets/{timesheet.Id}/approve", new { });
             await LoadTimesheetsAsync();
         }
         catch (Exception ex)
@@ -146,7 +146,7 @@ public partial class TimesheetsViewModel : ViewModelBase
 
         try
         {
-            await _apiClient.DeleteAsync($"api/timesheets/{timesheet.Id}");
+            await _apiClient.DeleteAsync($"api/v1/timesheets/{timesheet.Id}");
             await LoadTimesheetsAsync();
         }
         catch (Exception ex)

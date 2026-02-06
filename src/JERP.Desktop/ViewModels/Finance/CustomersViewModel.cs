@@ -65,7 +65,7 @@ public partial class CustomersViewModel : ViewModelBase
                 return;
             }
 
-            var requestUri = $"api/finance/customers?companyId={firmIdentifier}&page={PageNumber}&pageSize={ItemsPerPage}";
+            var requestUri = $"api/v1/finance/customers?companyId={firmIdentifier}&page={PageNumber}&pageSize={ItemsPerPage}";
             
             if (!string.IsNullOrWhiteSpace(KeywordSearch))
             {
@@ -159,7 +159,7 @@ public partial class CustomersViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/customers/{customerRecord.Id}");
+            await _apiClient.DeleteAsync($"api/v1/finance/customers/{customerRecord.Id}");
             await RetrieveCustomerDataAsync();
         }
         catch (Exception ex)

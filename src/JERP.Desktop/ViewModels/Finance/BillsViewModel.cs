@@ -69,7 +69,7 @@ public partial class BillsViewModel : ViewModelBase
                 return;
             }
 
-            var queryString = $"api/finance/bills?companyId={companyRef}&page={ActivePage}&pageSize={EntriesPerPage}";
+            var queryString = $"api/v1/vendors/bills?companyId={companyRef}&page={ActivePage}&pageSize={EntriesPerPage}";
             
             if (!string.IsNullOrWhiteSpace(SearchInput))
             {
@@ -218,7 +218,7 @@ public partial class BillsViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/bills/{billItem.Id}");
+            await _apiClient.DeleteAsync($"api/v1/vendors/bills/{billItem.Id}");
             await FetchBillDataAsync();
         }
         catch (Exception ex)

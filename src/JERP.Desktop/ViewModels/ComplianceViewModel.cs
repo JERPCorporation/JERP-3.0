@@ -64,7 +64,7 @@ public partial class ComplianceViewModel : ViewModelBase
 
         try
         {
-            var query = "api/compliance/violations?";
+            var query = "api/v1/compliance/violations/active?";
             
             if (SeverityFilter != "All")
             {
@@ -87,10 +87,10 @@ public partial class ComplianceViewModel : ViewModelBase
                 }
             }
 
-            var stats = await _apiClient.GetAsync<ComplianceStatsDto>("api/compliance/stats");
-            if (stats != null)
+            var scoreResponse = await _apiClient.GetAsync<dynamic>("api/v1/compliance/score");
+            if (scoreResponse != null)
             {
-                ComplianceScore = stats.ComplianceScore;
+                ComplianceScore = scoreResponse.Score ?? 0;
             }
         }
         catch (Exception ex)
@@ -110,7 +110,7 @@ public partial class ComplianceViewModel : ViewModelBase
 
         try
         {
-            await _apiClient.PostAsync<object>($"api/compliance/violations/{violation.Id}/resolve", new { });
+            await _apiClient.PostAsync<object>($"api/v1/compliance/violations/{violation.Id}/resolve", new { });
             await LoadViolationsAsync();
         }
         catch (Exception ex)
