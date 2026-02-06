@@ -47,6 +47,7 @@ public class EmployeeService : IEmployeeService
     public async Task<EmployeeDto> GetByIdAsync(Guid id)
     {
         var employee = await _context.Employees
+            .Include(e => e.Department)
             .FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
 
         if (employee == null)
@@ -61,6 +62,7 @@ public class EmployeeService : IEmployeeService
     public async Task<EmployeeDto> GetByEmployeeNumberAsync(string employeeNumber)
     {
         var employee = await _context.Employees
+            .Include(e => e.Department)
             .FirstOrDefaultAsync(e => e.EmployeeNumber == employeeNumber && !e.IsDeleted);
 
         if (employee == null)
@@ -88,6 +90,7 @@ public class EmployeeService : IEmployeeService
 
         var totalCount = await query.CountAsync();
         var employees = await query
+            .Include(e => e.Department)
             .OrderBy(e => e.LastName)
             .ThenBy(e => e.FirstName)
             .Skip((page - 1) * pageSize)
@@ -158,6 +161,9 @@ public class EmployeeService : IEmployeeService
 
         _logger.LogInformation("Employee created successfully: {EmployeeNumber}", request.EmployeeNumber);
 
+        // Reload employee with Department to populate navigation property
+        await _context.Entry(employee).Reference(e => e.Department).LoadAsync();
+
         // Audit log the employee creation
         try
         {
@@ -186,6 +192,7 @@ public class EmployeeService : IEmployeeService
         _logger.LogInformation("Updating employee: {EmployeeId}", id);
 
         var employee = await _context.Employees
+            .Include(e => e.Department)
             .FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
 
         if (employee == null)
@@ -326,6 +333,7 @@ public class EmployeeService : IEmployeeService
             EmployeeNumber = employee.EmployeeNumber,
             CompanyId = employee.CompanyId,
             DepartmentId = employee.DepartmentId,
+            Department = employee.Department?.DepartmentName,
             ManagerId = employee.ManagerId,
             HireDate = employee.HireDate,
             TerminationDate = employee.TerminationDate,

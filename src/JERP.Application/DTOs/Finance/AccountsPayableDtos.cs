@@ -63,8 +63,7 @@ public class BillDto
     public string? VendorInvoiceNumber { get; set; }
     public DateTime BillDate { get; set; }
     public DateTime DueDate { get; set; }
-    public BillStatus StatusEnum { get; set; }
-    public string Status { get; set; } = string.Empty;
+    public BillStatus Status { get; set; }
     public string? ReferenceNumber { get; set; }
     public string? Description { get; set; }
     public decimal Subtotal { get; set; }
@@ -97,8 +96,7 @@ public class BillListDto
     public string VendorName { get; set; } = string.Empty;
     public DateTime BillDate { get; set; }
     public DateTime DueDate { get; set; }
-    public BillStatus StatusEnum { get; set; }
-    public string Status { get; set; } = string.Empty; // Draft, Submitted, Approved, Paid
+    public BillStatus Status { get; set; }
     public decimal SubTotal { get; set; }
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }

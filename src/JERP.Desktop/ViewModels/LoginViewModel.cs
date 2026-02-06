@@ -82,7 +82,7 @@ public partial class LoginViewModel : ViewModelBase
                 var mainWindow = _serviceProvider.GetService(typeof(MainWindow)) as MainWindow;
                 mainWindow?.Show();
                 
-                Application.Current.Windows.OfType<LoginWindow>().FirstOrDefault()?.Close();
+                System.Windows.Application.Current.Windows.OfType<LoginWindow>().FirstOrDefault()?.Close();
             }
             else
             {
@@ -104,6 +104,6 @@ public partial class LoginViewModel : ViewModelBase
     [RelayCommand]
     private void Cancel()
     {
-        Application.Current.Shutdown();
+        System.Windows.Application.Current.Shutdown();
     }
 }

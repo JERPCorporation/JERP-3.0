@@ -33,6 +33,7 @@ public class EmployeeDto
     public required string EmployeeNumber { get; set; }
     public Guid CompanyId { get; set; }
     public Guid? DepartmentId { get; set; }
+    public string? Department { get; set; }
     public Guid? ManagerId { get; set; }
     public DateTime HireDate { get; set; }
     public DateTime? TerminationDate { get; set; }
