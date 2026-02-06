@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JERP.Application.DTOs.Compliance;
+using JERP.Application.DTOs.Statistics;
 using JERP.Desktop.Services;
 
 namespace JERP.Desktop.ViewModels;
@@ -86,10 +87,10 @@ public partial class ComplianceViewModel : ViewModelBase
                 }
             }
 
-            var stats = await _apiClient.GetAsync<dynamic>("api/compliance/stats");
+            var stats = await _apiClient.GetAsync<ComplianceStatsDto>("api/compliance/stats");
             if (stats != null)
             {
-                ComplianceScore = stats.complianceScore ?? 0.0;
+                ComplianceScore = stats.ComplianceScore;
             }
         }
         catch (Exception ex)

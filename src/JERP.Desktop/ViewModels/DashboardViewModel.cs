@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JERP.Application.DTOs.Compliance;
+using JERP.Application.DTOs.Statistics;
 using JERP.Desktop.Services;
 
 namespace JERP.Desktop.ViewModels;
@@ -62,21 +63,21 @@ public partial class DashboardViewModel : ViewModelBase
 
         try
         {
-            var statsTask = _apiClient.GetAsync<dynamic>("api/compliance/stats");
+            var statsTask = _apiClient.GetAsync<ComplianceStatsDto>("api/compliance/stats");
             var violationsTask = _apiClient.GetAsync<List<ComplianceViolationDto>>("api/compliance/violations/recent?count=10");
-            var employeesTask = _apiClient.GetAsync<dynamic>("api/employees/stats");
-            var timesheetsTask = _apiClient.GetAsync<dynamic>("api/timesheets/stats");
+            var employeesTask = _apiClient.GetAsync<EmployeeStatsDto>("api/employees/stats");
+            var timesheetsTask = _apiClient.GetAsync<TimesheetStatsDto>("api/timesheets/stats");
 
             await Task.WhenAll(statsTask, violationsTask, employeesTask, timesheetsTask);
 
             var stats = await statsTask;
             if (stats != null)
             {
-                ComplianceScore = stats.complianceScore ?? 0.0;
-                CriticalViolationCount = stats.criticalCount ?? 0;
-                HighViolationCount = stats.highCount ?? 0;
-                MediumViolationCount = stats.mediumCount ?? 0;
-                LowViolationCount = stats.lowCount ?? 0;
+                ComplianceScore = stats.ComplianceScore;
+                CriticalViolationCount = stats.CriticalCount;
+                HighViolationCount = stats.HighCount;
+                MediumViolationCount = stats.MediumCount;
+                LowViolationCount = stats.LowCount;
             }
 
             var violations = await violationsTask;
@@ -92,13 +93,13 @@ public partial class DashboardViewModel : ViewModelBase
             var employeeStats = await employeesTask;
             if (employeeStats != null)
             {
-                ActiveEmployeeCount = employeeStats.activeCount ?? 0;
+                ActiveEmployeeCount = employeeStats.ActiveCount;
             }
 
             var timesheetStats = await timesheetsTask;
             if (timesheetStats != null)
             {
-                PendingTimesheetCount = timesheetStats.pendingCount ?? 0;
+                PendingTimesheetCount = timesheetStats.PendingCount;
             }
         }
         catch (Exception ex)

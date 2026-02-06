@@ -81,10 +81,16 @@ public partial class EmployeesViewModel : ViewModelBase
                             FirstName = item.firstName,
                             LastName = item.lastName,
                             Email = item.email,
-                            Department = item.department,
+                            DepartmentId = item.departmentId,
                             Status = item.status,
                             HireDate = item.hireDate,
-                            HourlyRate = item.hourlyRate
+                            HourlyRate = item.hourlyRate,
+                            CompanyId = item.companyId,
+                            EmploymentType = item.employmentType,
+                            Classification = item.classification,
+                            PayFrequency = item.payFrequency,
+                            CreatedAt = item.createdAt,
+                            UpdatedAt = item.updatedAt
                         });
                     }
                 }
