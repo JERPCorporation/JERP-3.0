@@ -358,7 +358,7 @@ The FASB ASC framework implementation is **complete and ready for deployment**. 
 ---
 
 **JERP 3.0** - Professional ERP for Cannabis Businesses  
-© 2026 ninoyerbas. All Rights Reserved.
+© 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
 
 **Implementation Date**: February 5, 2026  
 **Implemented By**: GitHub Copilot Agent

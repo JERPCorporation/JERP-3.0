@@ -496,4 +496,4 @@ For questions about FASB ASC classification:
 ---
 
 **JERP 3.0** - Professional ERP for Cannabis Businesses  
-© 2026 ninoyerbas. All Rights Reserved.
+© 2026 Julio Cesar Mendez Tobar. All Rights Reserved.

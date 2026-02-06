@@ -7,7 +7,7 @@
 | **Project Name** | JERP 3.0 (Just Enough Resource Planning) |
 | **Document Version** | 1.0 |
 | **Last Updated** | February 5, 2026 |
-| **Document Owner** | ninoyerbas |
+| **Document Owner** | Julio Cesar Mendez Tobar |
 | **Status** | Active Development |
 
 ---
@@ -1279,6 +1279,6 @@ For additional information, see:
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|
-| Project Owner | ninoyerbas | _________________ | _________ |
+| Project Owner | Julio Cesar Mendez Tobar | _________________ | _________ |
 | Technical Lead | _________________ | _________________ | _________ |
 | Stakeholder | _________________ | _________________ | _________ |

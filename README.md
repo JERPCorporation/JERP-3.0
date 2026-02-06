@@ -66,8 +66,8 @@ Enterprise Resource Planning with Payroll Module
 **JERP 3.0 is proprietary software.** All rights reserved.
 
 ```
-Copyright © 2026 ninoyerbas
-JERP™ is a trademark of ninoyerbas
+Copyright © 2026 Julio Cesar Mendez Tobar
+JERP™ is a trademark of Julio Cesar Mendez Tobar
 ```
 
 ### Usage Rights
@@ -129,3 +129,23 @@ dotnet ef database update --project ../JERP.Infrastructure
 ```
 
 ---
+
+## 📜 License & Copyright
+
+**JERP 3.0 - Enterprise Resource Planning System**
+
+**Copyright © 2026 Julio Cesar Mendez Tobar. All Rights Reserved.**
+
+This software is proprietary and confidential. Unauthorized copying, distribution, modification, or use is strictly prohibited without the express written permission of the copyright holder.
+
+### Author
+
+**Julio Cesar Mendez Tobar**  
+Software Architect & Developer
+
+For licensing inquiries, please contact: licensing@jerp.io
+
+---
+
+Built with passion and dedication in 2026.
+
