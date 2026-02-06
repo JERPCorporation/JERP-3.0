@@ -267,12 +267,6 @@ public partial class ChartOfAccountsViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ToggleOverwriteMode()
-    {
-        OverwriteMode = !OverwriteMode;
-    }
-
-    [RelayCommand]
     private async Task PerformTemplateImportAsync()
     {
         if (SelectedTemplate == null || ProcessingImport) return;
