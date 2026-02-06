@@ -31,6 +31,7 @@ public class JournalEntryDto
     public bool IsBalanced { get; set; }
     public DateTime? PostedAt { get; set; }
     public List<GeneralLedgerEntryDto> LedgerEntries { get; set; } = new();
+    public List<JournalEntryLineDto> Lines { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
