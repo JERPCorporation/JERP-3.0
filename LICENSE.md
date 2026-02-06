@@ -1,6 +1,6 @@
 # JERP 3.0 Proprietary Software License
 
-**Copyright © 2026 ninoyerbas. All Rights Reserved.**
+**Copyright © 2026 Julio Cesar Mendez Tobar. All Rights Reserved.**
 
 ---
 
@@ -130,4 +130,13 @@ Licensor reserves the right to modify this License at any time. Continued use af
 
 ---
 
-*Last updated: February 4, 2026*
+## Author Information
+
+**Julio Cesar Mendez Tobar**  
+Software Architect & Developer  
+Created: 2026  
+Version: 3.0.0
+
+---
+
+*Last updated: February 6, 2026*

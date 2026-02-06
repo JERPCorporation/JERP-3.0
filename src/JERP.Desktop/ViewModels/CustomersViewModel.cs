@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -95,7 +95,7 @@ public partial class CustomersViewModel : ViewModelBase
 
         try
         {
-            var query = $"api/finance/customers?page={CurrentPageIndex}&pageSize={RecordsPerPage}&includeInactive={ShowInactiveClients}";
+            var query = $"api/v1/finance/customers?page={CurrentPageIndex}&pageSize={RecordsPerPage}&includeInactive={ShowInactiveClients}";
             
             if (!string.IsNullOrWhiteSpace(ClientSearchText))
             {
@@ -240,7 +240,7 @@ public partial class CustomersViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            var exposure = await _apiClient.GetAsync<dynamic>("api/finance/customers/credit-exposure");
+            var exposure = await _apiClient.GetAsync<dynamic>("api/v1/finance/customers/credit-exposure");
             
             if (exposure != null)
             {
@@ -268,7 +268,7 @@ public partial class CustomersViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            await _apiClient.PostAsync<object>($"api/finance/customers/{customer.Id}/verify-license", new { });
+            await _apiClient.PostAsync<object>($"api/v1/finance/customers/{customer.Id}/verify-license", new { });
             await LoadCustomerPortfolioAsync();
         }
         catch (Exception ex)
@@ -289,7 +289,7 @@ public partial class CustomersViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            await _apiClient.PutAsync($"api/finance/customers/{customer.Id}/toggle-status", new { });
+            await _apiClient.PutAsync($"api/v1/finance/customers/{customer.Id}/toggle-status", new { });
             await LoadCustomerPortfolioAsync();
         }
         catch (Exception ex)

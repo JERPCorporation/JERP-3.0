@@ -1,15 +1,16 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
  */
 
+using System;
 using System.IO;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,7 @@ using JERP.Desktop.Views.Finance;
 
 namespace JERP.Desktop;
 
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
     public IServiceProvider ServiceProvider { get; private set; } = null!;
     public IConfiguration Configuration { get; private set; } = null!;

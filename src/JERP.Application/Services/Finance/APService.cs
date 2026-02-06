@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -65,7 +65,8 @@ public class APService : IAPService
             TaxAmount = bill.TaxAmount,
             TotalAmount = bill.TotalAmount,
             AmountPaid = bill.AmountPaid,
-            Status = bill.Status,
+            StatusEnum = bill.Status,
+            Status = bill.Status.ToString(),
             IsPaid = bill.IsPaid,
             PaymentDate = bill.PaymentDate,
             JournalEntryId = bill.JournalEntryId,
@@ -115,7 +116,8 @@ public class APService : IAPService
                 DueDate = b.DueDate,
                 TotalAmount = b.TotalAmount,
                 AmountPaid = b.AmountPaid,
-                Status = b.Status
+                StatusEnum = b.Status,
+                Status = b.Status.ToString()
             })
             .ToListAsync();
     }

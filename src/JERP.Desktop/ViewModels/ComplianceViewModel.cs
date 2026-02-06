@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -64,7 +64,7 @@ public partial class ComplianceViewModel : ViewModelBase
 
         try
         {
-            var query = "api/compliance/violations?";
+            var query = "api/v1/compliance/violations/active?";
             
             if (SeverityFilter != "All")
             {
@@ -87,10 +87,10 @@ public partial class ComplianceViewModel : ViewModelBase
                 }
             }
 
-            var stats = await _apiClient.GetAsync<ComplianceStatsDto>("api/compliance/stats");
-            if (stats != null)
+            var scoreResponse = await _apiClient.GetAsync<dynamic>("api/v1/compliance/score");
+            if (scoreResponse != null)
             {
-                ComplianceScore = stats.ComplianceScore;
+                ComplianceScore = scoreResponse.Score ?? 0;
             }
         }
         catch (Exception ex)
@@ -110,7 +110,7 @@ public partial class ComplianceViewModel : ViewModelBase
 
         try
         {
-            await _apiClient.PostAsync<object>($"api/compliance/violations/{violation.Id}/resolve", new { });
+            await _apiClient.PostAsync<object>($"api/v1/compliance/violations/{violation.Id}/resolve", new { });
             await LoadViolationsAsync();
         }
         catch (Exception ex)

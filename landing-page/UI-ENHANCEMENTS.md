@@ -210,4 +210,4 @@ When adding new UI components:
 
 ## License
 Proprietary and Confidential - JERP 3.0
-Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.

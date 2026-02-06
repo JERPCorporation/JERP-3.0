@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -56,7 +56,7 @@ public partial class EmployeesViewModel : ViewModelBase
 
         try
         {
-            var query = $"api/employees?page={CurrentPage}&pageSize={PageSize}";
+            var query = $"api/v1/employees?page={CurrentPage}&pageSize={PageSize}";
             
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
@@ -135,7 +135,7 @@ public partial class EmployeesViewModel : ViewModelBase
 
         try
         {
-            await _apiClient.DeleteAsync($"api/employees/{employee.Id}");
+            await _apiClient.DeleteAsync($"api/v1/employees/{employee.Id}");
             await LoadEmployeesAsync();
         }
         catch (Exception ex)

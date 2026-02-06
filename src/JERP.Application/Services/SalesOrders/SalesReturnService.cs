@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -73,7 +73,7 @@ public class SalesReturnService : ISalesReturnService
                     RestockingFee = line.RestockingFee,
                     Notes = line.Notes
                 }).ToList(),
-                SubTotal = sr.SubTotal,
+                Subtotal = sr.Subtotal,
                 TaxAmount = sr.TaxAmount,
                 TotalAmount = sr.TotalAmount,
                 ApprovedBy = sr.ApprovedBy,
@@ -140,7 +140,7 @@ public class SalesReturnService : ISalesReturnService
             ReturnDate = DateTime.UtcNow,
             Status = SalesReturnStatus.Requested,
             Reason = reason,
-            SubTotal = 0,
+            Subtotal = 0,
             TaxAmount = 0,
             TotalAmount = 0
         };

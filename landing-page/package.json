@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "license": "UNLICENSED",
-  "author": "ninoyerbas",
+  "author": "Julio Cesar Mendez Tobar",
   "description": "JERP 3.0 Landing Page - Proprietary Software",
   "scripts": {
     "dev": "next dev",

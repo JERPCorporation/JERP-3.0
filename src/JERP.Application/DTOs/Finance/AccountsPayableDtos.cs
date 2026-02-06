@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -63,11 +63,11 @@ public class BillDto
     public string? VendorInvoiceNumber { get; set; }
     public DateTime BillDate { get; set; }
     public DateTime DueDate { get; set; }
-    public BillStatus Status { get; set; }
+    public BillStatus StatusEnum { get; set; }
+    public string Status { get; set; } = string.Empty;
     public string? ReferenceNumber { get; set; }
     public string? Description { get; set; }
     public decimal Subtotal { get; set; }
-    public decimal SubTotal { get; set; } // Alias for Subtotal
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }
     public decimal AmountPaid { get; set; }
@@ -96,8 +96,9 @@ public class BillListDto
     public string VendorName { get; set; } = string.Empty;
     public DateTime BillDate { get; set; }
     public DateTime DueDate { get; set; }
-    public BillStatus Status { get; set; }
-    public decimal SubTotal { get; set; }
+    public BillStatus StatusEnum { get; set; }
+    public string Status { get; set; } = string.Empty;
+    public decimal Subtotal { get; set; }
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }
     public decimal AmountPaid { get; set; }

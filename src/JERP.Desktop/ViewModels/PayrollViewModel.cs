@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -57,7 +57,7 @@ public partial class PayrollViewModel : ViewModelBase
 
         try
         {
-            var payPeriods = await _apiClient.GetAsync<List<PayPeriodDto>>($"api/payroll/periods?year={SelectedYear}");
+            var payPeriods = await _apiClient.GetAsync<List<PayPeriodDto>>($"api/v1/payroll/periods?year={SelectedYear}");
             
             if (payPeriods != null)
             {
@@ -92,7 +92,7 @@ public partial class PayrollViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            await _apiClient.PostAsync<object>($"api/payroll/periods/{SelectedPayPeriod.Id}/process", new { });
+            await _apiClient.PostAsync<object>($"api/v1/payroll/periods/{SelectedPayPeriod.Id}/process", new { });
             await ViewPayrollRecordsAsync();
         }
         catch (Exception ex)
@@ -113,7 +113,7 @@ public partial class PayrollViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            await _apiClient.PostAsync<object>($"api/payroll/periods/{SelectedPayPeriod.Id}/approve", new { });
+            await _apiClient.PostAsync<object>($"api/v1/payroll/periods/{SelectedPayPeriod.Id}/approve", new { });
             await LoadPayPeriodsAsync();
         }
         catch (Exception ex)
@@ -135,7 +135,7 @@ public partial class PayrollViewModel : ViewModelBase
         {
             IsBusy = true;
             var records = await _apiClient.GetAsync<List<PayrollRecordDto>>(
-                $"api/payroll/periods/{SelectedPayPeriod.Id}/records");
+                $"api/v1/payroll/periods/{SelectedPayPeriod.Id}/records");
             
             if (records != null)
             {
@@ -168,7 +168,7 @@ public partial class PayrollViewModel : ViewModelBase
 
         try
         {
-            var pdfBytes = await _apiClient.GetBytesAsync($"api/payroll/records/{record.Id}/paystub");
+            var pdfBytes = await _apiClient.GetBytesAsync($"api/v1/payroll/records/{record.Id}/paystub");
             
             var tempPath = Path.Combine(Path.GetTempPath(), $"PayStub_{record.Id}.pdf");
             await File.WriteAllBytesAsync(tempPath, pdfBytes);
@@ -193,7 +193,7 @@ public partial class PayrollViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            var zipBytes = await _apiClient.GetBytesAsync($"api/payroll/periods/{SelectedPayPeriod.Id}/paystubs/download");
+            var zipBytes = await _apiClient.GetBytesAsync($"api/v1/payroll/periods/{SelectedPayPeriod.Id}/paystubs/download");
             
             var downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var filePath = Path.Combine(downloadsPath, "Downloads", $"PayStubs_{SelectedPayPeriod.Id}.zip");

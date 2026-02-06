@@ -3,7 +3,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>2.0.0</Version>
+    <Version>3.0.0.0</Version>
+    <FileVersion>3.0.0.0</FileVersion>
+    <Authors>Julio Cesar Mendez Tobar</Authors>
+    <Company>Julio Cesar Mendez Tobar</Company>
+    <Product>JERP 3.0 - Enterprise Resource Planning System</Product>
+    <Copyright>Copyright © 2026 Julio Cesar Mendez Tobar. All Rights Reserved.</Copyright>
+    <Description>Professional ERP system for business management - Infrastructure Layer</Description>
   </PropertyGroup>
 
   <ItemGroup>

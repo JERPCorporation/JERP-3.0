@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -69,7 +69,7 @@ public partial class InvoicesViewModel : ViewModelBase
                 return;
             }
 
-            var urlPath = $"api/finance/invoices?companyId={entityId}&page={CurrentPageIndex}&pageSize={RecordsPerView}";
+            var urlPath = $"api/v1/finance/invoices?companyId={entityId}&page={CurrentPageIndex}&pageSize={RecordsPerView}";
             
             if (!string.IsNullOrWhiteSpace(TextFilter))
             {
@@ -103,7 +103,6 @@ public partial class InvoicesViewModel : ViewModelBase
                             InvoiceDate = invoiceData.invoiceDate,
                             DueDate = invoiceData.dueDate,
                             Subtotal = invoiceData.subtotal,
-                            SubTotal = invoiceData.subtotal,
                             TaxAmount = invoiceData.taxAmount,
                             TotalAmount = invoiceData.totalAmount,
                             AmountPaid = invoiceData.amountPaid,
@@ -216,7 +215,7 @@ public partial class InvoicesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/invoices/{invoiceRecord.Id}");
+            await _apiClient.DeleteAsync($"api/v1/finance/invoices/{invoiceRecord.Id}");
             await AcquireInvoiceDataAsync();
         }
         catch (Exception ex)

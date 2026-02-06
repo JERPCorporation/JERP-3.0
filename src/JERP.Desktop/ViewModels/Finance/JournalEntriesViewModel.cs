@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -69,7 +69,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            var endpointUrl = $"api/finance/journal-entries?companyId={organizationId}&page={CurrentPageNumber}&pageSize={ItemsPerPage}";
+            var endpointUrl = $"api/v1/finance/journal-entries?companyId={organizationId}&page={CurrentPageNumber}&pageSize={ItemsPerPage}";
             
             if (!string.IsNullOrWhiteSpace(LookupText))
             {
@@ -195,7 +195,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.PostAsync<object>($"api/finance/journal-entries/{entryRecord.Id}/post", null);
+            await _apiClient.PostAsync<object>($"api/v1/finance/journal-entries/{entryRecord.Id}/post", null);
             await RetrieveJournalEntriesAsync();
         }
         catch (Exception ex)
@@ -225,7 +225,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.PostAsync<object>($"api/finance/journal-entries/{entryRecord.Id}/void", null);
+            await _apiClient.PostAsync<object>($"api/v1/finance/journal-entries/{entryRecord.Id}/void", null);
             await RetrieveJournalEntriesAsync();
         }
         catch (Exception ex)
@@ -252,7 +252,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/journal-entries/{entryRecord.Id}");
+            await _apiClient.DeleteAsync($"api/v1/finance/journal-entries/{entryRecord.Id}");
             await RetrieveJournalEntriesAsync();
         }
         catch (Exception ex)

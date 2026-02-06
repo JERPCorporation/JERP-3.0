@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -65,7 +65,7 @@ public partial class CustomersViewModel : ViewModelBase
                 return;
             }
 
-            var requestUri = $"api/finance/customers?companyId={firmIdentifier}&page={PageNumber}&pageSize={ItemsPerPage}";
+            var requestUri = $"api/v1/finance/customers?companyId={firmIdentifier}&page={PageNumber}&pageSize={ItemsPerPage}";
             
             if (!string.IsNullOrWhiteSpace(KeywordSearch))
             {
@@ -159,7 +159,7 @@ public partial class CustomersViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/customers/{customerRecord.Id}");
+            await _apiClient.DeleteAsync($"api/v1/finance/customers/{customerRecord.Id}");
             await RetrieveCustomerDataAsync();
         }
         catch (Exception ex)

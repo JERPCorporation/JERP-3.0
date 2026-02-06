@@ -1,10 +1,10 @@
 /*
  * JERP 3.0 - Payroll & ERP System
- * Copyright (c) 2026 ninoyerbas. All Rights Reserved.
+ * Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
- * This source code is the confidential and proprietary information of ninoyerbas.
+ * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
  * For licensing inquiries: licensing@jerp.io
@@ -69,7 +69,7 @@ public partial class BillsViewModel : ViewModelBase
                 return;
             }
 
-            var queryString = $"api/finance/bills?companyId={companyRef}&page={ActivePage}&pageSize={EntriesPerPage}";
+            var queryString = $"api/v1/vendors/bills?companyId={companyRef}&page={ActivePage}&pageSize={EntriesPerPage}";
             
             if (!string.IsNullOrWhiteSpace(SearchInput))
             {
@@ -104,7 +104,6 @@ public partial class BillsViewModel : ViewModelBase
                             BillDate = billEntry.billDate,
                             DueDate = billEntry.dueDate,
                             Subtotal = billEntry.subtotal,
-                            SubTotal = billEntry.subtotal,
                             TaxAmount = billEntry.taxAmount,
                             TotalAmount = billEntry.totalAmount,
                             AmountPaid = billEntry.amountPaid,
@@ -218,7 +217,7 @@ public partial class BillsViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.DeleteAsync($"api/finance/bills/{billItem.Id}");
+            await _apiClient.DeleteAsync($"api/v1/vendors/bills/{billItem.Id}");
             await FetchBillDataAsync();
         }
         catch (Exception ex)
