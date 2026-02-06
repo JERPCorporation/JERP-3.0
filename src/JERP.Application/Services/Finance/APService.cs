@@ -65,8 +65,7 @@ public class APService : IAPService
             TaxAmount = bill.TaxAmount,
             TotalAmount = bill.TotalAmount,
             AmountPaid = bill.AmountPaid,
-            StatusEnum = bill.Status,
-            Status = bill.Status.ToString(),
+            Status = bill.Status,
             IsPaid = bill.IsPaid,
             PaymentDate = bill.PaymentDate,
             JournalEntryId = bill.JournalEntryId,
@@ -116,8 +115,7 @@ public class APService : IAPService
                 DueDate = b.DueDate,
                 TotalAmount = b.TotalAmount,
                 AmountPaid = b.AmountPaid,
-                StatusEnum = b.Status,
-                Status = b.Status.ToString()
+                Status = b.Status
             })
             .ToListAsync();
     }
