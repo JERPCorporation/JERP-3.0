@@ -5,4 +5,10 @@
   <Project Path="src\JERP.Core\JERP.Core.csproj" />
   <Project Path="src\JERP.Desktop\JERP.Desktop.csproj" />
   <Project Path="src\JERP.Infrastructure\JERP.Infrastructure.csproj" />
+  <Project Path="tests\JERP.Api.Tests\JERP.Api.Tests.csproj" />
+  <Project Path="tests\JERP.Application.Tests\JERP.Application.Tests.csproj" />
+  <Project Path="tests\JERP.Compliance.Tests\JERP.Compliance.Tests.csproj" />
+  <Project Path="tests\JERP.Core.Tests\JERP.Core.Tests.csproj" />
+  <Project Path="tests\JERP.Desktop.Tests\JERP.Desktop.Tests.csproj" />
+  <Project Path="tests\JERP.Infrastructure.Tests\JERP.Infrastructure.Tests.csproj" />
 </Solution>
