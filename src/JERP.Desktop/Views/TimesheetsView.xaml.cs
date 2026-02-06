@@ -15,7 +15,7 @@ using JERP.Desktop.ViewModels;
 
 namespace JERP.Desktop.Views;
 
-public partial class TimesheetsView : UserControl
+public partial class TimesheetsView : System.Windows.Controls.UserControl
 {
     public TimesheetsView(TimesheetsViewModel viewModel)
     {

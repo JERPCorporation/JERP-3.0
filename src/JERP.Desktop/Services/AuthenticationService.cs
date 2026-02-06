@@ -11,6 +11,7 @@
  */
 
 using JERP.Application.DTOs;
+using JERP.Application.DTOs.Users;
 
 namespace JERP.Desktop.Services;
 

@@ -15,7 +15,7 @@ using JERP.Desktop.ViewModels;
 
 namespace JERP.Desktop.Views;
 
-public partial class ComplianceView : UserControl
+public partial class ComplianceView : System.Windows.Controls.UserControl
 {
     public ComplianceView(ComplianceViewModel viewModel)
     {

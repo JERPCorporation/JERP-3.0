@@ -15,7 +15,7 @@ using JERP.Desktop.ViewModels;
 
 namespace JERP.Desktop.Views;
 
-public partial class EmployeesView : UserControl
+public partial class EmployeesView : System.Windows.Controls.UserControl
 {
     public EmployeesView(EmployeesViewModel viewModel)
     {
