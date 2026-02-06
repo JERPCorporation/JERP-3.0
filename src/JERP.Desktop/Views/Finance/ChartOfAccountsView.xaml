@@ -43,12 +43,179 @@
                       ui:ControlHelper.PlaceholderText="Filter by Account Type"/>
 
             <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button Content="Load Template" Command="{Binding OpenTemplateSelectorCommand}" 
+                        Height="35" MinWidth="120" Margin="0,0,10,0"/>
                 <Button Content="New Account" Command="{Binding CreateNewAccountCommand}" 
                         Height="35" MinWidth="120" Margin="0,0,10,0" Style="{StaticResource AccentButtonStyle}"/>
                 <Button Content="Refresh" Command="{Binding RefreshDataCommand}" 
                         Height="35" MinWidth="80"/>
             </StackPanel>
         </Grid>
+
+        <!-- Template Selector Overlay -->
+        <Border Grid.Row="0" Grid.RowSpan="3" Background="#DD000000" 
+                Visibility="{Binding TemplateSelectorOpen, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Panel.ZIndex="1000">
+            <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                    MaxWidth="900" MaxHeight="700" CornerRadius="8" Padding="30"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                        <TextBlock Text="Account Template Library" FontSize="24" FontWeight="Bold"/>
+                        <Button Content="✕" Command="{Binding CloseTemplateSelectorCommand}"
+                                Width="32" Height="32" HorizontalAlignment="Right" FontSize="18" Padding="0"/>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding AvailableTemplates}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="2"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="10" Padding="20" CornerRadius="6"
+                                            Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                                            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                            BorderThickness="1" Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding Gesture="LeftClick" 
+                                                        Command="{Binding DataContext.ChooseTemplateCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
+                                        
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding}" 
+                                                               Value="{Binding DataContext.SelectedTemplate, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                                        <Setter Property="BorderBrush" Value="#4A90E2"/>
+                                                        <Setter Property="BorderThickness" Value="3"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Grid Grid.Row="0" Margin="0,0,0,10">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding DataContext.DeriveIconFromTemplate(.), RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                             FontSize="24" Margin="0,0,10,0"/>
+                                                    <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                                <Border HorizontalAlignment="Right" Background="#4CAF50" 
+                                                        CornerRadius="10" Padding="6,2"
+                                                        Visibility="{Binding DataContext.HasCannabisIndicator(.), RelativeSource={RelativeSource AncestorType=ItemsControl}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <TextBlock Text="280E" FontSize="10" FontWeight="Bold" Foreground="White"/>
+                                                </Border>
+                                            </Grid>
+
+                                            <TextBlock Grid.Row="1" Text="{Binding Description}" 
+                                                     TextWrapping="Wrap" Opacity="0.7" Margin="0,0,0,10"/>
+
+                                            <TextBlock Grid.Row="2" Margin="0,0,0,10">
+                                                <Run Text="{Binding Industry, Mode=OneWay}" FontWeight="SemiBold"/>
+                                                <Run Text=" • "/>
+                                                <Run Text="{Binding AccountCount, Mode=OneWay}"/>
+                                                <Run Text=" accounts"/>
+                                            </TextBlock>
+
+                                            <StackPanel Grid.Row="3" Orientation="Vertical" Margin="0,10,0,0">
+                                                <TextBlock Text="Account Distribution:" FontSize="11" Opacity="0.6" Margin="0,0,0,5"/>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                                                        <Border Height="{Binding DataContext.GetAssetVisualizationHeight(.), RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                Background="#3498DB" CornerRadius="2" MinHeight="2" VerticalAlignment="Bottom"/>
+                                                        <TextBlock Text="{Binding Breakdown.Assets}" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                                        <TextBlock Text="Assets" FontSize="9" HorizontalAlignment="Center" Opacity="0.6"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="1" Margin="0,0,5,0">
+                                                        <Border Height="{Binding DataContext.GetLiabilityVisualizationHeight(.), RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                Background="#E74C3C" CornerRadius="2" MinHeight="2" VerticalAlignment="Bottom"/>
+                                                        <TextBlock Text="{Binding Breakdown.Liabilities}" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                                        <TextBlock Text="Liabilities" FontSize="9" HorizontalAlignment="Center" Opacity="0.6"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="2" Margin="0,0,5,0">
+                                                        <Border Height="{Binding DataContext.GetEquityVisualizationHeight(.), RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                Background="#2ECC71" CornerRadius="2" MinHeight="2" VerticalAlignment="Bottom"/>
+                                                        <TextBlock Text="{Binding Breakdown.Equity}" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                                        <TextBlock Text="Equity" FontSize="9" HorizontalAlignment="Center" Opacity="0.6"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="3" Margin="0,0,5,0">
+                                                        <Border Height="{Binding DataContext.GetRevenueVisualizationHeight(.), RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                Background="#F1C40F" CornerRadius="2" MinHeight="2" VerticalAlignment="Bottom"/>
+                                                        <TextBlock Text="{Binding Breakdown.Revenue}" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                                        <TextBlock Text="Revenue" FontSize="9" HorizontalAlignment="Center" Opacity="0.6"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="4">
+                                                        <Border Height="{Binding DataContext.GetExpenseVisualizationHeight(.), RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                Background="#9B59B6" CornerRadius="2" MinHeight="2" VerticalAlignment="Bottom"/>
+                                                        <TextBlock Text="{Binding Breakdown.Expenses}" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                                        <TextBlock Text="Expenses" FontSize="9" HorizontalAlignment="Center" Opacity="0.6"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <Grid Grid.Row="2" Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <CheckBox Grid.Column="0" Content="Overwrite existing accounts" 
+                                IsChecked="{Binding OverwriteMode}"
+                                Command="{Binding ToggleOverwriteModeCommand}"
+                                VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <TextBlock Text="{Binding OperationMessage}" 
+                                     VerticalAlignment="Center" Margin="0,0,15,0"
+                                     Foreground="#4CAF50" FontWeight="SemiBold"/>
+                            
+                            <Button Content="Apply Template" 
+                                    Command="{Binding PerformTemplateImportCommand}"
+                                    IsEnabled="{Binding SelectedTemplate, Converter={StaticResource StringToVisibilityConverter}}"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    Height="35" MinWidth="140"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Border>
 
         <DataGrid Grid.Row="1" ItemsSource="{Binding AccountsList}" 
                   SelectedItem="{Binding CurrentSelectedAccount}"

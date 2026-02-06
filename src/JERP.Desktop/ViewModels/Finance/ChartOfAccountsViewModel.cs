@@ -45,12 +45,68 @@ public partial class ChartOfAccountsViewModel : ViewModelBase
     [ObservableProperty]
     private int _recordsPerPage = 25;
 
+    [ObservableProperty]
+    private bool _templateSelectorOpen;
+
+    [ObservableProperty]
+    private ObservableCollection<AccountTemplateSummaryDto> _availableTemplates = new();
+
+    [ObservableProperty]
+    private AccountTemplateSummaryDto? _selectedTemplate;
+
+    [ObservableProperty]
+    private bool _overwriteMode;
+
+    [ObservableProperty]
+    private string? _operationMessage;
+
+    [ObservableProperty]
+    private bool _processingImport;
+
     public ChartOfAccountsViewModel(IApiClient apiClient, IAuthenticationService authService)
     {
         _apiClient = apiClient;
         _authService = authService;
         _ = FetchAccountsDataAsync();
     }
+
+    public string DeriveIconFromTemplate(AccountTemplateSummaryDto template)
+    {
+        var signature = $"{template.Code}{template.Industry}".ToUpperInvariant();
+        var numericHash = 0;
+        foreach (var character in template.Code) 
+            numericHash = (numericHash * 31 + character) & 0x7FFFFFFF;
+        
+        if (signature.Contains("RETAIL")) return "◆";
+        if (signature.Contains("CANNABIS") || signature.Contains("280")) return "✿";
+        if (signature.Contains("RESTAURANT")) return "◈";
+        if (signature.Contains("SAAS")) return "◉";
+        if (signature.Contains("MANUFACTUR")) return "▣";
+        if (signature.Contains("CONSTRUCT")) return "◧";
+        if (signature.Contains("HEALTH")) return "⊕";
+        if (signature.Contains("NONPROFIT")) return "◎";
+        
+        return new[] { "◇", "◊", "○", "□", "△", "▽", "◁", "▷" }[numericHash % 8];
+    }
+
+    public bool HasCannabisIndicator(AccountTemplateSummaryDto template)
+    {
+        var searchableText = $"{template.Industry}|{template.Code}".ToLowerInvariant();
+        return searchableText.Contains("cannabis") || searchableText.Contains("280e") || searchableText.Contains("marijuana");
+    }
+
+    public double CalculateVisualizationHeight(int count)
+    {
+        if (count == 0) return 2;
+        var computedHeight = Math.Log10(count + 1) * 16;
+        return Math.Clamp(computedHeight, 2, 80);
+    }
+
+    public double GetAssetVisualizationHeight(AccountTemplateSummaryDto t) => CalculateVisualizationHeight(t.Breakdown.Assets);
+    public double GetLiabilityVisualizationHeight(AccountTemplateSummaryDto t) => CalculateVisualizationHeight(t.Breakdown.Liabilities);
+    public double GetEquityVisualizationHeight(AccountTemplateSummaryDto t) => CalculateVisualizationHeight(t.Breakdown.Equity);
+    public double GetRevenueVisualizationHeight(AccountTemplateSummaryDto t) => CalculateVisualizationHeight(t.Breakdown.Revenue);
+    public double GetExpenseVisualizationHeight(AccountTemplateSummaryDto t) => CalculateVisualizationHeight(t.Breakdown.Expenses);
 
     [RelayCommand]
     private async Task FetchAccountsDataAsync()
@@ -198,6 +254,109 @@ public partial class ChartOfAccountsViewModel : ViewModelBase
         {
             PageIndex--;
             await FetchAccountsDataAsync();
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenTemplateSelectorAsync()
+    {
+        if (IsBusy) return;
+
+        IsBusy = true;
+        ErrorMessage = null;
+
+        try
+        {
+            var templateData = await _apiClient.GetAsync<List<AccountTemplateSummaryDto>>("api/v1/finance/account-templates");
+            
+            if (templateData != null)
+            {
+                AvailableTemplates.Clear();
+                foreach (var item in templateData)
+                {
+                    AvailableTemplates.Add(item);
+                }
+                TemplateSelectorOpen = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            SetError($"Failed loading templates: {ex.Message}");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    private void CloseTemplateSelector()
+    {
+        TemplateSelectorOpen = false;
+        SelectedTemplate = null;
+        OverwriteMode = false;
+        OperationMessage = null;
+    }
+
+    [RelayCommand]
+    private void ChooseTemplate(AccountTemplateSummaryDto? template)
+    {
+        SelectedTemplate = template;
+    }
+
+    [RelayCommand]
+    private void ToggleOverwriteMode()
+    {
+        OverwriteMode = !OverwriteMode;
+    }
+
+    [RelayCommand]
+    private async Task PerformTemplateImportAsync()
+    {
+        if (SelectedTemplate == null || ProcessingImport) return;
+
+        ProcessingImport = true;
+        ErrorMessage = null;
+        OperationMessage = null;
+
+        try
+        {
+            var organizationId = _authService.CurrentUser?.CompanyId;
+            if (organizationId == null)
+            {
+                SetError("Organization ID not available");
+                return;
+            }
+
+            var requestData = new
+            {
+                CompanyId = organizationId,
+                OverwriteExisting = OverwriteMode
+            };
+
+            var operationResult = await _apiClient.PostAsync<TemplateLoadResultDto>(
+                $"api/v1/finance/account-templates/{SelectedTemplate.Code}/load", 
+                requestData);
+
+            if (operationResult != null && operationResult.Success)
+            {
+                OperationMessage = $"Import successful: {operationResult.AccountsCreated} accounts created";
+                await Task.Delay(1500);
+                TemplateSelectorOpen = false;
+                await FetchAccountsDataAsync();
+            }
+            else if (operationResult != null)
+            {
+                SetError($"Import errors: {string.Join(", ", operationResult.Errors)}");
+            }
+        }
+        catch (Exception ex)
+        {
+            SetError($"Import operation failed: {ex.Message}");
+        }
+        finally
+        {
+            ProcessingImport = false;
         }
     }
 }
