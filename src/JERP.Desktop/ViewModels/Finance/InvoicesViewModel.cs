@@ -103,7 +103,6 @@ public partial class InvoicesViewModel : ViewModelBase
                             InvoiceDate = invoiceData.invoiceDate,
                             DueDate = invoiceData.dueDate,
                             Subtotal = invoiceData.subtotal,
-                            SubTotal = invoiceData.subtotal,
                             TaxAmount = invoiceData.taxAmount,
                             TotalAmount = invoiceData.totalAmount,
                             AmountPaid = invoiceData.amountPaid,

@@ -78,7 +78,7 @@ public class PurchaseOrderService : IPurchaseOrderService
                     IsFullyReceived = l.QuantityReceived >= l.QuantityOrdered,
                     Notes = l.Notes
                 }).ToList(),
-                SubTotal = po.Subtotal,
+                Subtotal = po.Subtotal,
                 TaxAmount = po.TaxAmount,
                 ShippingAmount = po.ShippingAmount,
                 TotalAmount = po.TotalAmount,

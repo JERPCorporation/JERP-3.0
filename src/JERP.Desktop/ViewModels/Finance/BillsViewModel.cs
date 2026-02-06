@@ -104,7 +104,6 @@ public partial class BillsViewModel : ViewModelBase
                             BillDate = billEntry.billDate,
                             DueDate = billEntry.dueDate,
                             Subtotal = billEntry.subtotal,
-                            SubTotal = billEntry.subtotal,
                             TaxAmount = billEntry.taxAmount,
                             TotalAmount = billEntry.totalAmount,
                             AmountPaid = billEntry.amountPaid,

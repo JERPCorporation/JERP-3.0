@@ -88,7 +88,7 @@ public class SalesOrderService : ISalesOrderService
                     RevenueAccountId = line.RevenueAccountId,
                     Notes = line.Notes
                 }).ToList(),
-                SubTotal = so.SubTotal,
+                Subtotal = so.Subtotal,
                 TaxAmount = so.TaxAmount,
                 ShippingAmount = so.ShippingAmount,
                 DiscountAmount = so.DiscountAmount,
@@ -137,7 +137,7 @@ public class SalesOrderService : ISalesOrderService
                 OrderDate = so.OrderDate,
                 RequestedShipDate = so.RequestedShipDate,
                 PromisedShipDate = so.PromisedShipDate,
-                SubTotal = so.SubTotal,
+                Subtotal = so.Subtotal,
                 TaxAmount = so.TaxAmount,
                 ShippingAmount = so.ShippingAmount,
                 DiscountAmount = so.DiscountAmount,
@@ -262,9 +262,9 @@ public class SalesOrderService : ISalesOrderService
         }
 
         // Calculate totals
-        salesOrder.SubTotal = salesOrder.LineItems.Sum(l => l.Quantity * l.UnitPrice - l.DiscountAmount);
+        salesOrder.Subtotal = salesOrder.LineItems.Sum(l => l.Quantity * l.UnitPrice - l.DiscountAmount);
         salesOrder.TaxAmount = salesOrder.LineItems.Sum(l => l.TaxAmount);
-        salesOrder.TotalAmount = salesOrder.SubTotal + salesOrder.TaxAmount + salesOrder.ShippingAmount - salesOrder.DiscountAmount;
+        salesOrder.TotalAmount = salesOrder.Subtotal + salesOrder.TaxAmount + salesOrder.ShippingAmount - salesOrder.DiscountAmount;
 
         _context.SalesOrders.Add(salesOrder);
         await _context.SaveChangesAsync();
@@ -358,9 +358,9 @@ public class SalesOrderService : ISalesOrderService
         }
 
         // Recalculate totals
-        salesOrder.SubTotal = salesOrder.LineItems.Sum(l => l.Quantity * l.UnitPrice - l.DiscountAmount);
+        salesOrder.Subtotal = salesOrder.LineItems.Sum(l => l.Quantity * l.UnitPrice - l.DiscountAmount);
         salesOrder.TaxAmount = salesOrder.LineItems.Sum(l => l.TaxAmount);
-        salesOrder.TotalAmount = salesOrder.SubTotal + salesOrder.TaxAmount + salesOrder.ShippingAmount - salesOrder.DiscountAmount;
+        salesOrder.TotalAmount = salesOrder.Subtotal + salesOrder.TaxAmount + salesOrder.ShippingAmount - salesOrder.DiscountAmount;
 
         await _context.SaveChangesAsync();
 

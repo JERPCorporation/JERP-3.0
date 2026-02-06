@@ -69,7 +69,7 @@ public class VendorBillService : IVendorBillService
                     AccountId = l.AccountId,
                     AccountName = l.Account.AccountName
                 }).ToList(),
-                SubTotal = b.Subtotal,
+                Subtotal = b.Subtotal,
                 TaxAmount = b.TaxAmount,
                 TotalAmount = b.TotalAmount,
                 AmountPaid = b.AmountPaid,
@@ -101,7 +101,7 @@ public class VendorBillService : IVendorBillService
                 DueDate = b.DueDate,
                 Status = b.Status.ToString(),
                 LineItems = new List<VendorBillLineDto>(),
-                SubTotal = b.Subtotal,
+                Subtotal = b.Subtotal,
                 TaxAmount = b.TaxAmount,
                 TotalAmount = b.TotalAmount,
                 AmountPaid = b.AmountPaid,

@@ -29,7 +29,7 @@ public class CustomerInvoiceDto
     
     public List<CustomerInvoiceLineDto> LineItems { get; set; } = new();
     
-    public decimal SubTotal { get; set; }
+    public decimal Subtotal { get; set; }
     
     public decimal TaxAmount { get; set; }
     

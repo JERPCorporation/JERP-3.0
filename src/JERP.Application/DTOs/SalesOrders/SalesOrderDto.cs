@@ -48,7 +48,7 @@ public class SalesOrderDto
     public List<SalesOrderLineDto> LineItems { get; set; } = new();
     
     // Amounts
-    public decimal SubTotal { get; set; }
+    public decimal Subtotal { get; set; }
     
     public decimal TaxAmount { get; set; }
     

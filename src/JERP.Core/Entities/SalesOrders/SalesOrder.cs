@@ -106,7 +106,7 @@ public class SalesOrder : BaseEntity
     
     // Amounts
     [Column(TypeName = "decimal(18,2)")]
-    public decimal SubTotal { get; set; }
+    public decimal Subtotal { get; set; }
     
     [Column(TypeName = "decimal(18,2)")]
     public decimal TaxAmount { get; set; }

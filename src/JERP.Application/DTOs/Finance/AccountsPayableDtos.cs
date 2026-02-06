@@ -68,7 +68,6 @@ public class BillDto
     public string? ReferenceNumber { get; set; }
     public string? Description { get; set; }
     public decimal Subtotal { get; set; }
-    public decimal SubTotal { get; set; } // Alias for Subtotal
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }
     public decimal AmountPaid { get; set; }
@@ -99,7 +98,7 @@ public class BillListDto
     public DateTime DueDate { get; set; }
     public BillStatus StatusEnum { get; set; }
     public string Status { get; set; } = string.Empty;
-    public decimal SubTotal { get; set; }
+    public decimal Subtotal { get; set; }
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }
     public decimal AmountPaid { get; set; }

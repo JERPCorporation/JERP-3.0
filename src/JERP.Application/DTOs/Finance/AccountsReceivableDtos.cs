@@ -66,7 +66,6 @@ public class InvoiceDto
     public string? PONumber { get; set; }
     public string? Description { get; set; }
     public decimal Subtotal { get; set; }
-    public decimal SubTotal { get; set; } // Alias for Subtotal
     public decimal TaxAmount { get; set; }
     public decimal DiscountAmount { get; set; }
     public decimal TotalAmount { get; set; }
@@ -99,7 +98,7 @@ public class InvoiceListDto
     public DateTime DueDate { get; set; }
     public InvoiceStatus StatusEnum { get; set; }
     public string Status { get; set; } = string.Empty;
-    public decimal SubTotal { get; set; }
+    public decimal Subtotal { get; set; }
     public decimal TaxAmount { get; set; }
     public decimal TotalAmount { get; set; }
     public decimal AmountPaid { get; set; }

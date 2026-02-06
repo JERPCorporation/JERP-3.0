@@ -73,7 +73,7 @@ public class SalesReturnService : ISalesReturnService
                     RestockingFee = line.RestockingFee,
                     Notes = line.Notes
                 }).ToList(),
-                SubTotal = sr.SubTotal,
+                Subtotal = sr.Subtotal,
                 TaxAmount = sr.TaxAmount,
                 TotalAmount = sr.TotalAmount,
                 ApprovedBy = sr.ApprovedBy,
@@ -140,7 +140,7 @@ public class SalesReturnService : ISalesReturnService
             ReturnDate = DateTime.UtcNow,
             Status = SalesReturnStatus.Requested,
             Reason = reason,
-            SubTotal = 0,
+            Subtotal = 0,
             TaxAmount = 0,
             TotalAmount = 0
         };
