@@ -83,7 +83,7 @@ public class EmployeeDto
     /// <summary>
     /// Years of service with the company
     /// </summary>
-    public int YearsOfService => (DateTime.Now - HireDate).Days / 365;
+    public int YearsOfService => (int)((DateTime.Now - HireDate).Days / 365.25);
     
     /// <summary>
     /// Formatted tenure display
