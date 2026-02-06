@@ -195,7 +195,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.PostAsync($"api/finance/journal-entries/{entryRecord.Id}/post", null);
+            await _apiClient.PostAsync<object>($"api/finance/journal-entries/{entryRecord.Id}/post", null);
             await RetrieveJournalEntriesAsync();
         }
         catch (Exception ex)
@@ -225,7 +225,7 @@ public partial class JournalEntriesViewModel : ViewModelBase
                 return;
             }
 
-            await _apiClient.PostAsync($"api/finance/journal-entries/{entryRecord.Id}/void", null);
+            await _apiClient.PostAsync<object>($"api/finance/journal-entries/{entryRecord.Id}/void", null);
             await RetrieveJournalEntriesAsync();
         }
         catch (Exception ex)
