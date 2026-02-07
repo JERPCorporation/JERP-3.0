@@ -1,0 +1,56 @@
+name: Create Release Build
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+jobs:
+  release-build:
+    name: Build Release Package
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Extract Version from Tag
+        id: version
+        run: |
+          $version = "${{ github.ref_name }}" -replace 'v', ''
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Restore and Build
+        run: |
+          dotnet restore src/JERP.Desktop/JERP.Desktop.csproj
+          dotnet build src/JERP.Desktop/JERP.Desktop.csproj --configuration Release --no-restore
+
+      - name: Publish Windows x64
+        run: |
+          dotnet publish src/JERP.Desktop/JERP.Desktop.csproj `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained true `
+            --output release/win-x64 `
+            -p:PublishSingleFile=false `
+            -p:PublishReadyToRun=true
+
+      - name: Create Release ZIP
+        run: |
+          Compress-Archive -Path release/win-x64/* -DestinationPath "JERP-Desktop-v${{ steps.version.outputs.VERSION }}-win-x64.zip"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: JERP-Desktop-*.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

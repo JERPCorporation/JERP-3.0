@@ -1,0 +1,91 @@
+name: Build Desktop Artifacts
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    name: Build Windows Desktop Application
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        configuration: [Release]
+        platform: [win-x64]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore src/JERP.Desktop/JERP.Desktop.csproj
+
+      - name: Build Desktop Application
+        run: |
+          dotnet build src/JERP.Desktop/JERP.Desktop.csproj `
+            --configuration ${{ matrix.configuration }} `
+            --no-restore
+
+      - name: Publish Self-Contained Application
+        run: |
+          dotnet publish src/JERP.Desktop/JERP.Desktop.csproj `
+            --configuration ${{ matrix.configuration }} `
+            --runtime ${{ matrix.platform }} `
+            --self-contained true `
+            --output publish/${{ matrix.platform }} `
+            -p:PublishSingleFile=false `
+            -p:PublishReadyToRun=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true
+
+      - name: Create Artifact Directory
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts
+
+      - name: Copy Configuration Files
+        run: |
+          Copy-Item src/JERP.Desktop/appsettings.json publish/${{ matrix.platform }}/ -ErrorAction SilentlyContinue
+          Copy-Item src/JERP.Desktop/appsettings.Production.json publish/${{ matrix.platform }}/ -ErrorAction SilentlyContinue
+          Copy-Item README.md publish/${{ matrix.platform }}/ -ErrorAction SilentlyContinue
+
+      - name: Create Version Info File
+        run: |
+          $versionInfo = @"
+          JERP 3.0 - Desktop Application
+          Build Date: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+          Commit: ${{ github.sha }}
+          Branch: ${{ github.ref_name }}
+          Configuration: ${{ matrix.configuration }}
+          Platform: ${{ matrix.platform }}
+          "@
+          $versionInfo | Out-File -FilePath publish/${{ matrix.platform }}/VERSION.txt -Encoding UTF8
+
+      - name: Create ZIP Archive
+        run: |
+          $version = Get-Date -Format "yyyyMMdd"
+          $zipName = "JERP-Desktop-${{ matrix.platform }}-$version.zip"
+          Compress-Archive -Path publish/${{ matrix.platform }}/* -DestinationPath artifacts/$zipName
+          Write-Host "Created: $zipName"
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: JERP-Desktop-${{ matrix.platform }}-${{ matrix.configuration }}
+          path: artifacts/*.zip
+          retention-days: 30
+
+      - name: Display Artifact Info
+        run: |
+          Write-Host "===== Build Completed Successfully ====="
+          Write-Host "Platform: ${{ matrix.platform }}"
+          Write-Host "Configuration: ${{ matrix.configuration }}"
+          Write-Host "Artifacts available for download in Actions tab"
+          Get-ChildItem artifacts -Recurse | Format-Table Name, Length
