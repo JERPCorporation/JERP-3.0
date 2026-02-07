@@ -1,7 +1,8 @@
 <UserControl x:Class="JERP.Desktop.Views.AIAssistantView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ui="http://schemas.modernwpf.com/2019">
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:converters="clr-namespace:JERP.Desktop.Converters">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -116,9 +117,6 @@
     
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
-        
-        <!-- Inverse Boolean Converter -->
-        <local:InverseBooleanConverter x:Key="InverseBooleanConverter"
-            xmlns:local="clr-namespace:JERP.Desktop.Converters"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </UserControl.Resources>
 </UserControl>
