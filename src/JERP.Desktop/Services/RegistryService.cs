@@ -7,7 +7,7 @@
  * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
- * For licensing inquiries: licensing@jerp.io
+ * For licensing inquiries: ichbincesartobar@yahoo.com
  */
 
 using Microsoft.Win32;

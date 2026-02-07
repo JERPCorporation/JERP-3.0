@@ -38,9 +38,9 @@ npm run dev
 ```
 
 ### For Business Users
-- **Demo:** Contact sales@jerp.io
+- **Demo:** Contact ichbincesartobar@yahoo.com
 - **Pricing:** https://jerp.io/pricing
-- **Support:** support@jerp.io
+- **Support:** ichbincesartobar@yahoo.com
 
 ## 💡 Key Features
 
@@ -73,7 +73,7 @@ JERP™ is a trademark of Julio Cesar Mendez Tobar
 ### Usage Rights
 
 - ✅ **SaaS Customers:** Full access via subscription at https://jerp.io/pricing
-- ✅ **Evaluation:** Contact sales@jerp.io for demo access
+- ✅ **Evaluation:** Contact ichbincesartobar@yahoo.com for demo access
 - ❌ **Copying/Distribution:** Prohibited without written permission
 - ❌ **Reverse Engineering:** Prohibited
 - ❌ **Commercial Use:** Requires valid subscription
@@ -91,10 +91,11 @@ See [LICENSE.md](LICENSE.md) for complete terms.
 
 ### Contact
 
-- **Licensing inquiries:** licensing@jerp.io
-- **Enterprise/white-label:** sales@jerp.io
-- **Security issues:** security@jerp.io
-- **General support:** support@jerp.io
+- **Licensing inquiries:** ichbincesartobar@yahoo.com
+- **Enterprise/white-label:** ichbincesartobar@yahoo.com
+- **Security issues:** ichbincesartobar@yahoo.com
+- **General support:** ichbincesartobar@yahoo.com
+- **Alternative contact:** ichbincesartobar@gmail.com
 
 ---
 
@@ -141,9 +142,11 @@ This software is proprietary and confidential. Unauthorized copying, distributio
 ### Author
 
 **Julio Cesar Mendez Tobar**  
-Software Architect & Developer
+Software Architect & Developer  
+Email: ichbincesartobar@yahoo.com  
+Alternative: ichbincesartobar@gmail.com
 
-For licensing inquiries, please contact: licensing@jerp.io
+For licensing inquiries, please contact: ichbincesartobar@yahoo.com
 
 ---
 

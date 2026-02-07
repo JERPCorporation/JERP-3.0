@@ -5,7 +5,7 @@
  * PROPRIETARY AND CONFIDENTIAL
  * 
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
- * For licensing inquiries: licensing@jerp.io
+ * For licensing inquiries: ichbincesartobar@yahoo.com
  */
 
 /**
@@ -26,9 +26,9 @@
 const MOCK_USERS = [
   {
     id: '1',
-    email: 'admin@jerp.com',
+    email: 'ichbincesartobar@yahoo.com',
     password: 'admin123',
-    name: 'Admin Principal',
+    name: 'Julio Cesar Mendez Tobar Jr.',
     role: 'super_admin',
   },
   {

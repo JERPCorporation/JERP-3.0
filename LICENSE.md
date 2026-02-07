@@ -121,7 +121,8 @@ Licensor reserves the right to modify this License at any time. Continued use af
 ### 15. Contact Information
 
 **For licensing inquiries:**
-- Email: licensing@jerp.io
+- Email: ichbincesartobar@yahoo.com
+- Alternative: ichbincesartobar@gmail.com
 - Website: https://github.com/ninoyerbas/JERP-3.0
 
 ---

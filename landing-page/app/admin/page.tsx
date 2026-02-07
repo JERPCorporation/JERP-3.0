@@ -5,7 +5,7 @@
  * PROPRIETARY AND CONFIDENTIAL
  * 
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
- * For licensing inquiries: licensing@jerp.io
+ * For licensing inquiries: ichbincesartobar@yahoo.com
  */
 
 "use client";
@@ -15,7 +15,7 @@ import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Cart
 
 // Mock Data
 const mockUsers = [
-  { id: 1, name: "Admin Principal", email: "admin@company.com", role: "super_admin", status: "active", lastLogin: "2025-02-03 14:30", created: "2024-01-15" },
+  { id: 1, name: "Julio Cesar Mendez Tobar Jr.", email: "ichbincesartobar@yahoo.com", role: "super_admin", status: "active", lastLogin: "2025-02-03 14:30", created: "2024-01-15" },
   { id: 2, name: "María González", email: "maria@company.com", role: "admin", status: "active", lastLogin: "2025-02-03 10:15", created: "2024-03-20" },
   { id: 3, name: "Carlos Ruiz", email: "carlos@company.com", role: "payroll_manager", status: "active", lastLogin: "2025-02-02 16:45", created: "2024-06-10" },
   { id: 4, name: "Ana Martínez", email: "ana@company.com", role: "hr_manager", status: "active", lastLogin: "2025-02-01 09:20", created: "2024-08-05" },
@@ -23,12 +23,12 @@ const mockUsers = [
 ];
 
 const mockAuditLogs = [
-  { id: 1, timestamp: "2025-02-03 14:32:15", user: "admin@company.com", action: "payroll_processed", resource: "Payroll Period Jan-2025", ip: "192.168.1.100", hash: "a7f3c9e2d4b1..." },
+  { id: 1, timestamp: "2025-02-03 14:32:15", user: "ichbincesartobar@yahoo.com", action: "payroll_processed", resource: "Payroll Period Jan-2025", ip: "192.168.1.100", hash: "a7f3c9e2d4b1..." },
   { id: 2, timestamp: "2025-02-03 13:18:42", user: "maria@company.com", action: "employee_updated", resource: "Employee #1234", ip: "192.168.1.105", hash: "b2e8d4a1f9c7..." },
   { id: 3, timestamp: "2025-02-03 11:05:33", user: "carlos@company.com", action: "compliance_check", resource: "Tax Withholdings", ip: "192.168.1.110", hash: "c9f1a5b3e2d8..." },
-  { id: 4, timestamp: "2025-02-02 16:47:28", user: "admin@company.com", action: "user_created", resource: "User #5678", ip: "192.168.1.100", hash: "d3a7c2e8f4b1..." },
+  { id: 4, timestamp: "2025-02-02 16:47:28", user: "ichbincesartobar@yahoo.com", action: "user_created", resource: "User #5678", ip: "192.168.1.100", hash: "d3a7c2e8f4b1..." },
   { id: 5, timestamp: "2025-02-02 10:22:11", user: "ana@company.com", action: "deduction_modified", resource: "CA SDI Rate", ip: "192.168.1.112", hash: "e5b9d1f4a3c2..." },
-  { id: 6, timestamp: "2025-02-01 15:33:50", user: "admin@company.com", action: "system_backup", resource: "Database Backup", ip: "192.168.1.100", hash: "f1c4e6a2b9d7..." },
+  { id: 6, timestamp: "2025-02-01 15:33:50", user: "ichbincesartobar@yahoo.com", action: "system_backup", resource: "Database Backup", ip: "192.168.1.100", hash: "f1c4e6a2b9d7..." },
 ];
 
 const mockSystemMetrics = [

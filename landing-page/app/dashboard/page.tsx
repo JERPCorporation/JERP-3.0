@@ -5,7 +5,7 @@
  * PROPRIETARY AND CONFIDENTIAL
  * 
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
- * For licensing inquiries: licensing@jerp.io
+ * For licensing inquiries: ichbincesartobar@yahoo.com
  */
 
 'use client';
@@ -368,10 +368,10 @@ export default function DashboardPage() {
                 e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.3)';
               }}
             >
-              <div style={styles.avatar}>AD</div>
+              <div style={styles.avatar}>JM</div>
               <div>
-                <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>Admin User</div>
-                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>admin@jerp.com</div>
+                <div style={{ fontSize: '0.875rem', fontWeight: 600 }}>Julio Mendez</div>
+                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>ichbincesartobar@yahoo.com</div>
               </div>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />

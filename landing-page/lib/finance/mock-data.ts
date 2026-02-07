@@ -5,7 +5,7 @@
  * PROPRIETARY AND CONFIDENTIAL
  * 
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
- * For licensing inquiries: licensing@jerp.io
+ * For licensing inquiries: ichbincesartobar@yahoo.com
  */
 
 import { Account, JournalEntry, GLTransaction, Vendor, Customer, Bill, Invoice, InvoiceItem } from './types';
@@ -72,7 +72,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-02-04',
     description: 'Daily Cannabis Sales - Flower',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-02-04T10:30:00Z',
     postedAt: '2025-02-04T10:35:00Z',
     lines: [
@@ -85,7 +85,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-02-04',
     description: 'Payroll - Feb 2025',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-02-04T09:00:00Z',
     postedAt: '2025-02-04T09:15:00Z',
     lines: [
@@ -99,7 +99,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-02-03',
     description: 'Vendor Payment - Green Leaf Supply',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-02-03T14:20:00Z',
     postedAt: '2025-02-03T14:25:00Z',
     lines: [
@@ -112,7 +112,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-02-03',
     description: 'Rent Payment - February',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-02-03T11:00:00Z',
     postedAt: '2025-02-03T11:05:00Z',
     lines: [
@@ -125,7 +125,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-02-02',
     description: 'Customer Payment - Green Valley Dispensary',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-02-02T15:30:00Z',
     postedAt: '2025-02-02T15:35:00Z',
     lines: [
@@ -138,7 +138,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-02-01',
     description: 'Inventory Purchase - Cannabis Products',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-02-01T10:00:00Z',
     postedAt: '2025-02-01T10:10:00Z',
     lines: [
@@ -151,7 +151,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-01-31',
     description: 'Utilities - January',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-01-31T16:00:00Z',
     postedAt: '2025-01-31T16:05:00Z',
     lines: [
@@ -164,7 +164,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-01-30',
     description: 'Marketing Campaign - Social Media',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-01-30T13:00:00Z',
     postedAt: '2025-01-30T13:10:00Z',
     lines: [
@@ -177,7 +177,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-01-29',
     description: 'Insurance Premium - February',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-01-29T10:00:00Z',
     postedAt: '2025-01-29T10:05:00Z',
     lines: [
@@ -190,7 +190,7 @@ export const mockJournalEntries: JournalEntry[] = [
     date: '2025-01-28',
     description: 'Cannabis Wholesale - Green Valley',
     status: 'Posted',
-    createdBy: 'admin@company.com',
+    createdBy: 'ichbincesartobar@yahoo.com',
     createdAt: '2025-01-28T11:30:00Z',
     postedAt: '2025-01-28T11:40:00Z',
     lines: [

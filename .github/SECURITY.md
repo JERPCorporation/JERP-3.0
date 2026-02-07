@@ -4,7 +4,7 @@
 
 **DO NOT** create a public GitHub issue for security vulnerabilities.
 
-Instead, please report security issues via email to: **security@jerp.io**
+Instead, please report security issues via email to: **ichbincesartobar@yahoo.com**
 
 Include:
 - Description of the vulnerability
@@ -64,8 +64,9 @@ We do not currently have a formal bug bounty program, but we appreciate responsi
 
 ## Contact
 
-- **Security issues:** security@jerp.io
-- **General support:** support@jerp.io
+- **Security issues:** ichbincesartobar@yahoo.com
+- **General support:** ichbincesartobar@yahoo.com
+- **Alternative contact:** ichbincesartobar@gmail.com
 - **Urgent issues:** +1 (555) JERP-360
 
 ---

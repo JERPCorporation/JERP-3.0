@@ -183,7 +183,7 @@ npm run dev
 1. Open browser to http://localhost:3000
 2. You should see the JERP 3.0 login page
 3. Default credentials:
-   - **Email**: admin@jerp.com
+   - **Email**: ichbincesartobar@yahoo.com
    - **Password**: Admin@123
 4. After login, you should see the dashboard
 

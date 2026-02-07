@@ -334,7 +334,7 @@ dotnet ef database update --startup-project ../JERP.Api
 - Cannabis 280E Tax Guidance
 
 ### Contact
-- Technical Support: support@jerp.io
+- Technical Support: ichbincesartobar@yahoo.com
 - FASB Questions: Consult with CPA
 
 ---

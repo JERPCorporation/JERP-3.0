@@ -5,7 +5,7 @@
  * PROPRIETARY AND CONFIDENTIAL
  * 
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
- * For licensing inquiries: licensing@jerp.io
+ * For licensing inquiries: ichbincesartobar@yahoo.com
  */
 
 "use client";
@@ -404,7 +404,7 @@ export default function LoginPage() {
         >
           <strong>Demo Credentials:</strong>
           <br />
-          Admin: admin@jerp.com / admin123
+          Admin: ichbincesartobar@yahoo.com / admin123
           <br />
           User: user@jerp.com / user123
         </div>

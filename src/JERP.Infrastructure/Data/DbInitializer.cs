@@ -7,7 +7,7 @@
  * This source code is the confidential and proprietary information of Julio Cesar Mendez Tobar.
  * Unauthorized copying, modification, distribution, or use is strictly prohibited.
  * 
- * For licensing inquiries: licensing@jerp.io
+ * For licensing inquiries: ichbincesartobar@yahoo.com
  */
 
 using JERP.Core.Entities;
@@ -226,10 +226,10 @@ public static class DbInitializer
         var adminUser = new User
         {
             Username = "admin",
-            Email = "admin@jerp.com",
+            Email = "ichbincesartobar@yahoo.com",
             PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
-            FirstName = "System",
-            LastName = "Administrator",
+            FirstName = "Julio",
+            LastName = "Cesar Mendez Tobar Jr.",
             IsActive = true
         };
 

@@ -89,7 +89,7 @@ JWT_REFRESH_TOKEN_EXPIRATION_DAYS=7
 # ========================================
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=Admin@123
-ADMIN_EMAIL=admin@jerp.local
+ADMIN_EMAIL=ichbincesartobar@yahoo.com
 ADMIN_FIRSTNAME=System
 ADMIN_LASTNAME=Administrator
 

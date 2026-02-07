@@ -153,7 +153,7 @@ If migration fails:
 
 For migration assistance:
 - Review `docs/FASB_STRUCTURE.md` for FASB reference
-- Contact: support@jerp.io
+- Contact: ichbincesartobar@yahoo.com
 
 ---
 

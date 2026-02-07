@@ -314,7 +314,7 @@ Module (e.g., Finance)
 ```json
 {
   "sub": "user-id-123",
-  "email": "admin@jerp.com",
+  "email": "ichbincesartobar@yahoo.com",
   "roles": ["Admin", "Finance"],
   "companyId": "company-456",
   "exp": 1707148800,

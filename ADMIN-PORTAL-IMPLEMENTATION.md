@@ -91,8 +91,8 @@ Query audit logs with filtering and pagination.
         "sequenceNumber": 1,
         "timestamp": "2026-02-04T08:30:00Z",
         "userId": "guid",
-        "userEmail": "user@example.com",
-        "userName": "John Doe",
+        "userEmail": "ichbincesartobar@yahoo.com",
+        "userName": "Julio Mendez",
         "action": "payroll_processed",
         "resource": "PayPeriod:123",
         "details": "Processed 25 employee records...",
@@ -163,8 +163,8 @@ Export audit logs to CSV format.
 **Response**: CSV file download
 ```csv
 SequenceNumber,Timestamp,UserId,UserEmail,UserName,Action,Resource,Details,IpAddress,PreviousHash,CurrentHash
-1,"2026-02-04 08:00:00",guid,"admin@example.com","Admin User","employee_created","Employee:123","Created employee John Doe (#EMP001)","192.168.1.1","GENESIS","A1B2C3D4E5F6"
-2,"2026-02-04 08:05:00",guid,"admin@example.com","Admin User","payroll_processed","PayPeriod:456","Processed 25 employee records. Gross: $50,000.00","192.168.1.1","A1B2C3D4E5F6","B2C3D4E5F6A7"
+1,"2026-02-04 08:00:00",guid,"ichbincesartobar@yahoo.com","Julio Mendez","employee_created","Employee:123","Created employee John Doe (#EMP001)","192.168.1.1","GENESIS","A1B2C3D4E5F6"
+2,"2026-02-04 08:05:00",guid,"ichbincesartobar@yahoo.com","Julio Mendez","payroll_processed","PayPeriod:456","Processed 25 employee records. Gross: $50,000.00","192.168.1.1","A1B2C3D4E5F6","B2C3D4E5F6A7"
 ```
 
 ### 6. Automatic Audit Logging
@@ -209,7 +209,7 @@ dotnet ef database update --project src/JERP.Infrastructure --startup-project sr
 - **Mitigation**: Acceptable for most use cases; documented for review
 
 ### User Context
-- **Current**: Placeholder values (Guid.Empty, "system@jerp.io")
+- **Current**: Placeholder values (Guid.Empty, "ichbincesartobar@yahoo.com")
 - **Required**: Implement proper HttpContext user retrieval before production
 - **Impact**: Cannot identify actual users in current state
 - **TODO**: Added comments throughout codebase

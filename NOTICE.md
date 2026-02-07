@@ -38,6 +38,8 @@ Full list of third-party licenses available in THIRD-PARTY-NOTICES.md
 
 ## Contact
 
-For licensing questions: licensing@jerp.io
+For licensing questions: ichbincesartobar@yahoo.com
 
-For copyright inquiries: legal@jerp.io
+For copyright inquiries: ichbincesartobar@yahoo.com
+
+Alternative contact: ichbincesartobar@gmail.com
