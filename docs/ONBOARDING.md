@@ -1,1758 +1,1339 @@
 # JERP 3.0 - Developer Onboarding Guide
 
-Welcome to the JERP 3.0 development team! This guide will help you get started with the project, understand the codebase, and become productive quickly.
-
----
+Welcome to the JERP 3.0 development team! This guide will help you get set up and productive quickly.
 
 ## Table of Contents
-
-1. [Setup Instructions](#1-setup-instructions)
-2. [Project Structure](#2-project-structure-explanation)
-3. [Development Workflow](#3-development-workflow)
-4. [Testing Strategy](#4-testing-strategy)
-5. [Common Tasks and Recipes](#5-common-tasks-and-recipes)
+1. [Prerequisites](#prerequisites)
+2. [Setup Instructions](#setup-instructions)
+3. [Project Structure](#project-structure)
+4. [Development Workflow](#development-workflow)
+5. [Testing Strategy](#testing-strategy)
+6. [Common Tasks and Recipes](#common-tasks-and-recipes)
+7. [Troubleshooting](#troubleshooting)
+8. [Resources](#resources)
 
 ---
 
-## 1. Setup Instructions
+## Prerequisites
 
-### 1.1 Prerequisites
+Before you begin, ensure you have the following installed on your development machine:
 
-Before you begin, ensure you have the following installed:
+### Required Software
 
-| Software | Version | Download Link |
-|----------|---------|---------------|
-| **Node.js** | 18+ | https://nodejs.org/ |
-| **npm or yarn** | Latest | Included with Node.js |
-| **.NET SDK** | 8.0 | https://dotnet.microsoft.com/download |
-| **SQL Server** | 2019+ (Express/Developer) | https://www.microsoft.com/sql-server/sql-server-downloads |
-| **Git** | Latest | https://git-scm.com/ |
-| **Docker Desktop** | Latest (optional) | https://www.docker.com/products/docker-desktop |
-| **Visual Studio Code** | Latest | https://code.visualstudio.com/ |
-| **Visual Studio 2022** | Latest (optional) | https://visualstudio.microsoft.com/ |
+#### 1. Git
+- **Version**: 2.30+
+- **Download**: https://git-scm.com/downloads
+- **Verify**: `git --version`
 
-**Recommended VS Code Extensions:**
-- C# (Microsoft)
-- C# Dev Kit (Microsoft)
-- ESLint
-- Prettier
-- Docker
-- GitLens
-- REST Client
-- SQL Server (mssql)
+#### 2. Docker Desktop (Recommended for Quick Start)
+- **Version**: 4.0+
+- **Download**: 
+  - Windows/Mac: https://www.docker.com/products/docker-desktop
+  - Linux: Install Docker Engine + Docker Compose
+- **Verify**: 
+  ```bash
+  docker --version
+  docker-compose --version
+  ```
+- **Requirements**: 
+  - 8GB+ RAM allocated to Docker
+  - 50GB+ disk space
 
-### 1.2 Getting the Code
+#### 3. .NET SDK (For Backend Development)
+- **Version**: 8.0 LTS
+- **Download**: https://dotnet.microsoft.com/download/dotnet/8.0
+- **Verify**: `dotnet --version`
+- **Note**: Should output 8.0.x
 
+#### 4. Node.js and npm (For Frontend Development)
+- **Version**: Node.js 18.x or 20.x LTS
+- **Download**: https://nodejs.org/
+- **Verify**: 
+  ```bash
+  node --version
+  npm --version
+  ```
+
+#### 5. SQL Server (For Local Development)
+- **Options**:
+  - **SQL Server Express 2022** (Free): https://www.microsoft.com/en-us/sql-server/sql-server-downloads
+  - **SQL Server Developer Edition** (Free): Same link as above
+  - **Docker SQL Server** (Easiest): Included in docker-compose.yml
+- **Management Tools**:
+  - SQL Server Management Studio (SSMS): https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms
+  - Azure Data Studio: https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio
+  - VS Code with SQL Server extension
+
+### Recommended Software
+
+#### IDEs and Editors
+- **Visual Studio 2022** (Windows): https://visualstudio.microsoft.com/
+  - Workloads: ASP.NET and web development, .NET desktop development
+- **Visual Studio Code**: https://code.visualstudio.com/
+  - Extensions: C#, C# Dev Kit, ESLint, Prettier, Docker, GitLens
+- **JetBrains Rider** (Alternative): https://www.jetbrains.com/rider/
+
+#### API Testing Tools
+- **Postman**: https://www.postman.com/downloads/
+- **Insomnia**: https://insomnia.rest/download
+
+#### Database Tools
+- **SQL Server Management Studio (SSMS)**: For Windows users
+- **Azure Data Studio**: Cross-platform SQL tool
+- **DBeaver**: Universal database tool
+
+### System Requirements
+- **OS**: Windows 10/11, macOS 11+, or Linux (Ubuntu 20.04+)
+- **RAM**: 16GB minimum, 32GB recommended
+- **Storage**: 20GB free space
+- **CPU**: Multi-core processor (4+ cores recommended)
+
+---
+
+## Setup Instructions
+
+### Option 1: Quick Start with Docker (Recommended)
+
+This is the fastest way to get JERP 3.0 running with all dependencies.
+
+#### Step 1: Clone the Repository
 ```bash
-# Clone the repository
 git clone https://github.com/ninoyerbas/JERP-3.0.git
 cd JERP-3.0
-
-# Verify you're on the correct branch
-git branch
-# Should show: * main or * develop
 ```
 
-### 1.3 Backend Setup
+#### Step 2: Configure Environment Variables
+```bash
+# Copy the example environment file
+cp .env.example .env
 
-#### Step 1: Install .NET Dependencies
+# Edit .env file with your settings (use any text editor)
+# On Windows: notepad .env
+# On macOS/Linux: nano .env or vim .env
+```
+
+**Key Environment Variables:**
+```bash
+# Database
+SQLSERVER_PASSWORD=YourStrong!Passw0rd
+
+# JWT Authentication
+JWT_SECRET_KEY=YourSuperSecretKeyForJWTTokenGenerationMinimum32Characters!
+JWT_ISSUER=JERP-API
+JWT_AUDIENCE=JERP-Client
+JWT_EXPIRATION_HOURS=1
+
+# CORS (Add localhost for development)
+CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+
+# Logging
+SERILOG_MINIMUM_LEVEL=Information
+```
+
+#### Step 3: Start All Services with Docker
+```bash
+# Build and start all containers (API + SQL Server)
+docker-compose up --build
+
+# Or run in detached mode (background)
+docker-compose up -d --build
+```
+
+**Services Started:**
+- **SQL Server**: http://localhost:1433
+- **JERP API**: http://localhost:5000
+- **Swagger UI**: http://localhost:5000/swagger
+
+#### Step 4: Run Database Migrations
+```bash
+# Wait for SQL Server to be ready (30-60 seconds on first run)
+# Then run migrations
+docker-compose exec api dotnet ef database update --project /app/JERP.Infrastructure --startup-project /app/JERP.Api
+
+# Or if API container isn't running migrations automatically, you can run them locally:
+cd src/JERP.Api
+dotnet ef database update --project ../JERP.Infrastructure
+```
+
+#### Step 5: Seed Initial Data (Optional)
+```bash
+# Seed sample data (accounts, users, sample transactions)
+docker-compose exec api dotnet run --project /app/JERP.Api -- seed
+
+# Or manually via API once it's running (see API documentation)
+```
+
+#### Step 6: Start Frontend (Separate Terminal)
+The frontend runs outside Docker for faster development with hot reload.
 
 ```bash
-# Navigate to the API project
-cd src/JERP.Api
+# In a new terminal, navigate to frontend directory
+cd landing-page
 
-# Restore NuGet packages
-dotnet restore
+# Install dependencies
+npm install
 
-# Verify the build works
-dotnet build
+# Start development server
+npm run dev
 ```
 
-#### Step 2: Configure Database Connection
+**Frontend URL**: http://localhost:3000
 
-Update the connection string in `appsettings.Development.json`:
+#### Step 7: Verify Installation
+1. Open browser to http://localhost:3000
+2. You should see the JERP 3.0 login page
+3. Default credentials:
+   - **Email**: ichbincesartobar@yahoo.com
+   - **Password**: Admin@123
+4. After login, you should see the dashboard
 
+**API Documentation**: http://localhost:5000/swagger
+
+---
+
+### Option 2: Manual Setup (Full Control)
+
+For developers who prefer to run services individually or don't use Docker.
+
+#### Backend Setup
+
+##### 1. Install SQL Server Locally
+- Download and install SQL Server Express or Developer Edition
+- Note the connection string (usually `Server=localhost\SQLEXPRESS;...`)
+
+##### 2. Configure Database Connection
+Edit `src/JERP.Api/appsettings.Development.json`:
 ```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=JERP3_DB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+  },
+  "Jwt": {
+    "SecretKey": "YourSuperSecretKeyForJWTTokenGenerationMinimum32Characters!",
+    "Issuer": "JERP-API",
+    "Audience": "JERP-Client",
+    "ExpirationHours": 1
   }
 }
 ```
 
-**For SQL Server Authentication (instead of Windows Auth):**
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=JERP3_DB;User Id=your_username;Password=your_password;MultipleActiveResultSets=true;TrustServerCertificate=True"
-  }
-}
+##### 3. Restore Dependencies
+```bash
+cd /path/to/JERP-3.0
+dotnet restore
 ```
 
-#### Step 3: Create Database
-
-**Option 1: Using SQL Server Management Studio (SSMS)**
-```sql
+##### 4. Create Database
+```bash
+# Option A: Create empty database via SQL
+# Connect to SQL Server and run:
 CREATE DATABASE JERP3_DB;
+
+# Option B: Let migrations create it (skip to next step)
 ```
 
-**Option 2: Using Command Line**
+##### 5. Run Migrations
 ```bash
-sqlcmd -S localhost\SQLEXPRESS -Q "CREATE DATABASE JERP3_DB"
-```
-
-#### Step 4: Run Database Migrations
-
-```bash
-# Make sure you're in the src/JERP.Api directory
 cd src/JERP.Api
-
-# Apply migrations to create database schema
 dotnet ef database update --project ../JERP.Infrastructure
 ```
 
-**If migrations don't exist yet, create initial migration:**
+**Troubleshooting Migrations:**
 ```bash
-dotnet ef migrations add InitialCreate --project ../JERP.Infrastructure
+# If you get "No executable found matching command dotnet-ef"
+dotnet tool install --global dotnet-ef
+
+# Then try again
 dotnet ef database update --project ../JERP.Infrastructure
 ```
 
-#### Step 5: Run the API
-
+##### 6. Run the API
 ```bash
-# Run the API (from src/JERP.Api directory)
+cd src/JERP.Api
 dotnet run
-
-# You should see output like:
-# info: Microsoft.Hosting.Lifetime[14]
-#       Now listening on: https://localhost:7001
-#       Now listening on: http://localhost:5000
 ```
 
-**Access Swagger UI:**
-- Open browser to: https://localhost:7001/swagger
-- You should see the API documentation
+**API will start on**: http://localhost:5000  
+**Swagger UI**: http://localhost:5000/swagger
 
-### 1.4 Frontend Setup
+#### Frontend Setup
 
-#### Step 1: Install Node Dependencies
-
+##### 1. Navigate to Frontend Directory
 ```bash
-# Navigate to the frontend directory
-cd landing-page
+cd /path/to/JERP-3.0/landing-page
+```
 
-# Install dependencies (choose npm or yarn)
+##### 2. Install Dependencies
+```bash
 npm install
-# OR
+# or
 yarn install
 ```
 
-#### Step 2: Configure Environment Variables
-
-Create a `.env.local` file in the `landing-page` directory:
-
+##### 3. Configure Environment (if needed)
+Create `landing-page/.env.local`:
 ```bash
-# Copy the example file
-cp .env.example .env.local
-```
-
-Update `.env.local` with your configuration:
-
-```env
-# API Configuration
-NEXT_PUBLIC_API_URL=https://localhost:7001
-NEXT_PUBLIC_API_VERSION=v1
-
-# NextAuth Configuration
+NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXTAUTH_SECRET=your-nextauth-secret-here
 NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-key-here-generate-with-openssl
-
-# Database (Prisma)
-DATABASE_URL="Server=localhost\\SQLEXPRESS;Database=JERP3_DB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
-
-# Stripe (for payment processing)
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_key_here
-STRIPE_SECRET_KEY=sk_test_your_key_here
-
-# Optional: Feature Flags
-NEXT_PUBLIC_ENABLE_METRC=false
-NEXT_PUBLIC_ENABLE_LOYALTY=true
 ```
 
-**Generate NEXTAUTH_SECRET:**
+##### 4. Run Development Server
 ```bash
-openssl rand -base64 32
-```
-
-#### Step 3: Run Database Setup (Prisma)
-
-```bash
-# Generate Prisma client
-npx prisma generate
-
-# Run Prisma migrations (if using Prisma)
-npx prisma db push
-```
-
-#### Step 4: Run the Frontend
-
-```bash
-# Start the development server (from landing-page directory)
 npm run dev
-# OR
+# or
 yarn dev
-
-# You should see output like:
-# ready - started server on 0.0.0.0:3000, url: http://localhost:3000
 ```
 
-**Access the Application:**
-- Open browser to: http://localhost:3000
-
-### 1.5 Docker Setup (Optional)
-
-If you prefer to use Docker for local development:
-
-```bash
-# From the project root directory
-docker-compose -f docker-compose.dev.yml up -d
-
-# This will start:
-# - SQL Server on port 1433
-# - API on port 7001
-# - Frontend on port 3000
-```
-
-**Stop Docker containers:**
-```bash
-docker-compose -f docker-compose.dev.yml down
-```
-
-### 1.6 Verify Installation
-
-#### Backend Health Check
-```bash
-curl https://localhost:7001/health
-# Should return: {"status":"Healthy"}
-```
-
-#### Test API Authentication
-```bash
-# Using the REST Client extension in VS Code, or curl:
-curl -X POST https://localhost:7001/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","password":"Test123!"}'
-```
-
-#### Frontend Test
-- Navigate to http://localhost:3000
-- You should see the landing page
-- Check browser console for any errors
-
-### 1.7 Troubleshooting Common Setup Issues
-
-**Issue: "SqlException: Cannot open database"**
-- **Solution:** Ensure SQL Server is running and database exists
-  ```bash
-  # Check SQL Server status
-  sqlcmd -S localhost\SQLEXPRESS -Q "SELECT @@VERSION"
-  ```
-
-**Issue: "Port already in use"**
-- **Solution:** Change the port in `launchSettings.json` (backend) or `package.json` (frontend)
-  ```json
-  // For backend: src/JERP.Api/Properties/launchSettings.json
-  "applicationUrl": "https://localhost:7002;http://localhost:5001"
-  
-  // For frontend: update dev script in package.json
-  "dev": "next dev -p 3001"
-  ```
-
-**Issue: "CORS error when calling API from frontend"**
-- **Solution:** Verify CORS settings in `Program.cs` include your frontend URL
-  ```csharp
-  builder.Services.AddCors(options =>
-  {
-      options.AddPolicy("AllowDevelopment", policy =>
-      {
-          policy.WithOrigins("http://localhost:3000")
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
-      });
-  });
-  ```
-
-**Issue: "Entity Framework migrations not found"**
-- **Solution:** Ensure you're running commands from the correct directory
-  ```bash
-  cd src/JERP.Api
-  dotnet ef migrations list --project ../JERP.Infrastructure
-  ```
-
-**Issue: "npm/yarn install fails"**
-- **Solution:** Clear cache and try again
-  ```bash
-  npm cache clean --force
-  rm -rf node_modules package-lock.json
-  npm install
-  ```
+**Frontend URL**: http://localhost:3000
 
 ---
 
-## 2. Project Structure Explanation
+### Option 3: Using Visual Studio (Windows)
 
-### 2.1 Root Directory Structure
+#### 1. Open Solution
+- Launch Visual Studio 2022
+- Open `JERP.slnx` or `src/JERP.Api/JERP.Api.csproj`
+
+#### 2. Configure Startup Projects
+- Right-click solution → Properties
+- Set startup projects:
+  - `JERP.Api` (Always start)
+  - Optional: Set multiple startup projects if you have additional services
+
+#### 3. Configure Database
+- Update connection string in `appsettings.Development.json`
+- Open Package Manager Console (View → Other Windows → Package Manager Console)
+- Run: `Update-Database -Project JERP.Infrastructure -StartupProject JERP.Api`
+
+#### 4. Run
+- Press F5 or click "Start Debugging"
+- API will launch with Swagger UI
+
+#### 5. Run Frontend Separately
+- Open terminal in Visual Studio or external terminal
+- Navigate to `landing-page`
+- Run `npm install` and `npm run dev`
+
+---
+
+## Project Structure
+
+### High-Level Overview
 
 ```
 JERP-3.0/
-├── .github/                        # GitHub Actions CI/CD workflows
-│   └── workflows/
-│       ├── build.yml              # Build and test workflow
-│       └── deploy.yml             # Deployment workflow
-├── docs/                          # Documentation
-│   ├── architecture/              # Architecture documentation
-│   ├── SOW.md                     # Scope of Work
-│   └── ONBOARDING.md              # This file
-├── src/                           # Source code
-│   ├── JERP.Api/                  # Web API project
-│   ├── JERP.Core/                 # Domain entities and interfaces
-│   ├── JERP.Application/          # Business logic and DTOs
-│   ├── JERP.Infrastructure/       # Data access and external services
-│   ├── JERP.Compliance/           # Compliance-specific logic
-│   └── JERP.Desktop/              # Desktop application (WPF)
-├── landing-page/                  # Next.js frontend
-│   ├── app/                       # Next.js 13+ app directory
-│   ├── components/                # React components
-│   ├── lib/                       # Utility libraries
-│   ├── public/                    # Static assets
-│   ├── prisma/                    # Prisma ORM configuration
-│   └── styles/                    # Global styles
-├── tests/                         # Test projects
-│   ├── JERP.Api.Tests/
-│   ├── JERP.Core.Tests/
-│   └── JERP.Application.Tests/
-├── docker/                        # Docker configurations
-├── .editorconfig                  # Editor configuration
-├── .gitignore                     # Git ignore rules
-├── docker-compose.yml             # Production Docker Compose
-├── docker-compose.dev.yml         # Development Docker Compose
-├── JERP.slnx                      # Solution file
-└── README.md                      # Project README
+├── src/                          # Source code
+│   ├── JERP.Api/                 # ASP.NET Core Web API
+│   ├── JERP.Core/                # Domain models and interfaces
+│   ├── JERP.Application/         # Business logic layer
+│   ├── JERP.Infrastructure/      # Data access & external services
+│   ├── JERP.Compliance/          # Cannabis compliance features
+│   └── JERP.Desktop/             # Desktop application (optional)
+├── landing-page/                 # Next.js frontend
+├── tests/                        # Test projects (planned)
+├── docs/                         # Documentation
+├── docker-compose.yml            # Docker orchestration
+└── README.md                     # Project overview
 ```
 
-### 2.2 Backend Structure (src/)
+### Backend Structure (ASP.NET Core)
 
-#### JERP.Api/
-**Purpose:** ASP.NET Core Web API project - entry point for HTTP requests
-
+#### JERP.Api - Web API Layer
 ```
 JERP.Api/
-├── Controllers/                   # API endpoint controllers
-│   ├── AuthController.cs          # Authentication endpoints
-│   ├── FinanceController.cs       # Finance module endpoints
-│   ├── InventoryController.cs     # Inventory module endpoints
-│   ├── POSController.cs           # Point of Sale endpoints
-│   └── ComplianceController.cs    # Compliance endpoints
-├── Middleware/                    # Custom middleware
-│   ├── ErrorHandlingMiddleware.cs # Global error handling
-│   ├── LoggingMiddleware.cs       # Request/response logging
-│   └── AuthenticationMiddleware.cs # Custom auth logic
-├── Properties/
-│   └── launchSettings.json        # Development launch settings
-├── appsettings.json               # Application configuration
-├── appsettings.Development.json   # Development-specific config
-├── appsettings.Production.json    # Production-specific config
-├── Program.cs                     # Application entry point
-└── JERP.Api.csproj                # Project file
+├── Controllers/                  # API endpoints
+│   ├── AccountsController.cs    # Chart of Accounts CRUD
+│   ├── JournalEntriesController.cs
+│   ├── GeneralLedgerController.cs
+│   ├── EmployeesController.cs
+│   ├── PayrollController.cs
+│   ├── VendorsController.cs
+│   ├── CustomersController.cs
+│   ├── ProductsController.cs
+│   ├── InventoryController.cs
+│   └── FinancialReportsController.cs
+├── Middleware/                   # Custom middleware
+│   ├── ErrorHandlingMiddleware.cs
+│   ├── AuthenticationMiddleware.cs
+│   └── TenantResolutionMiddleware.cs
+├── Program.cs                    # Application entry point
+├── appsettings.json              # Configuration
+├── appsettings.Development.json  # Dev-specific config
+└── Dockerfile                    # Docker image definition
 ```
 
 **Key Files:**
+- **Program.cs**: Configures services (DI), middleware pipeline, authentication, CORS
+- **Controllers**: REST API endpoints, route definitions, request/response handling
 
-**Program.cs** - Application configuration and startup
-```csharp
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Configure database
-builder.Services.AddDbContext<JerpDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Configure authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => { /* JWT config */ });
-
-var app = builder.Build();
-
-// Configure middleware pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
-app.Run();
-```
-
-#### JERP.Core/
-**Purpose:** Domain layer - entities, interfaces, enums (no dependencies)
-
+#### JERP.Core - Domain Layer
 ```
 JERP.Core/
-├── Entities/                      # Domain entities (business objects)
-│   ├── BaseEntity.cs              # Base class for all entities
-│   ├── Finance/
-│   │   ├── Account.cs             # Chart of Accounts
-│   │   ├── JournalEntry.cs        # Journal entries
-│   │   ├── Invoice.cs             # Invoices
-│   │   └── Payment.cs             # Payments
-│   ├── Inventory/
-│   │   ├── Product.cs             # Products
-│   │   ├── Batch.cs               # Inventory batches
-│   │   ├── Transfer.cs            # Transfer manifests
-│   │   └── StockMovement.cs       # Inventory movements
-│   ├── POS/
-│   │   ├── Sale.cs                # Sales transactions
-│   │   ├── Customer.cs            # Customers
-│   │   └── Cart.cs                # Shopping carts
-│   └── Compliance/
-│       ├── MetrcPackage.cs        # METRC packages
-│       └── AuditLog.cs            # Audit trail
-├── Enums/                         # Enumerations
-│   ├── AccountType.cs             # Asset, Liability, Equity, etc.
-│   ├── TransactionStatus.cs       # Pending, Completed, Failed
-│   └── ComplianceStatus.cs        # Compliant, Non-Compliant, etc.
-├── Exceptions/                    # Custom exceptions
-│   └── DomainException.cs         # Base domain exception
-└── Interfaces/                    # Repository interfaces
-    ├── IRepository.cs             # Generic repository interface
-    ├── IAccountRepository.cs      # Account-specific operations
-    └── IProductRepository.cs      # Product-specific operations
+├── Entities/                     # Domain entities
+│   ├── BaseEntity.cs             # Base class (Id, CreatedAt, UpdatedAt)
+│   ├── Finance/                  # Finance entities
+│   │   ├── Account.cs
+│   │   ├── JournalEntry.cs
+│   │   ├── GeneralLedgerEntry.cs
+│   │   ├── Vendor.cs
+│   │   ├── VendorBill.cs
+│   │   ├── Customer.cs
+│   │   ├── CustomerInvoice.cs
+│   │   ├── FASBTopic.cs
+│   │   └── FASBSubtopic.cs
+│   ├── Inventory/                # Inventory entities
+│   │   ├── Product.cs
+│   │   ├── ProductBatch.cs
+│   │   ├── Warehouse.cs
+│   │   ├── InventoryLevel.cs
+│   │   ├── InventoryTransaction.cs
+│   │   ├── PurchaseOrder.cs
+│   │   └── StockReceipt.cs
+│   ├── SalesOrders/              # Sales entities
+│   ├── Employee.cs
+│   ├── Timesheet.cs
+│   ├── PayrollRecord.cs
+│   ├── Department.cs
+│   ├── User.cs
+│   ├── Role.cs
+│   └── Company.cs
+├── Enums/                        # Enumerations
+│   ├── AccountType.cs
+│   ├── AccountSubType.cs
+│   ├── JournalEntryStatus.cs
+│   ├── EmploymentStatus.cs
+│   └── PaymentStatus.cs
+└── Interfaces/                   # Repository interfaces
+    ├── IRepository.cs
+    ├── IUnitOfWork.cs
+    └── IFinanceService.cs
 ```
 
-**Example Entity:**
-```csharp
-public class Product : BaseEntity
-{
-    public string SKU { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public ProductCategory Category { get; set; }
-    public decimal Price { get; set; }
-    public decimal THCContent { get; set; }
-    public decimal CBDContent { get; set; }
-    public int QuantityOnHand { get; set; }
-    public string MetrcId { get; set; }
-    
-    // Navigation properties
-    public ICollection<StockMovement> StockMovements { get; set; }
-    public ICollection<Batch> Batches { get; set; }
-}
-```
+**Entity Design Principles:**
+- All entities inherit from `BaseEntity` (Id, CreatedAt, UpdatedAt, CompanyId)
+- Navigation properties for relationships
+- Validation attributes for data integrity
+- Immutable properties where appropriate
 
-#### JERP.Application/
-**Purpose:** Application layer - business logic, DTOs, validators
-
+#### JERP.Application - Business Logic Layer
 ```
 JERP.Application/
-├── DTOs/                          # Data Transfer Objects
+├── DTOs/                         # Data Transfer Objects
 │   ├── Finance/
-│   │   ├── CreateInvoiceDto.cs
-│   │   └── InvoiceDto.cs
+│   │   ├── AccountDto.cs
+│   │   ├── CreateAccountDto.cs
+│   │   ├── UpdateAccountDto.cs
+│   │   ├── JournalEntryDto.cs
+│   │   ├── CreateJournalEntryDto.cs
+│   │   └── FinancialReportDto.cs
 │   ├── Inventory/
-│   │   ├── CreateProductDto.cs
-│   │   └── ProductDto.cs
-│   └── Common/
-│       └── PagedResultDto.cs
-├── Services/                      # Business logic services
-│   ├── IFinanceService.cs
-│   ├── FinanceService.cs
-│   ├── IInventoryService.cs
-│   ├── InventoryService.cs
-│   └── IMetrcService.cs
-├── Validators/                    # FluentValidation validators
-│   ├── CreateInvoiceValidator.cs
-│   └── CreateProductValidator.cs
-├── Mappings/                      # AutoMapper profiles
-│   └── MappingProfile.cs
-└── JERP.Application.csproj
+│   └── Payroll/
+├── Services/                     # Business services
+│   ├── Finance/
+│   │   ├── IAccountService.cs
+│   │   ├── AccountService.cs
+│   │   ├── IJournalEntryService.cs
+│   │   ├── JournalEntryService.cs
+│   │   ├── IFinancialReportService.cs
+│   │   ├── FinancialReportService.cs
+│   │   ├── IPayrollToFinanceService.cs
+│   │   └── PayrollToFinanceService.cs
+│   ├── Inventory/
+│   ├── Payroll/
+│   └── Auth/
+│       ├── IAuthService.cs
+│       └── AuthService.cs
+├── Validators/                   # FluentValidation validators
+│   ├── CreateAccountValidator.cs
+│   ├── CreateJournalEntryValidator.cs
+│   └── CreateEmployeeValidator.cs
+├── Mappings/                     # AutoMapper profiles
+│   ├── FinanceMappingProfile.cs
+│   ├── InventoryMappingProfile.cs
+│   └── PayrollMappingProfile.cs
+└── Exceptions/                   # Custom exceptions
+    ├── NotFoundException.cs
+    ├── ValidationException.cs
+    └── BusinessRuleException.cs
 ```
 
-**Example Service:**
-```csharp
-public class FinanceService : IFinanceService
-{
-    private readonly IAccountRepository _accountRepository;
-    private readonly IJournalEntryRepository _journalEntryRepository;
-    
-    public FinanceService(
-        IAccountRepository accountRepository,
-        IJournalEntryRepository journalEntryRepository)
-    {
-        _accountRepository = accountRepository;
-        _journalEntryRepository = journalEntryRepository;
-    }
-    
-    public async Task<InvoiceDto> CreateInvoiceAsync(CreateInvoiceDto dto)
-    {
-        // Validate business rules
-        // Create invoice entity
-        // Create journal entries for accounting
-        // Return DTO
-    }
-}
-```
+**Service Layer Responsibilities:**
+- Implement business logic and rules
+- Validate input (FluentValidation)
+- Orchestrate data access via repositories
+- Map entities to DTOs (AutoMapper)
+- Handle exceptions and return appropriate responses
 
-#### JERP.Infrastructure/
-**Purpose:** Infrastructure layer - data access, external services
-
+#### JERP.Infrastructure - Data Access Layer
 ```
 JERP.Infrastructure/
-├── Data/                          # Database context and configurations
-│   ├── JerpDbContext.cs           # Entity Framework DbContext
-│   ├── Configurations/            # Entity configurations
+├── Data/
+│   ├── JerpDbContext.cs          # EF Core DbContext
+│   ├── Configurations/           # Entity configurations
 │   │   ├── AccountConfiguration.cs
+│   │   ├── JournalEntryConfiguration.cs
+│   │   ├── EmployeeConfiguration.cs
 │   │   └── ProductConfiguration.cs
-│   └── Seed/                      # Database seed data
-│       └── DataSeeder.cs
-├── Repositories/                  # Repository implementations
-│   ├── Repository.cs              # Generic repository
+│   ├── Seeders/                  # Data seeders
+│   │   ├── ChartOfAccountsSeeder.cs
+│   │   ├── UserSeeder.cs
+│   │   └── SampleDataSeeder.cs
+│   └── Migrations/               # EF Core migrations
+│       ├── 20260204075145_AddFinanceModule.cs
+│       └── 20260204075145_AddFinanceModule.Designer.cs
+├── Repositories/                 # Repository implementations
+│   ├── Repository.cs             # Generic repository
 │   ├── AccountRepository.cs
-│   └── ProductRepository.cs
-├── Services/                      # External service integrations
-│   ├── MetrcApiService.cs         # METRC API integration
-│   ├── StripePaymentService.cs    # Stripe payment integration
-│   └── EmailService.cs            # Email service
-├── Migrations/                    # Entity Framework migrations
-│   └── 20260205_InitialCreate.cs
-└── JERP.Infrastructure.csproj
+│   └── EmployeeRepository.cs
+└── Services/                     # Infrastructure services
+    ├── EmailService.cs
+    ├── FileStorageService.cs
+    └── CacheService.cs
 ```
 
-**Example DbContext:**
-```csharp
-public class JerpDbContext : DbContext
-{
-    public DbSet<Account> Accounts { get; set; }
-    public DbSet<Product> Products { get; set; }
-    public DbSet<Invoice> Invoices { get; set; }
-    public DbSet<Sale> Sales { get; set; }
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        // Apply configurations
-        modelBuilder.ApplyConfiguration(new AccountConfiguration());
-        modelBuilder.ApplyConfiguration(new ProductConfiguration());
-        
-        // Seed data
-        modelBuilder.Entity<Account>().HasData(/* seed data */);
-    }
-}
+**Key Files:**
+- **JerpDbContext.cs**: Database context, DbSets, query filters
+- **Configurations/**: Fluent API entity configurations (relationships, indexes, constraints)
+- **Migrations/**: Database schema versions
+
+#### JERP.Compliance - Compliance Features (Optional)
 ```
-
-### 2.3 Frontend Structure (landing-page/)
-
-```
-landing-page/
-├── app/                           # Next.js App Router
-│   ├── (auth)/                    # Auth routes group
-│   │   ├── login/
-│   │   └── register/
-│   ├── (dashboard)/               # Protected dashboard routes
-│   │   ├── finance/
-│   │   ├── inventory/
-│   │   ├── pos/
-│   │   └── compliance/
-│   ├── api/                       # API routes (Next.js API)
-│   │   └── auth/
-│   ├── layout.tsx                 # Root layout
-│   └── page.tsx                   # Home page
-├── components/                    # React components
-│   ├── ui/                        # Reusable UI components
-│   │   ├── Button.tsx
-│   │   ├── Input.tsx
-│   │   ├── Modal.tsx
-│   │   └── Table.tsx
-│   ├── finance/                   # Finance module components
-│   │   ├── InvoiceList.tsx
-│   │   └── CreateInvoice.tsx
-│   ├── inventory/                 # Inventory module components
-│   ├── pos/                       # POS module components
-│   └── layout/                    # Layout components
-│       ├── Header.tsx
-│       ├── Sidebar.tsx
-│       └── Footer.tsx
-├── lib/                           # Utility libraries
-│   ├── api/                       # API client
-│   │   ├── client.ts              # Axios/Fetch configuration
-│   │   ├── finance.ts             # Finance API calls
-│   │   └── inventory.ts           # Inventory API calls
-│   ├── hooks/                     # Custom React hooks
-│   │   ├── useAuth.ts
-│   │   ├── useFinance.ts
-│   │   └── useInventory.ts
-│   ├── utils/                     # Utility functions
-│   │   ├── format.ts              # Formatting utilities
-│   │   └── validation.ts          # Validation utilities
-│   └── context/                   # React Context providers
-│       └── AuthContext.tsx
-├── public/                        # Static assets
-│   ├── images/
-│   └── icons/
-├── styles/                        # Global styles
-│   └── globals.css
-├── types/                         # TypeScript type definitions
-│   ├── api.ts
-│   └── models.ts
-├── middleware.ts                  # Next.js middleware
-├── next.config.js                 # Next.js configuration
-├── tailwind.config.ts             # Tailwind CSS configuration
-├── tsconfig.json                  # TypeScript configuration
-└── package.json                   # Dependencies and scripts
-```
-
-**Example Component:**
-```tsx
-// components/finance/InvoiceList.tsx
-import { useEffect, useState } from 'react';
-import { getInvoices } from '@/lib/api/finance';
-import { Invoice } from '@/types/models';
-
-export function InvoiceList() {
-  const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    async function fetchInvoices() {
-      try {
-        const data = await getInvoices();
-        setInvoices(data);
-      } catch (error) {
-        console.error('Failed to fetch invoices:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
-    fetchInvoices();
-  }, []);
-  
-  if (loading) return <div>Loading...</div>;
-  
-  return (
-    <div className="invoice-list">
-      {invoices.map(invoice => (
-        <div key={invoice.id}>{invoice.invoiceNumber}</div>
-      ))}
-    </div>
-  );
-}
+JERP.Compliance/
+├── Services/
+│   ├── IMetrcService.cs
+│   ├── MetrcService.cs
+│   ├── IBioTrackService.cs
+│   └── BioTrackService.cs
+└── Models/
+    ├── MetrcPackage.cs
+    └── ComplianceReport.cs
 ```
 
 ---
 
-## 3. Development Workflow
-
-### 3.1 Git Workflow
-
-#### Branch Strategy
-
-We follow **Git Flow** branching model:
+### Frontend Structure (Next.js)
 
 ```
-main (production)
-  └── develop (integration)
-       ├── feature/add-invoice-module
-       ├── feature/metrc-integration
-       ├── bugfix/fix-calculation-error
-       └── hotfix/security-patch
+landing-page/
+├── app/                          # Next.js 13+ App Router
+│   ├── (auth)/                   # Auth pages
+│   │   ├── login/
+│   │   └── register/
+│   ├── (dashboard)/              # Protected routes
+│   │   ├── layout.tsx
+│   │   ├── page.tsx              # Dashboard home
+│   │   ├── finance/              # Finance module
+│   │   │   ├── accounts/
+│   │   │   ├── journal-entries/
+│   │   │   ├── general-ledger/
+│   │   │   ├── vendors/
+│   │   │   ├── customers/
+│   │   │   └── reports/
+│   │   ├── inventory/            # Inventory module
+│   │   ├── sales/                # Sales module
+│   │   └── admin/                # Admin portal
+│   ├── api/                      # API routes (if using Next.js API)
+│   └── layout.tsx                # Root layout
+├── components/                   # React components
+│   ├── Finance/
+│   │   ├── AccountForm.tsx
+│   │   ├── AccountList.tsx
+│   │   ├── JournalEntryForm.tsx
+│   │   └── FinancialReports.tsx
+│   ├── Inventory/
+│   ├── Common/                   # Shared components
+│   │   ├── Button.tsx
+│   │   ├── Table.tsx
+│   │   ├── Modal.tsx
+│   │   ├── LoadingSpinner.tsx
+│   │   └── Navbar.tsx
+│   └── Charts/                   # Chart components (Recharts)
+│       ├── BarChart.tsx
+│       └── LineChart.tsx
+├── lib/                          # Utility functions
+│   ├── api.ts                    # API client
+│   ├── auth.ts                   # Authentication helpers
+│   └── utils.ts                  # General utilities
+├── hooks/                        # Custom React hooks
+│   ├── useAuth.ts
+│   ├── useApi.ts
+│   └── useLocalStorage.ts
+├── types/                        # TypeScript type definitions
+│   ├── finance.ts
+│   ├── inventory.ts
+│   └── user.ts
+├── styles/                       # Global styles
+│   └── globals.css
+├── public/                       # Static assets
+│   ├── images/
+│   └── icons/
+├── middleware.ts                 # Next.js middleware (auth)
+├── next.config.js                # Next.js configuration
+├── tailwind.config.ts            # Tailwind CSS config
+├── tsconfig.json                 # TypeScript config
+└── package.json                  # Dependencies
+```
+
+**Key Concepts:**
+- **App Router**: Next.js 13+ uses file-system based routing in `app/` directory
+- **Server Components**: Default in Next.js 13+, rendered on server
+- **Client Components**: Use `"use client"` directive for interactive components
+- **API Integration**: API calls to ASP.NET Core backend
+
+---
+
+## Development Workflow
+
+### Branch Strategy (Git Flow)
+
+```
+main (production-ready)
+  └── develop (integration branch)
+       ├── feature/add-bank-reconciliation
+       ├── feature/implement-pos
+       ├── bugfix/fix-journal-entry-validation
+       └── hotfix/critical-security-patch
 ```
 
 **Branch Types:**
-- `main` - Production-ready code only
-- `develop` - Integration branch for features
-- `feature/*` - New features (branch from develop)
-- `bugfix/*` - Bug fixes (branch from develop)
-- `hotfix/*` - Urgent production fixes (branch from main)
-- `release/*` - Release preparation (branch from develop)
+- **main**: Production-ready code, tagged releases
+- **develop**: Integration branch, latest development
+- **feature/***: New features (branch from develop)
+- **bugfix/***: Bug fixes (branch from develop)
+- **hotfix/***: Critical production fixes (branch from main)
 
-#### Creating a Feature Branch
+### Development Process
 
+#### 1. Start a New Feature
 ```bash
-# Make sure you're on develop and up to date
+# Ensure you're on develop and up-to-date
 git checkout develop
 git pull origin develop
 
 # Create feature branch
-git checkout -b feature/add-inventory-alerts
+git checkout -b feature/add-bank-reconciliation
 
-# Work on your feature, commit regularly
+# Do your work...
+```
+
+#### 2. Make Changes with Commits
+```bash
+# Stage changes
 git add .
-git commit -m "feat: add inventory low stock alerts"
 
-# Push to remote
-git push origin feature/add-inventory-alerts
+# Commit with descriptive message
+git commit -m "feat: Add bank reconciliation entity and repository"
+
+# More commits as needed
+git commit -m "feat: Add bank reconciliation service and API endpoints"
+git commit -m "test: Add unit tests for bank reconciliation"
+git commit -m "docs: Update API documentation for bank reconciliation"
 ```
 
-### 3.2 Commit Convention
+**Commit Message Convention:**
+- `feat:` New feature
+- `fix:` Bug fix
+- `refactor:` Code refactoring
+- `test:` Adding or updating tests
+- `docs:` Documentation changes
+- `chore:` Maintenance tasks (dependencies, build scripts)
+- `style:` Code style changes (formatting, no logic change)
 
-We use **Conventional Commits** specification:
-
-**Format:**
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-**Types:**
-- `feat:` - New feature
-- `fix:` - Bug fix
-- `docs:` - Documentation changes
-- `style:` - Code style changes (formatting, no logic change)
-- `refactor:` - Code refactoring
-- `test:` - Adding or updating tests
-- `chore:` - Maintenance tasks, dependencies
-- `perf:` - Performance improvements
-- `ci:` - CI/CD changes
-
-**Examples:**
+#### 3. Push to Remote
 ```bash
-git commit -m "feat(finance): add 280E compliance report"
-git commit -m "fix(inventory): correct stock calculation in batch tracking"
-git commit -m "docs: update API documentation for invoice endpoint"
-git commit -m "test(pos): add unit tests for cart validation"
-git commit -m "chore: update Entity Framework to 8.0.1"
+git push origin feature/add-bank-reconciliation
 ```
 
-### 3.3 Pull Request Process
+#### 4. Create Pull Request
+1. Go to GitHub repository
+2. Click "New Pull Request"
+3. Base: `develop`, Compare: `feature/add-bank-reconciliation`
+4. Fill in PR description:
+   - What does this PR do?
+   - How to test?
+   - Screenshots (if UI changes)
+   - Related issue numbers
+5. Request review from team members
+6. Address review comments
+7. Merge once approved
 
-#### Step 1: Create Pull Request
-
-1. Push your feature branch to GitHub
-2. Navigate to the repository on GitHub
-3. Click "Pull Request" → "New Pull Request"
-4. Select base: `develop` and compare: `feature/your-feature`
-5. Fill in the PR template:
-
-```markdown
-## Description
-Brief description of changes
-
-## Type of Change
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Breaking change
-- [ ] Documentation update
-
-## Related Issues
-Closes #123
-
-## Testing
-- [ ] Unit tests added/updated
-- [ ] Integration tests added/updated
-- [ ] Manual testing completed
-
-## Checklist
-- [ ] Code follows style guidelines
-- [ ] Self-review completed
-- [ ] Documentation updated
-- [ ] No console.log or debug code
-- [ ] Tests pass locally
-```
-
-#### Step 2: Request Code Review
-
-- Add at least one reviewer (preferably 2)
-- Add appropriate labels (feature, bug, documentation)
-- Link related issues
-
-#### Step 3: Address Review Comments
-
+#### 5. Deployment
 ```bash
-# Make changes based on feedback
-git add .
-git commit -m "fix: address code review comments"
-git push origin feature/your-feature
-```
-
-#### Step 4: Merge
-
-Once approved:
-- **Squash and merge** (for feature branches)
-- **Rebase and merge** (for small bug fixes)
-- Delete the feature branch after merging
-
-### 3.4 Code Review Checklist
-
-**As a Reviewer:**
-- [ ] Code follows project style guidelines
-- [ ] Logic is clear and well-commented when necessary
-- [ ] No hardcoded values (use configuration)
-- [ ] Error handling is appropriate
-- [ ] Security best practices followed
-- [ ] Performance considerations addressed
-- [ ] Tests are included and passing
-- [ ] Documentation is updated
-- [ ] No console.log or debugging code
-- [ ] Database migrations are backwards compatible
-
-**As an Author:**
-- [ ] Self-review completed before requesting review
-- [ ] PR description is clear and complete
-- [ ] All tests pass
-- [ ] No merge conflicts
-- [ ] Code is ready for production
-
-### 3.5 Daily Development Workflow
-
-**Morning:**
-```bash
-# 1. Update your local develop branch
-git checkout develop
-git pull origin develop
-
-# 2. Merge develop into your feature branch
-git checkout feature/your-feature
+# After PR merged to develop, test in staging
+# When ready for production:
+git checkout main
+git pull origin main
 git merge develop
+git push origin main
 
-# 3. Run tests to ensure everything still works
-dotnet test  # Backend
-npm test     # Frontend
+# Tag release
+git tag -a v1.2.0 -m "Release version 1.2.0"
+git push origin v1.2.0
 ```
 
-**During the Day:**
-```bash
-# Make changes, commit frequently
-git add .
-git commit -m "feat: implement feature X"
+### Code Standards
 
-# Push to remote at end of day
-git push origin feature/your-feature
-```
+#### C# Code Standards
+- **Naming Conventions**:
+  - Classes: `PascalCase`
+  - Methods: `PascalCase`
+  - Properties: `PascalCase`
+  - Private fields: `_camelCase` (with underscore)
+  - Parameters: `camelCase`
+  - Constants: `UPPER_SNAKE_CASE`
+- **Use async/await** for I/O operations
+- **Use LINQ** for collections instead of loops where appropriate
+- **XML comments** for public APIs:
+  ```csharp
+  /// <summary>
+  /// Creates a new journal entry in draft status.
+  /// </summary>
+  /// <param name="dto">Journal entry data</param>
+  /// <returns>Created journal entry DTO</returns>
+  public async Task<JournalEntryDto> CreateJournalEntryAsync(CreateJournalEntryDto dto)
+  ```
+- **Use nullable reference types** (enabled in project)
+- **Avoid magic numbers**, use constants or enums
 
-**End of Day:**
-```bash
-# Ensure all changes are committed and pushed
-git status
-git push origin feature/your-feature
-```
+#### TypeScript/React Code Standards
+- **Naming Conventions**:
+  - Components: `PascalCase` (e.g., `AccountForm.tsx`)
+  - Functions: `camelCase`
+  - Constants: `UPPER_SNAKE_CASE` or `PascalCase` for components
+  - Types/Interfaces: `PascalCase`
+- **Functional components** with hooks (no class components)
+- **Props interfaces** defined for all components:
+  ```typescript
+  interface AccountFormProps {
+    accountId?: string;
+    onSave: (account: Account) => void;
+    onCancel: () => void;
+  }
+  ```
+- **Use TypeScript**, no `any` types (use `unknown` if truly unknown)
+- **ESLint and Prettier** for code formatting
+- **Destructure props** in component parameters
+
+#### Database Standards
+- **Table names**: Plural, PascalCase (e.g., `Accounts`, `JournalEntries`)
+- **Column names**: PascalCase
+- **Foreign keys**: `{Entity}Id` (e.g., `AccountId`, `CompanyId`)
+- **Indexes**: Add on foreign keys and commonly queried columns
+- **Migrations**: Descriptive names (e.g., `AddFASBTopicToAccount`)
 
 ---
 
-## 4. Testing Strategy
+## Testing Strategy
 
-### 4.1 Testing Pyramid
+### Backend Testing
 
-Our testing strategy follows the testing pyramid:
+#### Unit Tests
+**Framework**: xUnit  
+**Location**: `tests/JERP.Application.Tests/`
 
-```
-        /\
-       /E2E\        10% - End-to-End Tests
-      /------\
-     /Integration\  20% - Integration Tests
-    /------------\
-   /  Unit Tests  \ 70% - Unit Tests
-  /----------------\
-```
-
-### 4.2 Backend Testing
-
-#### Running Tests
-
-```bash
-# Run all tests
-dotnet test
-
-# Run tests in a specific project
-cd tests/JERP.Api.Tests
-dotnet test
-
-# Run tests with coverage
-dotnet test /p:CollectCoverage=true /p:CoverageDirectory=./coverage
-
-# Run specific test
-dotnet test --filter "FullyQualifiedName~FinanceServiceTests.CreateInvoice_ValidData_ReturnsInvoice"
-
-# Run tests by category
-dotnet test --filter "Category=Integration"
-```
-
-#### Writing Unit Tests
-
-**Test Structure:**
+**Example Test:**
 ```csharp
-// tests/JERP.Application.Tests/Services/FinanceServiceTests.cs
-public class FinanceServiceTests
+using Xunit;
+using Moq;
+using FluentAssertions;
+
+namespace JERP.Application.Tests.Services
 {
-    private readonly Mock<IAccountRepository> _accountRepoMock;
-    private readonly FinanceService _service;
-    
-    public FinanceServiceTests()
+    public class AccountServiceTests
     {
-        _accountRepoMock = new Mock<IAccountRepository>();
-        _service = new FinanceService(_accountRepoMock.Object);
-    }
-    
-    [Fact]
-    public async Task CreateInvoice_ValidData_ReturnsInvoice()
-    {
-        // Arrange
-        var dto = new CreateInvoiceDto
+        private readonly Mock<IRepository<Account>> _mockRepo;
+        private readonly AccountService _service;
+
+        public AccountServiceTests()
         {
-            CustomerName = "Test Customer",
-            Amount = 100.00m
-        };
-        
-        // Act
-        var result = await _service.CreateInvoiceAsync(dto);
-        
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal("Test Customer", result.CustomerName);
-        _accountRepoMock.Verify(x => x.AddAsync(It.IsAny<Invoice>()), Times.Once);
-    }
-    
-    [Fact]
-    public async Task CreateInvoice_InvalidAmount_ThrowsException()
-    {
-        // Arrange
-        var dto = new CreateInvoiceDto { Amount = -10.00m };
-        
-        // Act & Assert
-        await Assert.ThrowsAsync<ValidationException>(
-            () => _service.CreateInvoiceAsync(dto)
-        );
+            _mockRepo = new Mock<IRepository<Account>>();
+            _service = new AccountService(_mockRepo.Object);
+        }
+
+        [Fact]
+        public async Task CreateAccount_ValidInput_ReturnsAccountDto()
+        {
+            // Arrange
+            var createDto = new CreateAccountDto
+            {
+                AccountNumber = "1000",
+                Name = "Cash",
+                Type = AccountType.Asset
+            };
+
+            _mockRepo.Setup(r => r.AddAsync(It.IsAny<Account>()))
+                     .ReturnsAsync(new Account { Id = Guid.NewGuid(), Name = "Cash" });
+
+            // Act
+            var result = await _service.CreateAccountAsync(createDto);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Name.Should().Be("Cash");
+            _mockRepo.Verify(r => r.AddAsync(It.IsAny<Account>()), Times.Once);
+        }
     }
 }
 ```
 
-#### Writing Integration Tests
+**Run Tests:**
+```bash
+# Run all tests
+dotnet test
 
+# Run specific test project
+dotnet test tests/JERP.Application.Tests
+
+# Run tests with coverage
+dotnet test /p:CollectCoverage=true
+```
+
+#### Integration Tests
+**Framework**: xUnit + Testcontainers  
+**Location**: `tests/JERP.Api.Tests/`
+
+**Example Test:**
 ```csharp
-// tests/JERP.Api.Tests/Controllers/FinanceControllerIntegrationTests.cs
-public class FinanceControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+public class AccountsControllerTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
-    
-    public FinanceControllerIntegrationTests(WebApplicationFactory<Program> factory)
+
+    public AccountsControllerTests(WebApplicationFactory<Program> factory)
     {
         _client = factory.CreateClient();
     }
-    
+
     [Fact]
-    public async Task GetAccounts_ReturnsOk()
+    public async Task GetAccounts_ReturnsOkResult()
     {
+        // Arrange
+        var token = await GetAuthTokenAsync();
+        _client.DefaultRequestHeaders.Authorization = 
+            new AuthenticationHeaderValue("Bearer", token);
+
         // Act
-        var response = await _client.GetAsync("/api/finance/accounts");
-        
+        var response = await _client.GetAsync("/api/accounts");
+
         // Assert
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
-        Assert.NotEmpty(content);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var accounts = await response.Content.ReadFromJsonAsync<List<AccountDto>>();
+        accounts.Should().NotBeNull();
     }
 }
 ```
 
-### 4.3 Frontend Testing
+### Frontend Testing
 
-#### Running Tests
+#### Component Tests
+**Framework**: Jest + React Testing Library (to be set up)
 
-```bash
-# Run all tests
-npm test
-# OR
-yarn test
-
-# Run tests in watch mode
-npm test -- --watch
-
-# Run tests with coverage
-npm run test:coverage
-
-# Run specific test file
-npm test -- InvoiceList.test.tsx
-
-# Run E2E tests
-npm run test:e2e
-```
-
-#### Writing Component Tests
-
-**Test Structure:**
+**Example Test:**
 ```typescript
-// components/__tests__/InvoiceList.test.tsx
-import { render, screen, waitFor } from '@testing-library/react';
-import { InvoiceList } from '../InvoiceList';
-import * as api from '@/lib/api/finance';
+import { render, screen, fireEvent } from '@testing-library/react';
+import AccountForm from '@/components/Finance/AccountForm';
 
-jest.mock('@/lib/api/finance');
+describe('AccountForm', () => {
+  it('renders form fields', () => {
+    render(<AccountForm onSave={jest.fn()} onCancel={jest.fn()} />);
+    
+    expect(screen.getByLabelText(/Account Number/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Account Name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Account Type/i)).toBeInTheDocument();
+  });
 
-describe('InvoiceList', () => {
-  it('renders loading state initially', () => {
-    render(<InvoiceList />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-  });
-  
-  it('renders invoices after loading', async () => {
-    const mockInvoices = [
-      { id: 1, invoiceNumber: 'INV-001', amount: 100 },
-      { id: 2, invoiceNumber: 'INV-002', amount: 200 },
-    ];
+  it('calls onSave when form is submitted', async () => {
+    const mockSave = jest.fn();
+    render(<AccountForm onSave={mockSave} onCancel={jest.fn()} />);
     
-    (api.getInvoices as jest.Mock).mockResolvedValue(mockInvoices);
-    
-    render(<InvoiceList />);
-    
-    await waitFor(() => {
-      expect(screen.getByText('INV-001')).toBeInTheDocument();
-      expect(screen.getByText('INV-002')).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/Account Number/i), {
+      target: { value: '1000' }
     });
-  });
-  
-  it('handles errors gracefully', async () => {
-    (api.getInvoices as jest.Mock).mockRejectedValue(new Error('API Error'));
-    
-    render(<InvoiceList />);
-    
-    await waitFor(() => {
-      expect(screen.getByText(/error/i)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/Account Name/i), {
+      target: { value: 'Cash' }
     });
+    
+    fireEvent.click(screen.getByText(/Save/i));
+    
+    expect(mockSave).toHaveBeenCalled();
   });
 });
 ```
 
-### 4.4 Test Files Location
-
-**Backend Tests:**
-```
-tests/
-├── JERP.Api.Tests/
-│   ├── Controllers/
-│   └── Integration/
-├── JERP.Application.Tests/
-│   └── Services/
-├── JERP.Core.Tests/
-│   └── Entities/
-└── JERP.Infrastructure.Tests/
-    └── Repositories/
-```
-
-**Frontend Tests:**
-```
-landing-page/
-├── components/
-│   ├── __tests__/
-│   │   ├── InvoiceList.test.tsx
-│   │   └── Button.test.tsx
-├── lib/
-│   └── __tests__/
-│       └── utils.test.ts
-└── app/
-    └── __tests__/
-```
-
-### 4.5 Test Coverage Goals
-
-| Type | Target Coverage |
-|------|-----------------|
-| **Unit Tests** | 80%+ |
-| **Integration Tests** | 60%+ |
-| **E2E Tests** | Critical user flows |
-
-**View Coverage Reports:**
+**Run Tests:**
 ```bash
-# Backend
-dotnet test /p:CollectCoverage=true
-# Open: tests/coverage/index.html
-
-# Frontend
+cd landing-page
+npm run test
 npm run test:coverage
-# Open: coverage/lcov-report/index.html
 ```
+
+### Testing Guidelines
+
+1. **AAA Pattern**: Arrange, Act, Assert
+2. **One assertion per test** (when possible)
+3. **Descriptive test names**: `MethodName_Scenario_ExpectedResult`
+4. **Test edge cases**: Null inputs, empty lists, boundary conditions
+5. **Mock external dependencies**: Database, APIs, file system
+6. **Test both success and failure paths**
+7. **Keep tests fast**: Unit tests < 100ms each
+8. **80%+ code coverage goal** for business logic
 
 ---
 
-## 5. Common Tasks and Recipes
+## Common Tasks and Recipes
 
-### 5.1 Add New Entity (Backend)
+### Backend Tasks
 
-#### Step 1: Create Entity Class
+#### 1. Add a New Entity
 
-```csharp
-// src/JERP.Core/Entities/Inventory/Vendor.cs
-public class Vendor : BaseEntity
-{
-    public string Name { get; set; }
-    public string ContactEmail { get; set; }
-    public string ContactPhone { get; set; }
-    public string Address { get; set; }
-    public VendorType Type { get; set; }
-    
-    // Navigation properties
-    public ICollection<Product> Products { get; set; }
-}
+**Step 1: Create Entity Class**
+```bash
+# Create file: src/JERP.Core/Entities/Finance/BankAccount.cs
 ```
 
-#### Step 2: Add DbSet to Context
-
 ```csharp
-// src/JERP.Infrastructure/Data/JerpDbContext.cs
-public DbSet<Vendor> Vendors { get; set; }
-```
-
-#### Step 3: Create Entity Configuration
-
-```csharp
-// src/JERP.Infrastructure/Data/Configurations/VendorConfiguration.cs
-public class VendorConfiguration : IEntityTypeConfiguration<Vendor>
+namespace JERP.Core.Entities.Finance
 {
-    public void Configure(EntityTypeBuilder<Vendor> builder)
+    public class BankAccount : BaseEntity
     {
-        builder.HasKey(v => v.Id);
-        builder.Property(v => v.Name).IsRequired().HasMaxLength(200);
-        builder.Property(v => v.ContactEmail).HasMaxLength(100);
-        builder.HasIndex(v => v.Name);
+        public string AccountNumber { get; set; } = string.Empty;
+        public string BankName { get; set; } = string.Empty;
+        public string AccountType { get; set; } = string.Empty;
+        public decimal Balance { get; set; }
+        public Guid AccountId { get; set; } // FK to Chart of Accounts
+        public Account Account { get; set; } = null!;
     }
 }
+```
 
-// Apply in DbContext
-protected override void OnModelCreating(ModelBuilder modelBuilder)
+**Step 2: Add DbSet to DbContext**
+```csharp
+// src/JERP.Infrastructure/Data/JerpDbContext.cs
+public DbSet<BankAccount> BankAccounts { get; set; }
+```
+
+**Step 3: Create Entity Configuration**
+```csharp
+// src/JERP.Infrastructure/Data/Configurations/BankAccountConfiguration.cs
+public class BankAccountConfiguration : IEntityTypeConfiguration<BankAccount>
 {
-    modelBuilder.ApplyConfiguration(new VendorConfiguration());
+    public void Configure(EntityTypeBuilder<BankAccount> builder)
+    {
+        builder.ToTable("BankAccounts");
+        
+        builder.Property(b => b.AccountNumber)
+               .IsRequired()
+               .HasMaxLength(50);
+               
+        builder.Property(b => b.Balance)
+               .HasPrecision(18, 2);
+               
+        builder.HasOne(b => b.Account)
+               .WithMany()
+               .HasForeignKey(b => b.AccountId)
+               .OnDelete(DeleteBehavior.Restrict);
+    }
 }
 ```
 
-#### Step 4: Create Migration
-
+**Step 4: Generate and Apply Migration**
 ```bash
 cd src/JERP.Api
-dotnet ef migrations add AddVendorEntity --project ../JERP.Infrastructure
-```
-
-#### Step 5: Review Migration
-
-```bash
-# View the generated migration
-cat ../JERP.Infrastructure/Migrations/XXXXXX_AddVendorEntity.cs
-
-# Generate SQL script (optional)
-dotnet ef migrations script --project ../JERP.Infrastructure
-```
-
-#### Step 6: Update Database
-
-```bash
+dotnet ef migrations add AddBankAccount --project ../JERP.Infrastructure
 dotnet ef database update --project ../JERP.Infrastructure
 ```
 
-#### Step 7: Create Repository Interface
+#### 2. Create a New API Endpoint
 
+**Step 1: Create DTOs**
 ```csharp
-// src/JERP.Core/Interfaces/IVendorRepository.cs
-public interface IVendorRepository : IRepository<Vendor>
-{
-    Task<IEnumerable<Vendor>> GetByTypeAsync(VendorType type);
-    Task<Vendor> GetByNameAsync(string name);
-}
+// src/JERP.Application/DTOs/Finance/BankAccountDto.cs
+public record BankAccountDto(
+    Guid Id,
+    string AccountNumber,
+    string BankName,
+    decimal Balance
+);
+
+public record CreateBankAccountDto(
+    string AccountNumber,
+    string BankName,
+    Guid AccountId
+);
 ```
 
-#### Step 8: Implement Repository
-
+**Step 2: Create Service Interface and Implementation**
 ```csharp
-// src/JERP.Infrastructure/Repositories/VendorRepository.cs
-public class VendorRepository : Repository<Vendor>, IVendorRepository
+// src/JERP.Application/Services/Finance/IBankAccountService.cs
+public interface IBankAccountService
 {
-    public VendorRepository(JerpDbContext context) : base(context) { }
-    
-    public async Task<IEnumerable<Vendor>> GetByTypeAsync(VendorType type)
-    {
-        return await _context.Vendors
-            .Where(v => v.Type == type)
-            .ToListAsync();
-    }
-    
-    public async Task<Vendor> GetByNameAsync(string name)
-    {
-        return await _context.Vendors
-            .FirstOrDefaultAsync(v => v.Name == name);
-    }
-}
-```
-
-#### Step 9: Register Repository
-
-```csharp
-// src/JERP.Api/Program.cs
-builder.Services.AddScoped<IVendorRepository, VendorRepository>();
-```
-
-### 5.2 Add New API Endpoint
-
-#### Step 1: Create DTO
-
-```csharp
-// src/JERP.Application/DTOs/Inventory/CreateVendorDto.cs
-public class CreateVendorDto
-{
-    public string Name { get; set; }
-    public string ContactEmail { get; set; }
-    public string ContactPhone { get; set; }
-    public VendorType Type { get; set; }
+    Task<BankAccountDto> GetByIdAsync(Guid id);
+    Task<IEnumerable<BankAccountDto>> GetAllAsync();
+    Task<BankAccountDto> CreateAsync(CreateBankAccountDto dto);
 }
 
-// src/JERP.Application/DTOs/Inventory/VendorDto.cs
-public class VendorDto
+// src/JERP.Application/Services/Finance/BankAccountService.cs
+public class BankAccountService : IBankAccountService
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string ContactEmail { get; set; }
-    public VendorType Type { get; set; }
-}
-```
+    private readonly IRepository<BankAccount> _repository;
+    private readonly IMapper _mapper;
 
-#### Step 2: Create Validator
-
-```csharp
-// src/JERP.Application/Validators/CreateVendorValidator.cs
-public class CreateVendorValidator : AbstractValidator<CreateVendorDto>
-{
-    public CreateVendorValidator()
-    {
-        RuleFor(x => x.Name)
-            .NotEmpty()
-            .MaximumLength(200);
-        
-        RuleFor(x => x.ContactEmail)
-            .EmailAddress()
-            .When(x => !string.IsNullOrEmpty(x.ContactEmail));
-    }
-}
-```
-
-#### Step 3: Create Service Method
-
-```csharp
-// src/JERP.Application/Services/IVendorService.cs
-public interface IVendorService
-{
-    Task<VendorDto> CreateAsync(CreateVendorDto dto);
-    Task<VendorDto> GetByIdAsync(int id);
-    Task<IEnumerable<VendorDto>> GetAllAsync();
-}
-
-// src/JERP.Application/Services/VendorService.cs
-public class VendorService : IVendorService
-{
-    private readonly IVendorRepository _repository;
-    
-    public VendorService(IVendorRepository repository)
+    public BankAccountService(IRepository<BankAccount> repository, IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
+    }
+
+    public async Task<BankAccountDto> CreateAsync(CreateBankAccountDto dto)
+    {
+        var bankAccount = _mapper.Map<BankAccount>(dto);
+        await _repository.AddAsync(bankAccount);
+        return _mapper.Map<BankAccountDto>(bankAccount);
     }
     
-    public async Task<VendorDto> CreateAsync(CreateVendorDto dto)
-    {
-        var vendor = new Vendor
-        {
-            Name = dto.Name,
-            ContactEmail = dto.ContactEmail,
-            Type = dto.Type
-        };
-        
-        await _repository.AddAsync(vendor);
-        
-        return new VendorDto
-        {
-            Id = vendor.Id,
-            Name = vendor.Name,
-            ContactEmail = vendor.ContactEmail,
-            Type = vendor.Type
-        };
-    }
+    // ... other methods
 }
 ```
 
-#### Step 4: Create Controller
-
+**Step 3: Create Controller**
 ```csharp
-// src/JERP.Api/Controllers/VendorController.cs
+// src/JERP.Api/Controllers/BankAccountsController.cs
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class VendorController : ControllerBase
+public class BankAccountsController : ControllerBase
 {
-    private readonly IVendorService _service;
-    
-    public VendorController(IVendorService service)
+    private readonly IBankAccountService _service;
+
+    public BankAccountsController(IBankAccountService service)
     {
         _service = service;
     }
-    
-    /// <summary>
-    /// Get all vendors
-    /// </summary>
+
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<VendorDto>), 200)]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<IEnumerable<BankAccountDto>>> GetAll()
     {
-        var vendors = await _service.GetAllAsync();
-        return Ok(vendors);
+        var accounts = await _service.GetAllAsync();
+        return Ok(accounts);
     }
-    
-    /// <summary>
-    /// Create a new vendor
-    /// </summary>
+
     [HttpPost]
-    [Authorize(Roles = "Admin,Manager")]
-    [ProducesResponseType(typeof(VendorDto), 201)]
-    [ProducesResponseType(400)]
-    public async Task<IActionResult> Create([FromBody] CreateVendorDto dto)
+    public async Task<ActionResult<BankAccountDto>> Create([FromBody] CreateBankAccountDto dto)
     {
-        var vendor = await _service.CreateAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = vendor.Id }, vendor);
+        var account = await _service.CreateAsync(dto);
+        return CreatedAtAction(nameof(GetById), new { id = account.Id }, account);
     }
     
-    /// <summary>
-    /// Get vendor by ID
-    /// </summary>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(VendorDto), 200)]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<ActionResult<BankAccountDto>> GetById(Guid id)
     {
-        var vendor = await _service.GetByIdAsync(id);
-        if (vendor == null)
-            return NotFound();
-        
-        return Ok(vendor);
+        var account = await _service.GetByIdAsync(id);
+        if (account == null) return NotFound();
+        return Ok(account);
     }
 }
 ```
 
-#### Step 5: Register Service
-
+**Step 4: Register Service in DI Container**
 ```csharp
 // src/JERP.Api/Program.cs
-builder.Services.AddScoped<IVendorService, VendorService>();
+builder.Services.AddScoped<IBankAccountService, BankAccountService>();
 ```
 
-#### Step 6: Test with Swagger
+**Step 5: Test with Swagger**
+- Run API: `dotnet run`
+- Open http://localhost:5000/swagger
+- Test endpoints
 
-1. Run the API: `dotnet run`
-2. Navigate to: https://localhost:7001/swagger
-3. Find the `/api/vendor` endpoints
-4. Test the endpoints
+#### 3. Database Migrations
 
-### 5.3 Add New React Component
-
-#### Step 1: Create Component File
-
-```tsx
-// landing-page/components/inventory/VendorList.tsx
-'use client';
-
-import { useEffect, useState } from 'react';
-import { getVendors } from '@/lib/api/vendor';
-import { Vendor } from '@/types/models';
-import { Button } from '@/components/ui/Button';
-
-interface VendorListProps {
-  onVendorSelect?: (vendor: Vendor) => void;
-}
-
-export function VendorList({ onVendorSelect }: VendorListProps) {
-  const [vendors, setVendors] = useState<Vendor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  
-  useEffect(() => {
-    async function fetchVendors() {
-      try {
-        const data = await getVendors();
-        setVendors(data);
-      } catch (err) {
-        setError('Failed to load vendors');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
-    fetchVendors();
-  }, []);
-  
-  if (loading) {
-    return <div className="animate-pulse">Loading vendors...</div>;
-  }
-  
-  if (error) {
-    return <div className="text-red-500">{error}</div>;
-  }
-  
-  return (
-    <div className="vendor-list">
-      <h2 className="text-2xl font-bold mb-4">Vendors</h2>
-      <div className="grid gap-4">
-        {vendors.map(vendor => (
-          <div 
-            key={vendor.id} 
-            className="border p-4 rounded-lg hover:shadow-lg transition-shadow"
-          >
-            <h3 className="font-semibold">{vendor.name}</h3>
-            <p className="text-gray-600">{vendor.contactEmail}</p>
-            {onVendorSelect && (
-              <Button onClick={() => onVendorSelect(vendor)}>
-                Select
-              </Button>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-```
-
-#### Step 2: Create API Client Function
-
-```typescript
-// landing-page/lib/api/vendor.ts
-import { apiClient } from './client';
-import { Vendor, CreateVendorDto } from '@/types/models';
-
-export async function getVendors(): Promise<Vendor[]> {
-  const response = await apiClient.get<Vendor[]>('/api/vendor');
-  return response.data;
-}
-
-export async function getVendorById(id: number): Promise<Vendor> {
-  const response = await apiClient.get<Vendor>(`/api/vendor/${id}`);
-  return response.data;
-}
-
-export async function createVendor(data: CreateVendorDto): Promise<Vendor> {
-  const response = await apiClient.post<Vendor>('/api/vendor', data);
-  return response.data;
-}
-```
-
-#### Step 3: Add Types
-
-```typescript
-// landing-page/types/models.ts
-export interface Vendor {
-  id: number;
-  name: string;
-  contactEmail: string;
-  contactPhone: string;
-  type: VendorType;
-}
-
-export interface CreateVendorDto {
-  name: string;
-  contactEmail: string;
-  contactPhone?: string;
-  type: VendorType;
-}
-
-export enum VendorType {
-  Cultivator = 'Cultivator',
-  Manufacturer = 'Manufacturer',
-  Supplier = 'Supplier'
-}
-```
-
-#### Step 4: Use Component
-
-```tsx
-// landing-page/app/(dashboard)/inventory/vendors/page.tsx
-import { VendorList } from '@/components/inventory/VendorList';
-
-export default function VendorsPage() {
-  return (
-    <div className="container mx-auto py-8">
-      <VendorList />
-    </div>
-  );
-}
-```
-
-#### Step 5: Add Tests
-
-```typescript
-// landing-page/components/inventory/__tests__/VendorList.test.tsx
-import { render, screen, waitFor } from '@testing-library/react';
-import { VendorList } from '../VendorList';
-import * as api from '@/lib/api/vendor';
-
-jest.mock('@/lib/api/vendor');
-
-describe('VendorList', () => {
-  it('renders vendors after loading', async () => {
-    const mockVendors = [
-      { id: 1, name: 'Vendor 1', contactEmail: 'vendor1@example.com' },
-      { id: 2, name: 'Vendor 2', contactEmail: 'vendor2@example.com' },
-    ];
-    
-    (api.getVendors as jest.Mock).mockResolvedValue(mockVendors);
-    
-    render(<VendorList />);
-    
-    await waitFor(() => {
-      expect(screen.getByText('Vendor 1')).toBeInTheDocument();
-      expect(screen.getByText('Vendor 2')).toBeInTheDocument();
-    });
-  });
-});
-```
-
-### 5.4 Database Migrations
-
-#### Create New Migration
-
+**Create Migration:**
 ```bash
 cd src/JERP.Api
 dotnet ef migrations add MigrationName --project ../JERP.Infrastructure
 ```
 
-#### Apply Migration
-
+**Apply Migration:**
 ```bash
-# Update to latest
 dotnet ef database update --project ../JERP.Infrastructure
-
-# Update to specific migration
-dotnet ef database update SpecificMigrationName --project ../JERP.Infrastructure
 ```
 
-#### Rollback Migration
-
+**Rollback Migration:**
 ```bash
-# Rollback to previous migration
+# Rollback to specific migration
 dotnet ef database update PreviousMigrationName --project ../JERP.Infrastructure
-```
 
-#### Remove Last Migration (if not applied)
-
-```bash
+# Remove last migration (before applying it)
 dotnet ef migrations remove --project ../JERP.Infrastructure
 ```
 
-#### View Migration SQL
-
+**Generate SQL Script:**
 ```bash
-# Generate SQL for all migrations
-dotnet ef migrations script --project ../JERP.Infrastructure
+# Generate script from all migrations
+dotnet ef migrations script --project ../JERP.Infrastructure --output migration.sql
 
-# Generate SQL for specific range
-dotnet ef migrations script FromMigration ToMigration --project ../JERP.Infrastructure
+# Generate script from specific migration to latest
+dotnet ef migrations script FromMigration --project ../JERP.Infrastructure --output migration.sql
 ```
 
-### 5.5 Debugging Tips
+### Frontend Tasks
 
-#### Backend Debugging (Visual Studio Code)
+#### 1. Add a New Frontend Component
 
-Create `.vscode/launch.json`:
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": ".NET Core Launch (web)",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/JERP.Api/bin/Debug/net8.0/JERP.Api.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/src/JERP.Api",
-      "stopAtEntry": false,
-      "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+**Step 1: Create Component File**
+```typescript
+// landing-page/components/Finance/BankAccountForm.tsx
+'use client';
+
+import React, { useState } from 'react';
+
+interface BankAccountFormProps {
+  onSave: (data: BankAccountFormData) => void;
+  onCancel: () => void;
+}
+
+interface BankAccountFormData {
+  accountNumber: string;
+  bankName: string;
+  accountId: string;
+}
+
+export default function BankAccountForm({ onSave, onCancel }: BankAccountFormProps) {
+  const [formData, setFormData] = useState<BankAccountFormData>({
+    accountNumber: '',
+    bankName: '',
+    accountId: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Account Number
+        </label>
+        <input
+          type="text"
+          value={formData.accountNumber}
+          onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          required
+        />
+      </div>
+      
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Bank Name
+        </label>
+        <input
+          type="text"
+          value={formData.bankName}
+          onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          required
+        />
+      </div>
+
+      <div className="flex justify-end space-x-2">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="px-4 py-2 border border-gray-300 rounded-md"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded-md"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  );
+}
+```
+
+**Step 2: Use Component in Page**
+```typescript
+// landing-page/app/(dashboard)/finance/bank-accounts/page.tsx
+'use client';
+
+import BankAccountForm from '@/components/Finance/BankAccountForm';
+
+export default function BankAccountsPage() {
+  const handleSave = async (data: BankAccountFormData) => {
+    // Call API
+    const response = await fetch('http://localhost:5000/api/bankaccounts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      body: JSON.stringify(data)
+    });
+    
+    if (response.ok) {
+      // Handle success
     }
-  ]
+  };
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Bank Accounts</h1>
+      <BankAccountForm onSave={handleSave} onCancel={() => {}} />
+    </div>
+  );
 }
 ```
 
-**Steps:**
-1. Set breakpoints in code (click left of line number)
-2. Press F5 to start debugging
-3. Breakpoints will pause execution
-4. Use Debug Console to inspect variables
+#### 2. Call API from Frontend
 
-#### Frontend Debugging (VS Code)
+**Create API Service:**
+```typescript
+// landing-page/lib/api.ts
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-1. Install "Debugger for Chrome" extension
-2. Set breakpoints in TypeScript files
-3. Run `npm run dev`
-4. Press F5 to attach debugger
-5. Use browser DevTools for additional debugging
-
-#### Common Debugging Commands
-
-```bash
-# Check API logs
-cd src/JERP.Api
-dotnet run  # Watch console output
-
-# Check frontend logs
-cd landing-page
-npm run dev  # Watch console output
-
-# Test API with curl
-curl -X GET https://localhost:7001/api/vendor -k
-
-# Test API with Postman
-# Import the Swagger JSON: https://localhost:7001/swagger/v1/swagger.json
-```
-
-### 5.6 Performance Tips
-
-#### Backend Performance
-
-**Use AsNoTracking for Read-Only Queries:**
-```csharp
-var products = await _context.Products
-    .AsNoTracking()  // Improves performance for read-only
-    .ToListAsync();
-```
-
-**Optimize Includes:**
-```csharp
-// Good: Only include what you need
-var orders = await _context.Orders
-    .Include(o => o.Customer)
-    .Include(o => o.Items)
-    .ToListAsync();
-
-// Bad: Over-fetching
-var orders = await _context.Orders
-    .Include(o => o.Customer)
-        .ThenInclude(c => c.Address)
-        .ThenInclude(a => a.City)
-    .ToListAsync();
-```
-
-**Use Pagination:**
-```csharp
-public async Task<PagedResult<Product>> GetProductsAsync(int page, int pageSize)
-{
-    var query = _context.Products.AsQueryable();
-    var total = await query.CountAsync();
-    
-    var items = await query
-        .Skip((page - 1) * pageSize)
-        .Take(pageSize)
-        .ToListAsync();
-    
-    return new PagedResult<Product>
-    {
-        Items = items,
-        TotalCount = total,
-        Page = page,
-        PageSize = pageSize
-    };
-}
-```
-
-**Use Caching:**
-```csharp
-// In-memory caching
-private readonly IMemoryCache _cache;
-
-public async Task<Product> GetProductAsync(int id)
-{
-    var cacheKey = $"product-{id}";
-    
-    if (!_cache.TryGetValue(cacheKey, out Product product))
-    {
-        product = await _context.Products.FindAsync(id);
-        _cache.Set(cacheKey, product, TimeSpan.FromMinutes(5));
+export async function fetchBankAccounts(token: string) {
+  const response = await fetch(`${API_BASE_URL}/api/bankaccounts`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     }
-    
-    return product;
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch bank accounts');
+  }
+  
+  return response.json();
+}
+
+export async function createBankAccount(data: BankAccountFormData, token: string) {
+  const response = await fetch(`${API_BASE_URL}/api/bankaccounts`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to create bank account');
+  }
+  
+  return response.json();
 }
 ```
 
-#### Frontend Performance
+**Use in Component:**
+```typescript
+import { fetchBankAccounts, createBankAccount } from '@/lib/api';
+import { useSession } from 'next-auth/react';
 
-**Use React.memo for Expensive Components:**
-```tsx
-export const ExpensiveComponent = React.memo(({ data }) => {
-  // Expensive rendering logic
-  return <div>{/* ... */}</div>;
-});
+export default function BankAccountsPage() {
+  const { data: session } = useSession();
+  const [accounts, setAccounts] = useState([]);
+
+  useEffect(() => {
+    if (session?.accessToken) {
+      fetchBankAccounts(session.accessToken)
+        .then(setAccounts)
+        .catch(console.error);
+    }
+  }, [session]);
+
+  // ... rest of component
+}
 ```
 
-**Lazy Load Components:**
-```tsx
-import dynamic from 'next/dynamic';
+---
 
-const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
-  loading: () => <p>Loading...</p>,
-});
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### Backend Issues
+
+**Problem: Build Errors**
+```
+Solution:
+# Restore NuGet packages
+cd /path/to/JERP-3.0
+dotnet restore
+
+# Clean and rebuild
+dotnet clean
+dotnet build
 ```
 
-**Optimize Images:**
-```tsx
-import Image from 'next/image';
+**Problem: Database Connection Errors**
+```
+Error: "A network-related or instance-specific error occurred..."
 
-<Image 
-  src="/product.jpg" 
-  alt="Product" 
-  width={500} 
-  height={300}
-  priority  // For above-the-fold images
-/>
+Solutions:
+1. Verify SQL Server is running:
+   - Windows: Open Services, check "SQL Server (MSSQLSERVER)" or "SQL Server (SQLEXPRESS)"
+   - Docker: docker ps (check if container is running)
+
+2. Check connection string:
+   - Verify server name (localhost\SQLEXPRESS or localhost,1433)
+   - Verify database name (JERP3_DB)
+   - Check authentication (Trusted_Connection or User Id/Password)
+
+3. Test connection with sqlcmd:
+   sqlcmd -S localhost\SQLEXPRESS -E -Q "SELECT @@VERSION"
 ```
 
-### 5.7 Common Issues and Solutions
+**Problem: Migration Errors**
+```
+Error: "No executable found matching command 'dotnet-ef'"
 
-#### Issue: "Cannot connect to SQL Server"
-
-**Solution:**
-```bash
-# 1. Check if SQL Server is running
-sqlcmd -S localhost\SQLEXPRESS -Q "SELECT @@VERSION"
-
-# 2. Verify connection string in appsettings.Development.json
-# 3. Check firewall settings
-# 4. Enable TCP/IP in SQL Server Configuration Manager
+Solution:
+dotnet tool install --global dotnet-ef
+# Then restart terminal and try again
 ```
 
-#### Issue: "Migration already applied"
+**Problem: Port Already in Use**
+```
+Error: "Failed to bind to address http://localhost:5000: address already in use"
 
-**Solution:**
-```bash
-# View migration history
-dotnet ef migrations list --project ../JERP.Infrastructure
+Solution:
+# Find process using port (Windows PowerShell):
+netstat -ano | findstr :5000
 
-# Rollback if needed
-dotnet ef database update PreviousMigration --project ../JERP.Infrastructure
+# Kill process:
+taskkill /PID <process-id> /F
 
-# Remove migration
-dotnet ef migrations remove --project ../JERP.Infrastructure
+# Or change port in launchSettings.json or appsettings.json
 ```
 
-#### Issue: "CORS error from frontend"
+#### Frontend Issues
 
-**Solution:**
-```csharp
-// In Program.cs, ensure CORS is configured correctly
+**Problem: `npm install` Fails**
+```
+Solution:
+# Clear npm cache
+npm cache clean --force
+
+# Delete node_modules and package-lock.json
+rm -rf node_modules package-lock.json
+
+# Reinstall
+npm install
+```
+
+**Problem: CORS Errors**
+```
+Error: "Access to fetch at 'http://localhost:5000/api/accounts' from origin 'http://localhost:3000' has been blocked by CORS policy"
+
+Solution:
+# Update CORS policy in Program.cs
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -1764,93 +1345,455 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Use CORS in middleware pipeline
 app.UseCors("AllowFrontend");
 ```
 
-#### Issue: "401 Unauthorized" on API calls
+**Problem: Environment Variables Not Loading**
+```
+Solution:
+# Ensure .env.local exists (for Next.js)
+# Restart dev server after creating/updating .env.local
+npm run dev
+```
 
-**Solution:**
-```typescript
-// Ensure JWT token is included in request headers
-import axios from 'axios';
+#### Docker Issues
 
-const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
+**Problem: Container Won't Start**
+```
+Solution:
+# View logs
+docker-compose logs
 
-apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+# Specific service logs
+docker-compose logs api
+docker-compose logs sqlserver
+
+# Restart containers
+docker-compose down
+docker-compose up --build
+```
+
+**Problem: Database Not Ready**
+```
+Error: "Cannot create database because file already exists"
+
+Solution:
+# Remove volumes and restart
+docker-compose down -v
+docker-compose up --build
 ```
 
 ---
 
-## 6. Additional Resources
+## Resources
 
-### 6.1 Documentation
+### Documentation
+- **Project Documentation**: 
+  - [README.md](README.md) - Project overview
+  - [ARCHITECTURE.md](ARCHITECTURE.md) - Architecture details
+  - [SCOPE-OF-WORK.md](SCOPE-OF-WORK.md) - Feature breakdown
+  - [API-DOCUMENTATION.md](API-DOCUMENTATION.md) - API reference
+  - [TESTING-GUIDE.md](TESTING-GUIDE.md) - Testing guide
+- **Official Docs**:
+  - [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/)
+  - [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/)
+  - [Next.js](https://nextjs.org/docs)
+  - [React](https://react.dev/)
+  - [Tailwind CSS](https://tailwindcss.com/docs)
 
-- [Architecture Documentation](docs/architecture/README.md)
-- [Project Scope of Work](docs/SOW.md)
-- [API Documentation](API-DOCUMENTATION.md)
-- [Finance Module Implementation](FINANCE-MODULE-IMPLEMENTATION.md)
-- [Inventory Module Implementation](INVENTORY-MODULE-IMPLEMENTATION.md)
+### Learning Resources
+- **C# and .NET**:
+  - [Microsoft Learn - C#](https://learn.microsoft.com/en-us/dotnet/csharp/)
+  - [Clean Architecture with .NET](https://github.com/jasontaylordev/CleanArchitecture)
+- **React and TypeScript**:
+  - [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
+  - [Next.js Tutorial](https://nextjs.org/learn)
+- **Database**:
+  - [SQL Server Tutorial](https://www.sqlservertutorial.net/)
+  - [Entity Framework Core Tutorial](https://www.entityframeworktutorial.net/efcore/entity-framework-core.aspx)
 
-### 6.2 Technology Documentation
+### Tools and Extensions
 
-**Backend:**
-- [ASP.NET Core Documentation](https://docs.microsoft.com/aspnet/core)
-- [Entity Framework Core](https://docs.microsoft.com/ef/core)
-- [C# Documentation](https://docs.microsoft.com/dotnet/csharp)
+#### VS Code Extensions
+- **C# Dev Kit**: Microsoft's official C# extension
+- **C#**: C# language support
+- **REST Client**: Test APIs directly in VS Code
+- **Docker**: Docker support
+- **GitLens**: Enhanced Git capabilities
+- **ESLint**: JavaScript/TypeScript linting
+- **Prettier**: Code formatting
+- **Tailwind CSS IntelliSense**: Tailwind CSS autocomplete
 
-**Frontend:**
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://react.dev)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs)
-- [Tailwind CSS](https://tailwindcss.com/docs)
+#### Chrome Extensions
+- **React Developer Tools**: Inspect React components
+- **Redux DevTools**: If using Redux
 
-**Database:**
-- [SQL Server Documentation](https://docs.microsoft.com/sql/sql-server)
-- [T-SQL Reference](https://docs.microsoft.com/sql/t-sql/language-reference)
-
-### 6.3 Tools
-
-- [Postman](https://www.postman.com) - API testing
-- [SQL Server Management Studio](https://docs.microsoft.com/sql/ssms) - Database management
-- [Azure Data Studio](https://docs.microsoft.com/sql/azure-data-studio) - Cross-platform DB tool
-
-### 6.4 Getting Help
+### Getting Help
 
 **Internal Resources:**
-- Slack channel: `#jerp-dev`
-- Weekly team sync: Mondays 10am
-- Code review sessions: Wednesdays 2pm
+- **Slack/Teams Channel**: #jerp-development (if applicable)
+- **Wiki**: Internal documentation wiki
+- **Code Reviews**: Ask questions in PR comments
 
 **External Resources:**
-- Stack Overflow
-- GitHub Issues
-- Team documentation wiki
+- **Stack Overflow**: Search or ask questions
+- **GitHub Issues**: For library-specific questions
+- **Discord/Reddit**: .NET and React communities
+
+### Useful Commands Cheat Sheet
+
+**Git:**
+```bash
+git status                    # Check status
+git log --oneline --graph     # View commit history
+git diff                      # View changes
+git stash                     # Temporarily save changes
+git stash pop                 # Restore stashed changes
+```
+
+**.NET:**
+```bash
+dotnet --version              # Check .NET version
+dotnet new                    # List project templates
+dotnet watch run              # Run with hot reload
+dotnet user-secrets set "Key" "Value"  # Set user secrets
+```
+
+**Docker:**
+```bash
+docker ps                     # List running containers
+docker ps -a                  # List all containers
+docker logs <container-id>    # View container logs
+docker exec -it <container-id> bash  # Access container shell
+docker-compose down           # Stop all services
+docker-compose down -v        # Stop and remove volumes
+```
+
+**Database:**
+```bash
+# Connect to SQL Server (Docker)
+docker exec -it jerp-sqlserver /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P <password>
+
+# List databases
+SELECT name FROM sys.databases;
+GO
+
+# Switch to JERP database
+USE JERP3_DB;
+GO
+
+# List tables
+SELECT * FROM INFORMATION_SCHEMA.TABLES;
+GO
+```
 
 ---
 
-## Conclusion
+## 🔐 Security Development Guidelines
 
-This onboarding guide should help you get started with JERP 3.0 development. Remember:
+### Security Mindset
 
-1. **Ask Questions** - Don't hesitate to reach out to the team
-2. **Read the Code** - The best documentation is the code itself
-3. **Follow Standards** - Maintain consistency with existing patterns
-4. **Test Your Changes** - Always write tests for new features
-5. **Document as You Go** - Update documentation when you make changes
+**Every developer is responsible for security.** Follow these guidelines to maintain JERP 3.0's security posture.
 
-Welcome to the team! 🎉
+### Secure Coding Practices
+
+#### 1. Input Validation (CRITICAL)
+
+**Always validate user input:**
+
+```csharp
+// ✅ GOOD: Use FluentValidation
+public class CreateAccountValidator : AbstractValidator<CreateAccountDto>
+{
+    public CreateAccountValidator()
+    {
+        RuleFor(x => x.AccountName)
+            .NotEmpty()
+            .MaximumLength(200)
+            .Matches("^[a-zA-Z0-9 ]*$"); // Alphanumeric only
+            
+        RuleFor(x => x.AccountNumber)
+            .NotEmpty()
+            .Length(4, 20);
+    }
+}
+
+// ❌ BAD: No validation
+public async Task<Account> CreateAccount(CreateAccountDto dto)
+{
+    var account = new Account { Name = dto.AccountName }; // Vulnerable!
+    await _context.Accounts.AddAsync(account);
+}
+```
+
+#### 2. SQL Injection Prevention (CRITICAL)
+
+**Always use parameterized queries:**
+
+```csharp
+// ✅ GOOD: EF Core with LINQ (parameterized automatically)
+var accounts = await _context.Accounts
+    .Where(a => a.AccountNumber == accountNumber)
+    .ToListAsync();
+
+// ✅ GOOD: Raw SQL with parameters
+var accounts = await _context.Accounts
+    .FromSqlRaw("SELECT * FROM Accounts WHERE AccountNumber = {0}", accountNumber)
+    .ToListAsync();
+
+// ❌ BAD: String concatenation (NEVER DO THIS!)
+var accounts = await _context.Accounts
+    .FromSqlRaw($"SELECT * FROM Accounts WHERE AccountNumber = '{accountNumber}'")
+    .ToListAsync();
+```
+
+#### 3. Authentication & Authorization
+
+**Check permissions on every sensitive operation:**
+
+```csharp
+// ✅ GOOD: Use [Authorize] attribute
+[Authorize(Roles = "FinanceManager,Accountant")]
+[HttpPost("journal-entries")]
+public async Task<IActionResult> CreateJournalEntry([FromBody] CreateJournalEntryDto dto)
+{
+    // Additional authorization checks if needed
+    if (!await _authService.CanCreateJournalEntry(_currentUser))
+    {
+        return Forbid();
+    }
+    
+    // Implementation
+}
+
+// ❌ BAD: No authorization check
+[HttpPost("journal-entries")]
+public async Task<IActionResult> CreateJournalEntry([FromBody] CreateJournalEntryDto dto)
+{
+    // Anyone can create journal entries!
+}
+```
+
+#### 4. Sensitive Data Handling
+
+**Never log or expose sensitive data:**
+
+```csharp
+// ✅ GOOD: Mask sensitive data in logs
+_logger.LogInformation("User {UserId} updated SSN for employee {EmployeeId}", 
+    userId, employeeId);
+
+// ❌ BAD: Logging sensitive data
+_logger.LogInformation("User updated SSN to {SSN}", employee.SSN);
+
+// ✅ GOOD: Remove sensitive data from responses
+public class EmployeeDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    // SSN not included in DTO
+}
+
+// ❌ BAD: Exposing sensitive data
+public class EmployeeDto
+{
+    public string SSN { get; set; } // Should not be in API response!
+}
+```
+
+#### 5. Error Handling
+
+**Don't expose internal details in error messages:**
+
+```csharp
+// ✅ GOOD: Generic error message
+try
+{
+    await _context.SaveChangesAsync();
+}
+catch (Exception ex)
+{
+    _logger.LogError(ex, "Error creating account for user {UserId}", userId);
+    return BadRequest(new { error = "Failed to create account" });
+}
+
+// ❌ BAD: Exposing stack traces
+catch (Exception ex)
+{
+    return BadRequest(new { error = ex.Message, stackTrace = ex.StackTrace });
+}
+```
+
+### Configuration & Secrets Management
+
+#### Environment Variables
+
+**Never commit secrets to source control:**
+
+```bash
+# ✅ GOOD: Use .env file (not tracked in git)
+JWT_SECRET=your-super-secret-key-here
+DATABASE_PASSWORD=strong-password
+
+# ❌ BAD: Hardcoded secrets in code
+var jwtSecret = "your-super-secret-key-here"; // NEVER DO THIS!
+```
+
+**Use appsettings.Development.json for local development:**
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=JERP3_DB;Trusted_Connection=True;"
+  },
+  "Jwt": {
+    "SecretKey": "development-secret-key-at-least-32-characters"
+  }
+}
+```
+
+#### User Secrets (Local Development)
+
+```bash
+# Store sensitive values using .NET user secrets
+cd src/JERP.Api
+dotnet user-secrets set "Jwt:SecretKey" "your-secret-key"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "your-connection-string"
+```
+
+### Security Testing Requirements
+
+#### Before Committing Code
+
+**Run these checks:**
+
+1. **Static Analysis:**
+```bash
+# Run .NET code analysis
+dotnet build /p:TreatWarningsAsErrors=true
+
+# Check for known vulnerabilities in dependencies
+dotnet list package --vulnerable
+```
+
+2. **Manual Security Review:**
+- [ ] No hardcoded secrets or credentials
+- [ ] All inputs validated
+- [ ] Authorization checks on sensitive operations
+- [ ] Error messages don't expose internal details
+- [ ] No SQL injection vulnerabilities
+- [ ] Sensitive data not logged
+
+3. **Test Security Features:**
+```bash
+# Test authentication
+curl -X POST http://localhost:5000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"invalid","password":"invalid"}'
+# Should return 401 Unauthorized
+
+# Test authorization
+curl -X GET http://localhost:5000/api/v1/employees \
+  -H "Authorization: Bearer invalid-token"
+# Should return 401 Unauthorized
+```
+
+### Common Security Vulnerabilities to Avoid
+
+#### OWASP Top 10 (2021)
+
+1. **A01:2021 – Broken Access Control**
+   - ✅ Always check user permissions
+   - ✅ Use [Authorize] attributes
+   - ✅ Validate tenant isolation
+
+2. **A02:2021 – Cryptographic Failures**
+   - ✅ Use BCrypt for passwords (work factor 12)
+   - ✅ Use HTTPS in production
+   - ✅ Never store passwords in plain text
+
+3. **A03:2021 – Injection**
+   - ✅ Use parameterized queries (EF Core)
+   - ✅ Validate and sanitize all inputs
+   - ✅ Use FluentValidation
+
+4. **A04:2021 – Insecure Design**
+   - ✅ Follow SOLID principles
+   - ✅ Implement defense in depth
+   - ✅ Use established security patterns
+
+5. **A05:2021 – Security Misconfiguration**
+   - ✅ Disable debug mode in production
+   - ✅ Use security headers (Phase 2.5)
+   - ✅ Keep dependencies updated
+
+6. **A06:2021 – Vulnerable Components**
+   - ✅ Regular dependency updates
+   - ✅ Monitor security advisories
+   - ✅ Use Dependabot
+
+7. **A07:2021 – Authentication Failures**
+   - ✅ Implement account lockout
+   - ✅ Use strong password policies
+   - ✅ Rate limit login attempts (Phase 2.5)
+
+8. **A08:2021 – Software & Data Integrity Failures**
+   - ✅ Verify JWT signatures
+   - ✅ Use audit logging
+   - ✅ Implement integrity checks
+
+9. **A09:2021 – Logging & Monitoring Failures**
+   - ✅ Log security events
+   - ✅ Monitor for anomalies (Phase 2.5)
+   - ✅ Set up alerts
+
+10. **A10:2021 – Server-Side Request Forgery**
+    - ✅ Validate all external URLs
+    - ✅ Whitelist allowed domains
+    - ✅ Use network segmentation
+
+### Security Resources
+
+**Documentation:**
+- [SECURITY.md](SECURITY.md) - Security policy and vulnerability reporting
+- [ARCHITECTURE.md](ARCHITECTURE.md) - Security architecture details
+- [docs/SECURITY-ROADMAP.md](docs/SECURITY-ROADMAP.md) - Security hardening roadmap
+
+**External Resources:**
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+- [.NET Security Best Practices](https://docs.microsoft.com/en-us/aspnet/core/security/)
+- [JWT Best Practices](https://tools.ietf.org/html/rfc8725)
+
+### Security Checklist for PRs
+
+Before submitting a pull request, verify:
+
+- [ ] No secrets or credentials in code
+- [ ] All user inputs validated with FluentValidation
+- [ ] Authorization checks on sensitive operations
+- [ ] Parameterized queries (no string concatenation)
+- [ ] Error messages don't expose internal details
+- [ ] Sensitive data not logged or exposed in responses
+- [ ] Dependencies updated and vulnerability-free
+- [ ] Security tests passed
+- [ ] Code review with security focus
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** February 5, 2026  
-**Maintained By:** JERP Development Team
+## Next Steps
+
+Now that you're set up, here's what to do next:
+
+1. ✅ **Verify Setup**: Ensure everything is running (API, frontend, database)
+2. 📖 **Read Architecture Docs**: Understand the system design ([ARCHITECTURE.md](ARCHITECTURE.md))
+3. 🔍 **Explore Codebase**: Browse through entities, services, and components
+4. 🎯 **Pick a Task**: Choose a small task or bug from the backlog
+5. 🌿 **Create Branch**: Follow the branch strategy
+6. 💻 **Write Code**: Implement your changes with tests
+7. 🔬 **Test Locally**: Verify your changes work
+8. 📝 **Create PR**: Submit for review
+9. 🔄 **Iterate**: Address feedback and improve
+10. 🎉 **Merge**: Celebrate your contribution!
+
+**Welcome to the team! Happy coding! 🚀**

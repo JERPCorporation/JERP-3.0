@@ -1489,6 +1489,298 @@ GO
 
 ---
 
+## 🔐 Security Development Guidelines
+
+### Security Mindset
+
+**Every developer is responsible for security.** Follow these guidelines to maintain JERP 3.0's security posture.
+
+### Secure Coding Practices
+
+#### 1. Input Validation (CRITICAL)
+
+**Always validate user input:**
+
+```csharp
+// ✅ GOOD: Use FluentValidation
+public class CreateAccountValidator : AbstractValidator<CreateAccountDto>
+{
+    public CreateAccountValidator()
+    {
+        RuleFor(x => x.AccountName)
+            .NotEmpty()
+            .MaximumLength(200)
+            .Matches("^[a-zA-Z0-9 ]*$"); // Alphanumeric only
+            
+        RuleFor(x => x.AccountNumber)
+            .NotEmpty()
+            .Length(4, 20);
+    }
+}
+
+// ❌ BAD: No validation
+public async Task<Account> CreateAccount(CreateAccountDto dto)
+{
+    var account = new Account { Name = dto.AccountName }; // Vulnerable!
+    await _context.Accounts.AddAsync(account);
+}
+```
+
+#### 2. SQL Injection Prevention (CRITICAL)
+
+**Always use parameterized queries:**
+
+```csharp
+// ✅ GOOD: EF Core with LINQ (parameterized automatically)
+var accounts = await _context.Accounts
+    .Where(a => a.AccountNumber == accountNumber)
+    .ToListAsync();
+
+// ✅ GOOD: Raw SQL with parameters
+var accounts = await _context.Accounts
+    .FromSqlRaw("SELECT * FROM Accounts WHERE AccountNumber = {0}", accountNumber)
+    .ToListAsync();
+
+// ❌ BAD: String concatenation (NEVER DO THIS!)
+var accounts = await _context.Accounts
+    .FromSqlRaw($"SELECT * FROM Accounts WHERE AccountNumber = '{accountNumber}'")
+    .ToListAsync();
+```
+
+#### 3. Authentication & Authorization
+
+**Check permissions on every sensitive operation:**
+
+```csharp
+// ✅ GOOD: Use [Authorize] attribute
+[Authorize(Roles = "FinanceManager,Accountant")]
+[HttpPost("journal-entries")]
+public async Task<IActionResult> CreateJournalEntry([FromBody] CreateJournalEntryDto dto)
+{
+    // Additional authorization checks if needed
+    if (!await _authService.CanCreateJournalEntry(_currentUser))
+    {
+        return Forbid();
+    }
+    
+    // Implementation
+}
+
+// ❌ BAD: No authorization check
+[HttpPost("journal-entries")]
+public async Task<IActionResult> CreateJournalEntry([FromBody] CreateJournalEntryDto dto)
+{
+    // Anyone can create journal entries!
+}
+```
+
+#### 4. Sensitive Data Handling
+
+**Never log or expose sensitive data:**
+
+```csharp
+// ✅ GOOD: Mask sensitive data in logs
+_logger.LogInformation("User {UserId} updated SSN for employee {EmployeeId}", 
+    userId, employeeId);
+
+// ❌ BAD: Logging sensitive data
+_logger.LogInformation("User updated SSN to {SSN}", employee.SSN);
+
+// ✅ GOOD: Remove sensitive data from responses
+public class EmployeeDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    // SSN not included in DTO
+}
+
+// ❌ BAD: Exposing sensitive data
+public class EmployeeDto
+{
+    public string SSN { get; set; } // Should not be in API response!
+}
+```
+
+#### 5. Error Handling
+
+**Don't expose internal details in error messages:**
+
+```csharp
+// ✅ GOOD: Generic error message
+try
+{
+    await _context.SaveChangesAsync();
+}
+catch (Exception ex)
+{
+    _logger.LogError(ex, "Error creating account for user {UserId}", userId);
+    return BadRequest(new { error = "Failed to create account" });
+}
+
+// ❌ BAD: Exposing stack traces
+catch (Exception ex)
+{
+    return BadRequest(new { error = ex.Message, stackTrace = ex.StackTrace });
+}
+```
+
+### Configuration & Secrets Management
+
+#### Environment Variables
+
+**Never commit secrets to source control:**
+
+```bash
+# ✅ GOOD: Use .env file (not tracked in git)
+JWT_SECRET=your-super-secret-key-here
+DATABASE_PASSWORD=strong-password
+
+# ❌ BAD: Hardcoded secrets in code
+var jwtSecret = "your-super-secret-key-here"; // NEVER DO THIS!
+```
+
+**Use appsettings.Development.json for local development:**
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=JERP3_DB;Trusted_Connection=True;"
+  },
+  "Jwt": {
+    "SecretKey": "development-secret-key-at-least-32-characters"
+  }
+}
+```
+
+#### User Secrets (Local Development)
+
+```bash
+# Store sensitive values using .NET user secrets
+cd src/JERP.Api
+dotnet user-secrets set "Jwt:SecretKey" "your-secret-key"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "your-connection-string"
+```
+
+### Security Testing Requirements
+
+#### Before Committing Code
+
+**Run these checks:**
+
+1. **Static Analysis:**
+```bash
+# Run .NET code analysis
+dotnet build /p:TreatWarningsAsErrors=true
+
+# Check for known vulnerabilities in dependencies
+dotnet list package --vulnerable
+```
+
+2. **Manual Security Review:**
+- [ ] No hardcoded secrets or credentials
+- [ ] All inputs validated
+- [ ] Authorization checks on sensitive operations
+- [ ] Error messages don't expose internal details
+- [ ] No SQL injection vulnerabilities
+- [ ] Sensitive data not logged
+
+3. **Test Security Features:**
+```bash
+# Test authentication
+curl -X POST http://localhost:5000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"invalid","password":"invalid"}'
+# Should return 401 Unauthorized
+
+# Test authorization
+curl -X GET http://localhost:5000/api/v1/employees \
+  -H "Authorization: Bearer invalid-token"
+# Should return 401 Unauthorized
+```
+
+### Common Security Vulnerabilities to Avoid
+
+#### OWASP Top 10 (2021)
+
+1. **A01:2021 – Broken Access Control**
+   - ✅ Always check user permissions
+   - ✅ Use [Authorize] attributes
+   - ✅ Validate tenant isolation
+
+2. **A02:2021 – Cryptographic Failures**
+   - ✅ Use BCrypt for passwords (work factor 12)
+   - ✅ Use HTTPS in production
+   - ✅ Never store passwords in plain text
+
+3. **A03:2021 – Injection**
+   - ✅ Use parameterized queries (EF Core)
+   - ✅ Validate and sanitize all inputs
+   - ✅ Use FluentValidation
+
+4. **A04:2021 – Insecure Design**
+   - ✅ Follow SOLID principles
+   - ✅ Implement defense in depth
+   - ✅ Use established security patterns
+
+5. **A05:2021 – Security Misconfiguration**
+   - ✅ Disable debug mode in production
+   - ✅ Use security headers (Phase 2.5)
+   - ✅ Keep dependencies updated
+
+6. **A06:2021 – Vulnerable Components**
+   - ✅ Regular dependency updates
+   - ✅ Monitor security advisories
+   - ✅ Use Dependabot
+
+7. **A07:2021 – Authentication Failures**
+   - ✅ Implement account lockout
+   - ✅ Use strong password policies
+   - ✅ Rate limit login attempts (Phase 2.5)
+
+8. **A08:2021 – Software & Data Integrity Failures**
+   - ✅ Verify JWT signatures
+   - ✅ Use audit logging
+   - ✅ Implement integrity checks
+
+9. **A09:2021 – Logging & Monitoring Failures**
+   - ✅ Log security events
+   - ✅ Monitor for anomalies (Phase 2.5)
+   - ✅ Set up alerts
+
+10. **A10:2021 – Server-Side Request Forgery**
+    - ✅ Validate all external URLs
+    - ✅ Whitelist allowed domains
+    - ✅ Use network segmentation
+
+### Security Resources
+
+**Documentation:**
+- [SECURITY.md](SECURITY.md) - Security policy and vulnerability reporting
+- [ARCHITECTURE.md](ARCHITECTURE.md) - Security architecture details
+- [docs/SECURITY-ROADMAP.md](docs/SECURITY-ROADMAP.md) - Security hardening roadmap
+
+**External Resources:**
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
+- [.NET Security Best Practices](https://docs.microsoft.com/en-us/aspnet/core/security/)
+- [JWT Best Practices](https://tools.ietf.org/html/rfc8725)
+
+### Security Checklist for PRs
+
+Before submitting a pull request, verify:
+
+- [ ] No secrets or credentials in code
+- [ ] All user inputs validated with FluentValidation
+- [ ] Authorization checks on sensitive operations
+- [ ] Parameterized queries (no string concatenation)
+- [ ] Error messages don't expose internal details
+- [ ] Sensitive data not logged or exposed in responses
+- [ ] Dependencies updated and vulnerability-free
+- [ ] Security tests passed
+- [ ] Code review with security focus
+
+---
+
 ## Next Steps
 
 Now that you're set up, here's what to do next:
