@@ -702,10 +702,10 @@ To provide cannabis businesses with a comprehensive, compliant, and user-friendl
 
 ---
 
-### Phase 2: Finance & Payroll (🔄 In Progress - Q1 2026)
-**Duration**: 2-3 months  
-**Status**: 80% Complete  
-**Expected Completion**: March 2026
+### Phase 2: Finance & Payroll (🔄 Near Complete - Q1 2026)
+**Duration**: 3 months  
+**Status**: 85% Complete  
+**Expected Completion**: February 2026
 
 **Completed:**
 - ✅ Chart of Accounts (CRUD operations)
@@ -718,6 +718,8 @@ To provide cannabis businesses with a comprehensive, compliant, and user-friendl
 - ✅ Basic financial reports (P&L, Balance Sheet)
 - ✅ FASB ASC Topic/Subtopic entities (PR #27)
 - ✅ Finance UI with 9 tabs (Dashboard, Accounts, Journal, GL, AP, AR, Reports, etc.)
+- ✅ Partner Portal implementation
+- ✅ Admin Portal implementation
 
 **In Progress:**
 - 🔄 FASB ASC topic integration with Chart of Accounts
@@ -736,6 +738,71 @@ To provide cannabis businesses with a comprehensive, compliant, and user-friendl
 - P&L and Balance Sheet accurately reflect transactions
 - 280E compliance features functional
 - Finance module ready for production use
+
+---
+
+### Phase 2.5: Security Hardening (⏳ Planned - February 2026)
+**Duration**: 3-4 weeks  
+**Status**: 0% Complete  
+**Expected Completion**: Early March 2026  
+**Priority**: Critical - Must complete before Phase 3
+
+**Security Features to Implement:**
+
+**Week 1: Security Headers & Response Protection**
+- ⏳ Security headers middleware implementation
+  - HSTS (HTTP Strict Transport Security)
+  - X-Content-Type-Options: nosniff
+  - X-Frame-Options: DENY
+  - X-XSS-Protection: 1; mode=block
+  - Content-Security-Policy (CSP)
+  - Referrer-Policy
+- ⏳ Secure cookie configuration
+- ⏳ HTTPS enforcement
+
+**Week 2: Rate Limiting & API Protection**
+- ⏳ Rate limiting middleware (per endpoint, per user, per IP)
+- ⏳ API throttling policies
+- ⏳ Brute force protection (login attempts)
+- ⏳ DDoS mitigation strategies
+- ⏳ Request size limits
+
+**Week 3: Enhanced Logging & Monitoring**
+- ⏳ Serilog structured logging integration
+- ⏳ Security event logging (failed logins, authorization failures)
+- ⏳ Audit trail enhancements
+- ⏳ Log aggregation and analysis setup
+- ⏳ Alerting for suspicious activities
+
+**Week 4: Backup Automation & JWT Hardening**
+- ⏳ Automated database backup system
+- ⏳ Backup verification and testing
+- ⏳ JWT token security review
+- ⏳ Token refresh mechanism improvements
+- ⏳ Session management enhancements
+
+**Currently Implemented Security Features:**
+- ✅ JWT authentication
+- ✅ Role-Based Access Control (RBAC)
+- ✅ BCrypt password hashing (cost factor 11)
+- ✅ CORS configuration
+- ✅ FluentValidation for input validation
+- ✅ EF Core parameterized queries (SQL injection prevention)
+- ✅ Basic audit logging
+
+**Security Testing:**
+- ⏳ Penetration testing (external service)
+- ⏳ Vulnerability scanning (OWASP ZAP, Dependabot)
+- ⏳ Security code review
+- ⏳ OWASP Top 10 compliance verification
+
+**Success Metrics:**
+- All OWASP Top 10 vulnerabilities addressed
+- Security headers passing Mozilla Observatory A+ grade
+- Rate limiting preventing brute force attacks
+- Automated daily backups with weekly verification
+- Comprehensive security logging in place
+- Zero critical vulnerabilities in dependency scan
 
 ---
 
@@ -1006,12 +1073,13 @@ To provide cannabis businesses with a comprehensive, compliant, and user-friendl
 | Phase | Duration | Status | Dates |
 |-------|----------|--------|-------|
 | Phase 1: Foundation | 3 months | ✅ Complete | Oct 2025 - Dec 2025 |
-| Phase 2: Finance & Payroll | 3 months | 🔄 80% Complete | Jan 2026 - Mar 2026 |
-| Phase 3: Inventory Management | 3 months | ⏳ Planned | Apr 2026 - Jun 2026 |
+| Phase 2: Finance & Payroll | 3 months | 🔄 85% Complete | Jan 2026 - Feb 2026 |
+| Phase 2.5: Security Hardening | 3-4 weeks | ⏳ Planned | Feb 2026 - Early Mar 2026 |
+| Phase 3: Inventory Management | 3 months | ⏳ Planned | Mar 2026 - Jun 2026 |
 | Phase 4: Sales & POS | 4 months | ⏳ Planned | Jul 2026 - Oct 2026 |
 | Phase 5: Advanced Features | 6 months | ⏳ Planned | Oct 2026 - Mar 2027 |
 
-**Total Estimated Timeline**: 19 months (Oct 2025 - March 2027)
+**Total Estimated Timeline**: 20 months (Oct 2025 - March 2027)
 
 ### Milestone Dates
 
@@ -1033,14 +1101,26 @@ To provide cannabis businesses with a comprehensive, compliant, and user-friendl
 
 ## Success Criteria
 
-### Phase 2 Success Criteria (Current)
+### Phase 2 Success Criteria (Near Complete)
 - ✅ All finance entities created and tested
 - ✅ Double-entry accounting enforced
 - ✅ Financial reports (P&L, Balance Sheet) accurate
-- 🔄 Finance UI functional with all 9 tabs
+- ✅ Finance UI functional with all 9 tabs
+- ✅ Partner Portal implemented
+- ✅ Admin Portal implemented
 - 🔄 FASB ASC topics integrated
 - ⏳ User acceptance testing passed
 - ⏳ Performance benchmarks met (<200ms API response time)
+
+### Phase 2.5 Success Criteria (Security Hardening)
+- ⏳ All security headers implemented and tested
+- ⏳ Rate limiting active on all API endpoints
+- ⏳ Serilog structured logging configured
+- ⏳ Automated daily database backups running
+- ⏳ JWT token security hardened
+- ⏳ Zero critical or high-severity vulnerabilities
+- ⏳ Security testing completed (OWASP Top 10)
+- ⏳ Mozilla Observatory grade A or higher
 
 ### Phase 3 Success Criteria
 - Full inventory CRUD operations
@@ -1105,13 +1185,22 @@ To provide cannabis businesses with a comprehensive, compliant, and user-friendl
 
 JERP 3.0 represents a comprehensive ERP solution tailored for the cannabis industry while remaining flexible enough for general businesses. With a clear phased approach, strong technical foundation, and focus on compliance and usability, the project is well-positioned for success.
 
-The current status (Phase 2, 80% complete) demonstrates significant progress, with the Finance and Payroll modules nearly complete. The remaining phases (Inventory, Sales, Advanced Features) build upon this solid foundation to deliver a full-featured ERP system.
+The current status (Phase 2, 85% complete) demonstrates significant progress, with the Finance and Payroll modules, Partner Portal, and Admin Portal successfully implemented. Before moving to Phase 3, a critical security hardening phase (Phase 2.5) will address remaining security gaps and ensure production readiness.
 
-**Next Steps:**
-1. Complete Phase 2 (Finance FASB ASC integration, UI polish)
-2. Begin Phase 3 (Inventory Management) in April 2026
-3. Continue gathering user feedback and refining features
-4. Maintain focus on code quality, testing, and documentation
+**Next Steps (February 2026):**
+1. Complete Phase 2 (Finance FASB ASC integration, final UI polish)
+2. Execute Phase 2.5: Security Hardening (Critical Priority)
+   - Implement security headers and rate limiting
+   - Deploy Serilog structured logging
+   - Establish automated backup system
+   - Complete security testing and vulnerability remediation
+3. Begin Phase 3 (Inventory Management) in March 2026
+4. Continue gathering user feedback and refining features
+5. Maintain focus on code quality, testing, and documentation
+
+**Security Priority:**
+Security hardening (Phase 2.5) is a non-negotiable prerequisite before Phase 3. This ensures the system meets enterprise security standards and protects sensitive financial and operational data.
 
 For detailed architecture information, see [ARCHITECTURE.md](ARCHITECTURE.md).  
-For developer setup instructions, see [ONBOARDING.md](ONBOARDING.md).
+For developer setup instructions, see [ONBOARDING.md](ONBOARDING.md).  
+For security information, see [SECURITY.md](SECURITY.md).

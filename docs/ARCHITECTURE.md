@@ -1,391 +1,765 @@
-# JERP 3.0 - System Architecture Documentation
+# JERP 3.0 Architecture Documentation
 
 ## Table of Contents
-- [System Architecture Overview](#system-architecture-overview)
-- [Technology Stack](#technology-stack)
-- [Data Flow and Integration Patterns](#data-flow-and-integration-patterns)
-- [Security Architecture](#security-architecture)
-- [Deployment Architecture](#deployment-architecture)
+1. [System Architecture Overview](#system-architecture-overview)
+2. [Technology Stack](#technology-stack)
+3. [Data Flow and Integration Patterns](#data-flow-and-integration-patterns)
+4. [Security Architecture](#security-architecture)
+5. [Deployment Architecture](#deployment-architecture)
 
 ---
 
 ## System Architecture Overview
 
-JERP 3.0 is a comprehensive Cannabis ERP system built with a modern, scalable architecture using .NET 8 backend and React frontend.
-
 ### High-Level Architecture Diagram
 
-```mermaid
-graph TB
-    subgraph "Frontend Layer"
-        LandingPage[Landing Page - Next.js + React]
-        AdminPortal[Admin Portal - React]
-        PartnerPortal[Partner Portal - React]
-    end
-    
-    subgraph "API Layer"
-        Gateway[API Gateway]
-        AuthAPI[Authentication API]
-        FinanceAPI[Finance API]
-        InventoryAPI[Inventory API]
-        ComplianceAPI[Compliance API]
-        PayrollAPI[Payroll API]
-    end
-    
-    subgraph "Backend Services - .NET 8"
-        FinanceModule[Finance Module]
-        InventoryModule[Inventory Module]
-        ComplianceModule[Compliance Module]
-        ReportingModule[Reporting Module]
-        PayrollModule[Payroll Module]
-    end
-    
-    subgraph "Data Layer"
-        SQLServer[(SQL Server Database)]
-        Redis[(Redis Cache)]
-        BlobStorage[Azure Blob Storage]
-    end
-    
-    LandingPage --> Gateway
-    AdminPortal --> Gateway
-    PartnerPortal --> Gateway
-    Gateway --> AuthAPI
-    Gateway --> FinanceAPI
-    Gateway --> InventoryAPI
-    Gateway --> ComplianceAPI
-    Gateway --> PayrollAPI
-    FinanceAPI --> FinanceModule
-    InventoryAPI --> InventoryModule
-    ComplianceAPI --> ComplianceModule
-    PayrollAPI --> PayrollModule
-    FinanceModule --> SQLServer
-    InventoryModule --> SQLServer
-    ComplianceModule --> SQLServer
-    PayrollModule --> SQLServer
-    FinanceModule --> Redis
-    InventoryModule --> BlobStorage
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     JERP 3.0 Architecture                    │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌──────────────┐      ┌──────────────┐    ┌─────────────┐│
+│  │   Web App    │      │    Admin     │    │   Partner   ││
+│  │ (Next.js/TS) │◄────►│    Portal    │    │   Portal    ││
+│  └──────────────┘      └──────────────┘    └─────────────┘│
+│         │                      │                    │       │
+│         └──────────────────────┴────────────────────┘       │
+│                              │                              │
+│                              ▼                              │
+│                   ┌──────────────────────┐                  │
+│                   │   API Gateway/BFF    │                  │
+│                   │    (ASP.NET Core)    │                  │
+│                   └──────────────────────┘                  │
+│                              │                              │
+│         ┌────────────────────┼────────────────────┐         │
+│         ▼                    ▼                    ▼         │
+│  ┌────────────┐      ┌────────────┐      ┌────────────┐   │
+│  │  Finance   │      │ Inventory  │      │   Sales    │   │
+│  │   Module   │      │   Module   │      │   Module   │   │
+│  │  + Payroll │      │            │      │            │   │
+│  └────────────┘      └────────────┘      └────────────┘   │
+│         │                    │                    │         │
+│         └────────────────────┴────────────────────┘         │
+│                              │                              │
+│                              ▼                              │
+│                   ┌──────────────────────┐                  │
+│                   │   Data Access Layer  │                  │
+│                   │  (Entity Framework)  │                  │
+│                   └──────────────────────┘                  │
+│                              │                              │
+│                              ▼                              │
+│                   ┌──────────────────────┐                  │
+│                   │  SQL Server Database │                  │
+│                   └──────────────────────┘                  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Architecture Layers
+### Layered Architecture
 
-#### 1. Presentation Layer
-- **Landing Page**: Next.js-based marketing and public-facing portal
-- **Admin Portal**: Full-featured administrative interface for system management
-- **Partner Portal**: Vendor and customer self-service portal
+JERP 3.0 follows a clean architecture pattern with clear separation of concerns:
 
-#### 2. API Layer
-- **RESTful APIs**: JSON-based HTTP APIs following OpenAPI specifications
-- **Authentication Service**: JWT-based authentication and authorization
-- **Module-specific APIs**: Dedicated endpoints for Finance, Inventory, Compliance, and Payroll
+```
+┌─────────────────────────────────────────────────────┐
+│                  Presentation Layer                 │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐   │
+│  │ JERP.Api   │  │ Next.js    │  │  Desktop   │   │
+│  │ (REST API) │  │  Web App   │  │    App     │   │
+│  └────────────┘  └────────────┘  └────────────┘   │
+└─────────────────────────────────────────────────────┘
+                        │
+┌─────────────────────────────────────────────────────┐
+│                  Application Layer                  │
+│          ┌──────────────────────────────┐           │
+│          │    JERP.Application          │           │
+│          │  • Services                  │           │
+│          │  • DTOs                      │           │
+│          │  • Validators                │           │
+│          │  • Business Logic            │           │
+│          └──────────────────────────────┘           │
+└─────────────────────────────────────────────────────┘
+                        │
+┌─────────────────────────────────────────────────────┐
+│                    Domain Layer                     │
+│          ┌──────────────────────────────┐           │
+│          │      JERP.Core               │           │
+│          │  • Entities                  │           │
+│          │  • Interfaces                │           │
+│          │  • Enums                     │           │
+│          │  • Domain Logic              │           │
+│          └──────────────────────────────┘           │
+└─────────────────────────────────────────────────────┘
+                        │
+┌─────────────────────────────────────────────────────┐
+│               Infrastructure Layer                  │
+│   ┌────────────────────────────────────────┐        │
+│   │    JERP.Infrastructure                 │        │
+│   │  • Data (DbContext, Migrations)        │        │
+│   │  • Repositories                        │        │
+│   │  • External Services                   │        │
+│   │  • Configurations                      │        │
+│   └────────────────────────────────────────┘        │
+└─────────────────────────────────────────────────────┘
+                        │
+┌─────────────────────────────────────────────────────┐
+│              Compliance Layer (Optional)            │
+│          ┌──────────────────────────────┐           │
+│          │   JERP.Compliance            │           │
+│          │  • Cannabis Regulations      │           │
+│          │  • 280E Tax Tracking         │           │
+│          │  • Metrc/Biotrack APIs       │           │
+│          └──────────────────────────────┘           │
+└─────────────────────────────────────────────────────┘
+```
 
-#### 3. Application Layer
-- **Business Logic**: Application services implementing business rules
-- **DTOs**: Data transfer objects for API communication
-- **Validation**: Input validation and business rule enforcement
-- **Mapping**: AutoMapper for entity-DTO transformations
+### Module Architecture
 
-#### 4. Domain Layer
-- **Entities**: Core business entities (Account, JournalEntry, Employee, Product, etc.)
-- **Enums**: Type-safe enumeration types
-- **Interfaces**: Contracts for repositories and services
-- **Domain Logic**: Core business rules and constraints
+Each business module (Finance, Inventory, Sales) follows a consistent structure:
 
-#### 5. Infrastructure Layer
-- **Data Access**: Entity Framework Core with SQL Server
-- **Repositories**: Data access implementations
-- **External Services**: Integration with third-party systems
-- **Caching**: Redis caching implementation
-- **File Storage**: Azure Blob Storage for documents
+```
+Module (e.g., Finance)
+├── Entities/
+│   ├── Account.cs
+│   ├── JournalEntry.cs
+│   ├── GeneralLedgerEntry.cs
+│   └── ...
+├── DTOs/
+│   ├── AccountDto.cs
+│   ├── CreateAccountDto.cs
+│   └── UpdateAccountDto.cs
+├── Services/
+│   ├── IAccountService.cs
+│   └── AccountService.cs
+├── Controllers/
+│   └── AccountsController.cs
+└── Configurations/
+    └── AccountConfiguration.cs
+```
 
 ---
 
 ## Technology Stack
 
-### Backend Technologies
-
-#### Core Framework
-- **.NET 8**: Latest LTS version of .NET
-- **ASP.NET Core Web API**: RESTful API framework
-- **C# 12**: Latest C# language features
-
-#### Data Access
-- **Entity Framework Core 8**: ORM with Code-First approach
-- **Microsoft SQL Server**: Primary relational database (Express 2019+)
-- **Npgsql** (optional): PostgreSQL support for alternative deployments
-
-#### Caching and Performance
-- **Redis**: Distributed caching for sessions and frequently accessed data
-- **In-Memory Caching**: ASP.NET Core memory cache for local caching
-
-#### Authentication & Security
-- **ASP.NET Core Identity**: User management and authentication
-- **JWT (JSON Web Tokens)**: Token-based authentication
-- **BCrypt/PBKDF2**: Password hashing
-- **CORS**: Cross-origin resource sharing policies
-
-#### Testing
-- **xUnit**: Unit testing framework
-- **Moq**: Mocking framework
-- **FluentAssertions**: Assertion library
-- **Bogus**: Fake data generation
-
 ### Frontend Technologies
 
-#### Core Framework
-- **Next.js 14**: React framework with SSR support
-- **React 18+**: UI component library
-- **TypeScript**: Type-safe JavaScript
-
-#### UI Libraries
+#### Next.js Web Application
+- **Next.js 16.1.6**: Modern React framework with server-side rendering
+- **React 18.2**: UI component library
+- **TypeScript 5.3**: Type-safe JavaScript
 - **Tailwind CSS**: Utility-first CSS framework
-- **shadcn/ui**: Component library built on Radix UI
-- **Lucide Icons**: Icon library
-- **Recharts**: Data visualization library
+- **Recharts 2.15**: Data visualization and charting
+- **Framer Motion 11.0**: Animation library
+- **Lucide React**: Icon library
+- **Next-Auth 4.24**: Authentication for Next.js
+- **React Hook Form 7.49**: Form management
+- **Zod 3.22**: TypeScript-first schema validation
 
-#### State Management
-- **React Context API**: Global state management
-- **React Hooks**: Local state management
-- **TanStack Query**: Server state management
-
-#### Development Tools
-- **Vite**: Fast build tool
+#### Build Tools
+- **Next.js**: Built-in bundling and optimization
+- **TypeScript Compiler**: Type checking and transpilation
+- **PostCSS**: CSS processing
 - **ESLint**: Code linting
-- **Prettier**: Code formatting
-- **TypeScript ESLint**: TypeScript-specific linting
 
-#### Testing
-- **React Testing Library**: Component testing
-- **Jest**: Testing framework
-- **Playwright**: E2E testing
+### Backend Technologies
 
-### DevOps & Infrastructure
+#### ASP.NET Core Stack
+- **.NET 8.0**: Latest LTS version of .NET
+- **ASP.NET Core 8.0**: Web API framework
+- **Entity Framework Core 8.0**: Object-Relational Mapper (ORM)
+- **C# 12**: Programming language
+
+#### Database
+- **Microsoft SQL Server 2022**: Primary relational database
+  - SQL Server Express (development)
+  - Developer/Standard/Enterprise editions (production)
+- **Entity Framework Core Migrations**: Database schema versioning
+
+#### Backend Libraries & Packages
+- **Serilog**: Structured logging
+- **AutoMapper**: Object-to-object mapping
+- **FluentValidation**: Input validation library
+- **BCrypt/PBKDF2**: Password hashing
+- **JWT Bearer**: Token-based authentication
+- **Swashbuckle (Swagger)**: API documentation
+- **Prisma**: Alternative ORM for Next.js backend features
+
+### Infrastructure & DevOps
 
 #### Containerization
 - **Docker**: Container platform
 - **Docker Compose**: Multi-container orchestration
 
-#### CI/CD
-- **GitHub Actions**: Automated workflows
-- **GitHub Packages**: Package registry
+#### Reverse Proxy & Web Server
+- **NGINX**: Reverse proxy, load balancing, SSL termination (optional)
 
-#### Cloud Platform (Production)
-- **Azure App Service**: Web application hosting
-- **Azure SQL Database**: Managed SQL Server
-- **Azure Redis Cache**: Managed Redis instance
-- **Azure Blob Storage**: Object storage
-- **Azure Application Insights**: Application monitoring
+#### Planned Infrastructure
+- **Redis**: Caching layer (planned)
+- **Message Queue**: RabbitMQ or Azure Service Bus (planned)
+- **Blob Storage**: File storage (planned)
 
-#### Monitoring & Logging
-- **Serilog**: Structured logging
-- **Application Insights**: Performance monitoring
-- **Azure Monitor**: Infrastructure monitoring
+### Development Tools
+
+#### Version Control
+- **Git**: Distributed version control
+- **GitHub**: Repository hosting and collaboration
+
+#### IDEs & Editors
+- **Visual Studio 2022**: Primary .NET IDE
+- **Visual Studio Code**: Lightweight editor for frontend and backend
+- **JetBrains Rider**: Alternative .NET IDE
+
+#### Testing Frameworks
+- **xUnit**: Unit testing framework for .NET
+- **Moq**: Mocking library
+- **FluentAssertions**: Assertion library
+- **Testcontainers**: Docker containers for integration tests
+
+#### API Tools
+- **Swagger UI**: Interactive API documentation
+- **Postman/Insomnia**: API testing
+
+### Third-Party Integrations
+
+#### Cannabis Compliance (Planned)
+- **Metrc API**: Cannabis track-and-trace system
+- **BioTrack API**: Alternative compliance system
+- **LeafLink API**: Wholesale marketplace
+
+#### Payment Processing (Planned)
+- **Stripe**: Payment gateway
+- **PayPal**: Alternative payment option
+
+#### Accounting Integrations (Planned)
+- **QuickBooks API**: Accounting sync
+- **Xero API**: Alternative accounting platform
 
 ---
 
 ## Data Flow and Integration Patterns
 
-### API Communication Patterns
+### 1. Request/Response Flow
 
-#### Request/Response Flow
-```mermaid
-sequenceDiagram
-    participant Client
-    participant API
-    participant Service
-    participant Repository
-    participant Database
+#### Standard API Request Flow
 
-    Client->>API: HTTP Request (JSON)
-    API->>API: Authentication/Authorization
-    API->>API: Validation
-    API->>Service: Call Application Service
-    Service->>Service: Business Logic
-    Service->>Repository: Data Operation
-    Repository->>Database: SQL Query
-    Database-->>Repository: Result Set
-    Repository-->>Service: Entity
-    Service-->>API: DTO
-    API-->>Client: HTTP Response (JSON)
+```
+┌─────────┐      ┌────────────┐      ┌─────────────┐      ┌──────────┐      ┌──────────┐
+│ Client  │─────>│   NGINX    │─────>│  API        │─────>│ Business │─────>│ Database │
+│ (Web)   │      │  (Proxy)   │      │ Controller  │      │ Service  │      │          │
+└─────────┘      └────────────┘      └─────────────┘      └──────────┘      └──────────┘
+     │                                      │                     │                │
+     │                                      │                     │                │
+     │<─────────────────────────────────────┴─────────────────────┴────────────────┘
+     │                         Response with data
+     └────────────────────────────────────────────────────────────────────────────────>
 ```
 
-#### Authentication Flow
-```mermaid
-sequenceDiagram
-    participant Client
-    participant AuthAPI
-    participant Identity
-    participant Database
+**Detailed Steps:**
 
-    Client->>AuthAPI: POST /api/v1/auth/login
-    AuthAPI->>Identity: Validate Credentials
-    Identity->>Database: Query User
-    Database-->>Identity: User Data
-    Identity->>Identity: Verify Password Hash
-    Identity->>Identity: Generate JWT Token
-    Identity-->>AuthAPI: Token + Claims
-    AuthAPI-->>Client: JWT Token (+ Refresh Token)
-    
-    Note over Client: Store token in secure storage
-    
-    Client->>AuthAPI: API Request + Bearer Token
-    AuthAPI->>AuthAPI: Validate JWT
-    AuthAPI->>AuthAPI: Extract Claims
-    AuthAPI->>AuthAPI: Authorize Action
+1. **Client Request**: Web application sends HTTP request (GET, POST, PUT, DELETE)
+2. **Reverse Proxy (Optional)**: NGINX routes request to API server
+3. **API Controller**: 
+   - Receives request
+   - Validates JWT token (authentication)
+   - Checks user permissions (authorization)
+4. **Service Layer**:
+   - Executes business logic
+   - Validates input with FluentValidation
+   - Performs calculations and data transformations
+5. **Data Access Layer**:
+   - Repository pattern for data access
+   - Entity Framework translates to SQL
+   - Queries or updates database
+6. **Database**: SQL Server processes query
+7. **Response Path**: Data flows back through layers
+   - Entity → DTO mapping (AutoMapper)
+   - JSON serialization
+   - HTTP response with status code
+
+### 2. Authentication Flow
+
+#### JWT Token Authentication
+
+```
+┌─────────┐                 ┌──────────────┐                 ┌──────────┐
+│ Client  │                 │   API        │                 │ Database │
+└─────────┘                 └──────────────┘                 └──────────┘
+     │                              │                              │
+     │  1. POST /api/auth/login    │                              │
+     │  { username, password }      │                              │
+     │─────────────────────────────>│                              │
+     │                              │  2. Query user & verify      │
+     │                              │──────────────────────────────>│
+     │                              │<──────────────────────────────│
+     │                              │  3. User data                │
+     │                              │                              │
+     │                              │  4. Generate JWT token       │
+     │                              │     (userId, roles, claims)  │
+     │                              │                              │
+     │  5. Return JWT token         │                              │
+     │<─────────────────────────────│                              │
+     │  { token, refreshToken }     │                              │
+     │                              │                              │
+     │  6. Subsequent requests      │                              │
+     │  Header: Authorization:      │                              │
+     │  Bearer <JWT>                │                              │
+     │─────────────────────────────>│                              │
+     │                              │  7. Validate JWT signature   │
+     │                              │  8. Check expiration         │
+     │                              │  9. Extract user claims      │
+     │                              │                              │
+     │  10. Protected resource      │                              │
+     │<─────────────────────────────│                              │
 ```
 
-### Data Persistence Patterns
+**JWT Token Contents:**
+```json
+{
+  "sub": "user-id-123",
+  "email": "ichbincesartobar@yahoo.com",
+  "roles": ["Admin", "Finance"],
+  "companyId": "company-456",
+  "exp": 1707148800,
+  "iat": 1707145200
+}
+```
+
+### 3. Module Communication Patterns
+
+#### Finance Module Integration with Payroll
+
+```
+┌──────────────┐         ┌──────────────┐         ┌──────────────┐
+│   Payroll    │         │   Finance    │         │   General    │
+│   Module     │         │   Module     │         │   Ledger     │
+└──────────────┘         └──────────────┘         └──────────────┘
+       │                        │                         │
+       │  1. Process Payroll    │                         │
+       │  (Calculate wages,     │                         │
+       │   taxes, deductions)   │                         │
+       │                        │                         │
+       │  2. Create GL Entry    │                         │
+       │────────────────────────>│                         │
+       │                        │                         │
+       │                        │  3. Post to GL          │
+       │                        │─────────────────────────>│
+       │                        │                         │
+       │                        │  4. Create entries:     │
+       │                        │     DR: Wages Expense   │
+       │                        │     CR: Cash/AP         │
+       │                        │     CR: Tax Payable     │
+       │                        │                         │
+       │  5. Confirmation       │                         │
+       │<────────────────────────│                         │
+```
+
+#### Inventory and Finance Integration (COGS)
+
+```
+Sale Transaction:
+  1. Sales Module records sale → Updates inventory quantity
+  2. Inventory Module calculates COGS (Cost of Goods Sold)
+  3. Finance Module creates journal entry:
+     DR: Cost of Goods Sold (Expense)
+     CR: Inventory (Asset)
+```
+
+### 4. External Integrations
+
+#### Cannabis Compliance API Integration (Planned)
+
+```
+┌──────────────┐         ┌──────────────┐         ┌──────────────┐
+│  JERP 3.0    │         │  Compliance  │         │    Metrc     │
+│   System     │         │   Service    │         │     API      │
+└──────────────┘         └──────────────┘         └──────────────┘
+       │                        │                         │
+       │  1. Inventory Change   │                         │
+       │  (Sale, Transfer)      │                         │
+       │                        │                         │
+       │  2. Trigger Sync       │                         │
+       │────────────────────────>│                         │
+       │                        │                         │
+       │                        │  3. Send tracking data  │
+       │                        │─────────────────────────>│
+       │                        │  (Package ID, quantity, │
+       │                        │   date, license #)      │
+       │                        │                         │
+       │                        │  4. Acknowledge receipt │
+       │                        │<─────────────────────────│
+       │                        │                         │
+       │  5. Update status      │                         │
+       │<────────────────────────│                         │
+       │  (Compliant/Error)     │                         │
+```
+
+### 5. Data Persistence Patterns
 
 #### Repository Pattern
-- **Generic Repository**: Base repository with common CRUD operations
-- **Specialized Repositories**: Domain-specific repositories with custom queries
-- **Unit of Work**: Transaction management across multiple repositories
 
-#### Entity Framework Core Strategy
-- **Code-First Migrations**: Database schema management
-- **Fluent API Configuration**: Entity configuration with type safety
-- **Query Optimization**: 
-  - Eager loading with `.Include()`
-  - Projection with `.Select()`
-  - AsNoTracking for read-only queries
-  - Compiled queries for frequently executed queries
+```csharp
+// Generic Repository Interface
+public interface IRepository<T> where T : BaseEntity
+{
+    Task<T> GetByIdAsync(Guid id);
+    Task<IEnumerable<T>> GetAllAsync();
+    Task<T> AddAsync(T entity);
+    Task UpdateAsync(T entity);
+    Task DeleteAsync(Guid id);
+}
 
-### Caching Strategy
+// Entity Framework Implementation
+public class Repository<T> : IRepository<T> where T : BaseEntity
+{
+    private readonly JerpDbContext _context;
+    private readonly DbSet<T> _dbSet;
 
-#### Cache Layers
-1. **Client-Side Caching**: Browser cache for static assets
-2. **Redis Distributed Cache**: 
-   - Chart of Accounts (1 hour TTL)
-   - User sessions (configurable TTL)
-   - Lookup data (departments, account types)
-3. **In-Memory Cache**: 
-   - Configuration settings
-   - Frequently accessed reference data
+    public Repository(JerpDbContext context)
+    {
+        _context = context;
+        _dbSet = context.Set<T>();
+    }
 
-#### Cache Invalidation
-- **Time-based expiration**: TTL for each cache entry
-- **Event-based invalidation**: Clear cache on data modification
-- **Cache-aside pattern**: Load from DB if cache miss
+    public async Task<T> GetByIdAsync(Guid id)
+    {
+        return await _dbSet.FindAsync(id);
+    }
+    // ... other methods
+}
+```
 
-### File Storage Pattern
+#### Unit of Work Pattern
 
-#### Azure Blob Storage
-- **Document Storage**: Invoices, receipts, compliance documents
-- **Structure**: `{tenant-id}/{module}/{year}/{month}/{document-id}.{ext}`
-- **Access**: Shared Access Signatures (SAS) with expiration
-- **Retention**: Configurable retention policies per document type
-
-### Real-time Updates (Future Enhancement)
-
-#### SignalR Integration
-- **Real-time Notifications**: System alerts, compliance warnings
-- **Live Dashboard Updates**: KPI metrics, pending approvals
-- **Collaboration Features**: Multi-user editing notifications
+```csharp
+public interface IUnitOfWork : IDisposable
+{
+    IRepository<Account> Accounts { get; }
+    IRepository<JournalEntry> JournalEntries { get; }
+    IRepository<Product> Products { get; }
+    
+    Task<int> CommitAsync();
+    Task RollbackAsync();
+}
+```
 
 ---
 
 ## Security Architecture
 
+### Security Implementation Status
+
+**Current Security Posture: 65% Complete**
+
+#### ✅ Implemented Security Features
+
+**Authentication & Authorization:**
+- ✅ JWT token-based authentication
+- ✅ Role-Based Access Control (RBAC)
+- ✅ Multi-tenant data isolation with query filters
+- ✅ Session management with token expiration
+
+**Password & Data Protection:**
+- ✅ BCrypt password hashing (work factor 12)
+- ✅ HTTPS/TLS encryption in transit
+- ✅ CORS configuration
+- ✅ SQL injection prevention (EF Core parameterized queries)
+- ✅ Input validation with FluentValidation
+
+**Audit & Compliance:**
+- ✅ Basic audit logging
+- ✅ Multi-tenant data segregation
+- ✅ FASB ASC compliance tracking
+
+#### ⏳ Planned Security Enhancements (Phase 2.5 - February 2026)
+
+**Week 1: Security Headers & Response Protection**
+- ⏳ Security headers middleware
+  - HSTS (HTTP Strict Transport Security)
+  - X-Content-Type-Options: nosniff
+  - X-Frame-Options: DENY
+  - X-XSS-Protection
+  - Content-Security-Policy (CSP)
+  - Referrer-Policy
+- ⏳ Secure cookie configuration with HttpOnly and Secure flags
+- ⏳ HTTPS enforcement in production
+
+**Week 2: Rate Limiting & API Protection**
+- ⏳ Per-endpoint rate limiting
+- ⏳ Per-user API throttling
+- ⏳ IP-based rate limiting
+- ⏳ Brute force protection (login attempts)
+- ⏳ Request size limits
+- ⏳ DDoS mitigation strategies
+
+**Week 3: Enhanced Logging & Monitoring**
+- ⏳ Serilog structured logging integration
+- ⏳ Security event logging (failed logins, authorization failures)
+- ⏳ Audit trail enhancements
+- ⏳ Log aggregation and centralized monitoring
+- ⏳ Real-time alerting for suspicious activities
+
+**Week 4: Backup Automation & JWT Hardening**
+- ⏳ Automated daily database backups
+- ⏳ Backup verification and recovery testing
+- ⏳ JWT token security review and improvements
+- ⏳ Refresh token mechanism
+- ⏳ Session management enhancements
+
+**Security Testing & Validation**
+- ⏳ OWASP Top 10 compliance verification
+- ⏳ Penetration testing (external service)
+- ⏳ Vulnerability scanning (OWASP ZAP, Dependabot)
+- ⏳ Security code review
+- ⏳ Mozilla Observatory grade A+ target
+
+#### ⚠️ Known Security Gaps (To be addressed in Phase 2.5)
+
+1. **Missing Security Headers**: No Content-Security-Policy, HSTS, or X-Frame-Options
+2. **No Rate Limiting**: API endpoints vulnerable to brute force and DDoS
+3. **Limited Logging**: No structured logging for security events
+4. **Manual Backups**: No automated backup system in place
+5. **JWT Token Security**: Token refresh mechanism needs improvement
+
+#### 🎯 Security Roadmap
+
+```mermaid
+gantt
+    title Security Hardening Roadmap (Phase 2.5)
+    dateFormat  YYYY-MM-DD
+    section Week 1
+    Security Headers           :2026-02-07, 7d
+    section Week 2
+    Rate Limiting             :2026-02-14, 7d
+    section Week 3
+    Enhanced Logging          :2026-02-21, 7d
+    section Week 4
+    Backup & JWT              :2026-02-28, 7d
+```
+
+---
+
 ### Authentication & Authorization
 
 #### JWT Token-Based Authentication
-```mermaid
-graph LR
-    A[User Login] --> B[Validate Credentials]
-    B --> C[Generate Access Token]
-    B --> D[Generate Refresh Token]
-    C --> E[Token Expires in 1h]
-    D --> F[Refresh Token Expires in 7d]
-    E --> G[Request New Token with Refresh Token]
-    F --> G
+
+**Token Generation:**
+```csharp
+var tokenHandler = new JwtSecurityTokenHandler();
+var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"]);
+var tokenDescriptor = new SecurityTokenDescriptor
+{
+    Subject = new ClaimsIdentity(new[]
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.Role, string.Join(",", user.Roles))
+    }),
+    Expires = DateTime.UtcNow.AddHours(1),
+    SigningCredentials = new SigningCredentials(
+        new SymmetricSecurityKey(key),
+        SecurityAlgorithms.HmacSha256Signature
+    )
+};
 ```
 
-**Token Claims:**
-- User ID
-- Username
-- Email
-- Roles (Admin, Manager, User, Partner)
-- Tenant ID (for multi-tenancy)
-- Permissions (granular access control)
+**Token Validation:**
+- Signature verification using secret key
+- Expiration check
+- Issuer and audience validation
+- Claims extraction for authorization
 
 #### Role-Based Access Control (RBAC)
 
-**System Roles:**
-1. **Super Admin**: Full system access, tenant management
-2. **Admin**: Full access within tenant, user management
-3. **Finance Manager**: Finance module full access
-4. **Inventory Manager**: Inventory module full access
-5. **Compliance Officer**: Compliance module full access
-6. **Accountant**: Finance module read/write
-7. **User**: Basic read access
-8. **Partner**: Limited vendor/customer portal access
+**Role Hierarchy:**
+```
+System Administrator
+├── Company Administrator
+│   ├── Finance Manager
+│   │   ├── Accountant
+│   │   └── Accounts Payable Clerk
+│   ├── Inventory Manager
+│   │   └── Warehouse Staff
+│   └── Sales Manager
+│       └── Sales Representative
+└── Auditor (Read-only)
+```
 
 **Permission Model:**
-- Module-based permissions (Finance, Inventory, Compliance)
-- Action-based permissions (Read, Create, Update, Delete, Approve)
-- Data-based permissions (Own data, Department data, All data)
+```csharp
+public enum Permission
+{
+    // Finance
+    ViewFinancialReports,
+    CreateJournalEntry,
+    PostJournalEntry,
+    VoidJournalEntry,
+    
+    // Inventory
+    ViewInventory,
+    AdjustInventory,
+    CreateProduct,
+    
+    // Sales
+    CreateSalesOrder,
+    VoidSalesOrder,
+    
+    // Admin
+    ManageUsers,
+    ManageCompanySettings
+}
+```
 
-### Data Protection
+**Controller Authorization:**
+```csharp
+[Authorize(Roles = "Admin,FinanceManager")]
+[HttpPost("journal-entries")]
+public async Task<IActionResult> CreateJournalEntry([FromBody] CreateJournalEntryDto dto)
+{
+    // Implementation
+}
+```
 
-#### Data in Transit
-- **TLS 1.3**: All HTTP traffic encrypted
-- **Certificate Pinning**: Mobile apps validate server certificates
+#### Multi-Tenant Data Isolation
+
+**Tenant Identification:**
+- Tenant ID stored in JWT token claims
+- Automatically applied to all queries via EF Core query filters
+
+```csharp
+// Global query filter
+modelBuilder.Entity<Account>()
+    .HasQueryFilter(a => a.CompanyId == _currentUser.CompanyId);
+```
+
+**Data Segregation:**
+- Each company has a unique `CompanyId` (GUID)
+- All entities include `CompanyId` foreign key
+- Queries automatically filtered by tenant
+- Prevents cross-tenant data access
+
+### Password Security
+
+**Hashing Algorithm:**
+- BCrypt with work factor 12
+- Salt automatically generated per password
+- Rainbow table attacks prevented
+
+```csharp
+public class PasswordHasher
+{
+    public string HashPassword(string password)
+    {
+        return BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);
+    }
+
+    public bool VerifyPassword(string password, string hash)
+    {
+        return BCrypt.Net.BCrypt.Verify(password, hash);
+    }
+}
+```
+
+**Password Policy:**
+- Minimum 8 characters
+- Must contain uppercase, lowercase, number, special character
+- Password history (last 5 passwords)
+- 90-day expiration (configurable)
+- Account lockout after 5 failed attempts
+
+### Data Security
+
+#### Encryption in Transit
+- **HTTPS/TLS 1.2+**: All API communications
+- **Certificate Management**: Let's Encrypt or commercial SSL certificates
 - **HSTS**: HTTP Strict Transport Security enabled
-- **Secure Cookies**: HttpOnly, Secure, SameSite attributes
 
-#### Data at Rest
-- **Database Encryption**: Transparent Data Encryption (TDE) in production
-- **Encrypted Connection Strings**: Azure Key Vault for secrets
-- **Password Hashing**: ASP.NET Core Identity with PBKDF2
-  - Minimum 10,000 iterations
-  - Salted hashes stored in database
-- **Sensitive Data Encryption**: AES-256 for PII fields
+```csharp
+// HTTPS Redirection
+app.UseHttpsRedirection();
+app.UseHsts();
+```
 
-### API Security
+#### Encryption at Rest
+- **Database Encryption**: Transparent Data Encryption (TDE) on SQL Server
+- **Backup Encryption**: Encrypted database backups
+- **Sensitive Fields**: Additional column-level encryption for SSN, credit cards
 
-#### Input Validation
-- **Model Validation**: Data annotations on DTOs
-- **Business Rule Validation**: FluentValidation for complex rules
-- **SQL Injection Prevention**: Parameterized queries via EF Core
-- **XSS Prevention**: Output encoding, Content Security Policy
+#### Sensitive Data Handling
+- **Masking in Logs**: PII and financial data masked
+```csharp
+Log.Information("User {UserId} updated account {AccountMask}", 
+    userId, 
+    MaskAccountNumber(accountNumber));
+```
+- **Audit Trail**: All sensitive operations logged
+- **Data Retention**: Configurable retention policies
 
-#### Rate Limiting
-- **Global Rate Limit**: 1000 requests per minute per IP
-- **Authenticated Rate Limit**: 2000 requests per minute per user
-- **Endpoint-Specific Limits**: Stricter limits on sensitive operations
+### CORS Policy
 
-#### CORS Policy
-- **Allowed Origins**: Configured per environment
-- **Allowed Methods**: GET, POST, PUT, DELETE
-- **Allowed Headers**: Authorization, Content-Type
-- **Credentials**: Allowed for authenticated requests
+```csharp
+services.AddCors(options =>
+{
+    options.AddPolicy("AllowedOrigins", builder =>
+    {
+        builder
+            .WithOrigins(
+                "https://app.jerp.io",
+                "https://admin.jerp.io",
+                "http://localhost:3000"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+```
 
-### Cannabis Industry Compliance
+### Compliance & Regulations
 
-#### 280E Tax Compliance
-- **COGS Tracking**: Detailed cost of goods sold tracking
-- **Non-Deductible Expenses**: Flagging of non-deductible expenses per IRS 280E
-- **Audit Trail**: Complete transaction history for tax audits
+#### Cannabis Industry Compliance
 
-#### State Regulatory Compliance
-- **License Tracking**: Monitor license expiration and renewals
-- **Metrc Integration**: State traceability system integration
-- **Seed-to-Sale Tracking**: Complete product lifecycle tracking
-- **Batch Tracking**: Lot numbers, expiration dates, testing results
+**280E Tax Compliance:**
+- Separate COGS tracking (deductible)
+- Non-deductible expense identification
+- FASB ASC topic mapping for audit trail
 
-### Audit Logging
+**Metrc/BioTrack Integration:**
+- Secure API key storage in environment variables
+- Webhook verification
+- Audit logging of all compliance sync operations
 
-#### Comprehensive Audit Trails
-- **Financial Transactions**: All journal entries, payments, invoices
-- **User Actions**: Login attempts, permission changes, data modifications
-- **System Events**: Configuration changes, integration errors
-- **Data Retention**: 7 years for financial records (SOX compliance)
+#### Accounting Standards
+- **FASB ASC**: Financial Accounting Standards Board Codification
+- **GAAP**: Generally Accepted Accounting Principles
+- **Double-Entry Bookkeeping**: Enforced at application level
 
-#### Audit Log Contents
-- **Who**: User ID, username, IP address
-- **What**: Action performed, entity type, entity ID
-- **When**: Timestamp (UTC)
-- **Where**: Module, endpoint, client info
-- **Result**: Success/failure, error details
+#### Data Privacy
+- **GDPR Considerations**: For EU customers (planned)
+- **CCPA Compliance**: For California customers (planned)
+- **Data Deletion**: Right to be forgotten implementation
+
+### Security Best Practices
+
+**Currently Implemented:**
+1. ✅ **Principle of Least Privilege**: Users granted minimum required permissions
+2. ✅ **Input Validation**: All user input validated with FluentValidation
+3. ✅ **SQL Injection Prevention**: Parameterized queries via Entity Framework
+4. ✅ **XSS Prevention**: Output encoding in frontend (React escaping)
+5. ✅ **Secret Management**: Environment variables, no secrets in code
+6. ✅ **Authentication**: JWT-based with role-based authorization
+
+**Planned Implementation (Phase 2.5):**
+7. ⏳ **Security Headers**: HSTS, X-Content-Type-Options, X-Frame-Options, CSP
+8. ⏳ **CSRF Protection**: Anti-forgery tokens for state-changing operations
+9. ⏳ **Rate Limiting**: API throttling and brute force protection
+10. ⏳ **Dependency Scanning**: Automated vulnerability scanning with Dependabot
+11. ⏳ **Structured Logging**: Serilog for security event monitoring
+12. ⏳ **Automated Backups**: Daily database backups with verification
+
+**Security Testing Requirements:**
+- ⏳ OWASP ZAP automated scanning
+- ⏳ Manual penetration testing
+- ⏳ Security code review
+- ⏳ Dependency vulnerability scanning
+- ⏳ SSL/TLS configuration testing
 
 ---
 
@@ -393,188 +767,370 @@ graph LR
 
 ### Development Environment
 
-#### Local Docker Development
-```yaml
-# docker-compose.yml
-services:
-  api:
-    - .NET 8 API
-    - Hot reload enabled
-    - Port 5000
-  
-  frontend:
-    - Next.js development server
-    - Port 3000
-  
-  sqlserver:
-    - SQL Server 2019 Express
-    - Persistent volume
-    - Port 1433
-  
-  redis:
-    - Redis 7
-    - Port 6379
+#### Local Development Setup
+
+```
+Developer Workstation
+├── Docker Desktop
+│   ├── SQL Server Container (Port 1433)
+│   └── API Container (Port 5000)
+├── Node.js (Frontend Dev Server - Port 3000)
+└── IDE (Visual Studio / VS Code)
 ```
 
-**Development Workflow:**
-1. Clone repository
-2. Run `docker-compose up`
-3. Apply migrations: `dotnet ef database update`
-4. Access Swagger UI: `http://localhost:5000`
-5. Access frontend: `http://localhost:3000`
+**Configuration:**
+- `.env.example` provides template
+- Local SQL Server Express or Docker container
+- Hot reload enabled for both frontend and backend
+- Swagger UI for API testing
+
+**Development Database:**
+- Seed data included
+- Sample accounts, users, transactions
+- Reset script available
 
 ### Staging Environment
 
-#### Azure App Service (Staging Slot)
-- **Web App**: Linux container with .NET 8 runtime
-- **Database**: Azure SQL Database (S1 tier)
-- **Cache**: Azure Redis Cache (Basic tier)
-- **Storage**: Azure Blob Storage (Standard tier)
+#### Staging Deployment Topology
 
-**Configuration:**
-- Deployment via GitHub Actions
-- Separate connection strings and secrets
-- Feature flags for testing new features
-- Smoke tests after deployment
-
-### Production Environment
-
-#### Multi-Region Azure Deployment
-
-```mermaid
-graph TB
-    subgraph "Primary Region - East US"
-        LB1[Azure Load Balancer]
-        APP1A[API Instance 1A]
-        APP1B[API Instance 1B]
-        APP1C[API Instance 1C]
-        SQL1[(Primary SQL Database)]
-        REDIS1[(Primary Redis Cache)]
-    end
-    
-    subgraph "Secondary Region - West US"
-        LB2[Azure Load Balancer]
-        APP2A[API Instance 2A]
-        APP2B[API Instance 2B]
-        SQL2[(Secondary SQL Database - Read Replica)]
-        REDIS2[(Secondary Redis Cache)]
-    end
-    
-    TM[Traffic Manager] --> LB1
-    TM --> LB2
-    LB1 --> APP1A
-    LB1 --> APP1B
-    LB1 --> APP1C
-    LB2 --> APP2A
-    LB2 --> APP2B
-    APP1A --> SQL1
-    APP1B --> SQL1
-    APP1C --> SQL1
-    APP2A --> SQL2
-    APP2B --> SQL2
-    SQL1 -.Replication.-> SQL2
-    APP1A --> REDIS1
-    APP2A --> REDIS2
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Staging Server                       │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  ┌─────────────┐         ┌─────────────┐              │
+│  │   NGINX     │────────>│  API Server │              │
+│  │   (SSL)     │         │  (Docker)   │              │
+│  └─────────────┘         └─────────────┘              │
+│         │                       │                       │
+│         │                       │                       │
+│         │                       ▼                       │
+│         │              ┌─────────────────┐             │
+│         │              │  SQL Server     │             │
+│         │              │  (Docker)       │             │
+│         │              └─────────────────┘             │
+│         │                                               │
+│         ▼                                               │
+│  ┌─────────────┐                                       │
+│  │   Next.js   │                                       │
+│  │   (Static)  │                                       │
+│  └─────────────┘                                       │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
 ```
 
-**Production Infrastructure:**
-- **Azure Traffic Manager**: Geographic load balancing
-- **Azure Load Balancer**: Layer 4 load balancing within regions
-- **API Instances**: Auto-scaling based on CPU/memory (2-10 instances)
-- **Azure SQL Database**: 
-  - Primary: Premium tier (P2) with 250 DTUs
-  - Secondary: Read replica for reporting
-  - Geo-replication for disaster recovery
-  - Automated backups (35-day retention)
-- **Azure Redis Cache**: Premium tier (6GB) with clustering
-- **Azure Blob Storage**: Geo-redundant storage (GRS)
+**Purpose:**
+- Pre-production testing
+- User acceptance testing (UAT)
+- Integration testing with external APIs
+- Performance testing
 
-### Database Architecture
+### Production Deployment
 
-#### High Availability
-- **Active Geo-Replication**: Secondary region read replica
-- **Automatic Failover Groups**: Auto-failover in case of regional outage
-- **Backup Strategy**:
-  - Automated backups every 5 minutes
-  - Point-in-time restore (35 days)
-  - Long-term retention (7 years for compliance)
+#### Production Architecture (Containerized)
 
-#### Performance Optimization
-- **Connection Pooling**: Min 10, Max 100 connections per instance
-- **Query Performance Insights**: Automatic query tuning recommendations
-- **Indexes**: 
-  - Clustered indexes on primary keys
-  - Non-clustered indexes on foreign keys and frequently queried columns
-  - Filtered indexes for common query patterns
+```
+┌──────────────────────────────────────────────────────────────┐
+│                     Production Environment                    │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │              Load Balancer / NGINX                  │    │
+│  │              (SSL Termination)                      │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                        │                                     │
+│         ┌──────────────┼──────────────┐                      │
+│         ▼              ▼              ▼                      │
+│  ┌──────────┐   ┌──────────┐   ┌──────────┐                │
+│  │ API Pod  │   │ API Pod  │   │ API Pod  │                │
+│  │ (Docker) │   │ (Docker) │   │ (Docker) │                │
+│  └──────────┘   └──────────┘   └──────────┘                │
+│         │              │              │                      │
+│         └──────────────┴──────────────┘                      │
+│                        │                                     │
+│                        ▼                                     │
+│         ┌─────────────────────────────┐                      │
+│         │    SQL Server (Primary)     │                      │
+│         │    (High Availability)      │                      │
+│         └─────────────────────────────┘                      │
+│                        │                                     │
+│                        ▼                                     │
+│         ┌─────────────────────────────┐                      │
+│         │  SQL Server (Read Replica)  │                      │
+│         │      (For Reporting)        │                      │
+│         └─────────────────────────────┘                      │
+│                                                              │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │              Redis Cache (Planned)                  │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+#### Docker Compose Configuration
+
+**docker-compose.yml:**
+```yaml
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${SQLSERVER_PASSWORD}
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$$SA_PASSWORD" -Q "SELECT 1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: src/JERP.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=JERP3_DB;..."
+      Jwt__SecretKey: ${JWT_SECRET_KEY}
+    ports:
+      - "5000:80"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - api
+```
+
+#### Environment Configuration
+
+**Environment Variables:**
+```bash
+# Database
+SQLSERVER_PASSWORD=YourStrong!Passw0rd
+ConnectionStrings__DefaultConnection=Server=...
+
+# JWT Authentication
+JWT_SECRET_KEY=YourSuperSecretKeyForJWTTokenGenerationMinimum32Characters!
+JWT_ISSUER=JERP-API
+JWT_AUDIENCE=JERP-Client
+JWT_EXPIRATION_HOURS=1
+
+# CORS
+CORS_ORIGINS=https://app.jerp.io,https://admin.jerp.io
+
+# Logging
+SERILOG_MINIMUM_LEVEL=Information
+
+# Compliance APIs (Planned)
+METRC_API_KEY=your-metrc-api-key
+METRC_LICENSE_NUMBER=your-license-number
+```
+
+#### Health Checks and Monitoring
+
+**Health Check Endpoint:**
+```csharp
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        var result = JsonSerializer.Serialize(new
+        {
+            status = report.Status.ToString(),
+            checks = report.Entries.Select(e => new
+            {
+                name = e.Key,
+                status = e.Value.Status.ToString(),
+                duration = e.Value.Duration.TotalMilliseconds
+            })
+        });
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsync(result);
+    }
+});
+```
+
+**Monitored Services:**
+- API availability
+- Database connectivity
+- Disk space
+- Memory usage
+- Response time
+
+**Logging:**
+- **Serilog**: Structured logging
+- **Log Sinks**: File, Console, (planned: Application Insights, ELK Stack)
+- **Log Levels**: Debug, Information, Warning, Error, Critical
+
+#### Backup Strategy
+
+**Database Backups:**
+- **Full Backup**: Daily at 2:00 AM
+- **Differential Backup**: Every 6 hours
+- **Transaction Log Backup**: Every 15 minutes
+- **Retention**: 30 days online, 1 year archived
+
+**Backup Script (SQL Server):**
+```sql
+BACKUP DATABASE [JERP3_DB]
+TO DISK = '/backups/JERP3_DB_Full_' + CONVERT(VARCHAR, GETDATE(), 112) + '.bak'
+WITH COMPRESSION, CHECKSUM, STATS = 10;
+```
+
+**Recovery Testing:**
+- Monthly restore testing
+- Point-in-time recovery capability
+- Documented recovery procedures
 
 #### Scaling Strategy
-- **Vertical Scaling**: Increase DTUs during peak hours
-- **Read Scale-Out**: Route read-only queries to replica
-- **Partitioning**: Future consideration for large tenants
 
-### Monitoring and Observability
+**Horizontal Scaling:**
+- Multiple API instances behind load balancer
+- Stateless API design
+- Session state in database or distributed cache
 
-#### Application Insights
-- **Performance Metrics**: Response times, throughput, failure rates
-- **Custom Metrics**: Business KPIs, module-specific metrics
-- **Dependency Tracking**: Database, Redis, external API calls
-- **Exception Tracking**: Detailed error logs with stack traces
+**Vertical Scaling:**
+- Increase container resources (CPU, memory)
+- Database server hardware upgrades
 
-#### Azure Monitor
-- **Infrastructure Metrics**: CPU, memory, disk, network
-- **Alerts**: Automated alerts for anomalies and thresholds
-- **Log Analytics**: Centralized logging and querying
-- **Availability Tests**: Synthetic monitoring from multiple regions
+**Database Scaling:**
+- Read replicas for reporting queries
+- Table partitioning for large datasets
+- Index optimization
 
-#### Logging Strategy
-- **Structured Logging**: Serilog with JSON formatting
-- **Log Levels**: 
-  - Error: Exceptions and critical failures
-  - Warning: Potential issues, degraded performance
-  - Information: Key business events, API calls
-  - Debug: Detailed diagnostic information (dev only)
-- **Log Sinks**: 
-  - Console (development)
-  - Application Insights (production)
-  - Azure Blob Storage (long-term retention)
+### CI/CD Pipeline (Planned)
 
-### Scalability Considerations
+#### Build Pipeline
 
-#### Horizontal Scaling
-- **Stateless API**: All API instances are identical and stateless
-- **Session State**: Stored in Redis for sharing across instances
-- **File Uploads**: Direct to Azure Blob Storage via SAS tokens
-- **Background Jobs**: Azure Functions or Hangfire with distributed locking
+```
+┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+│ Git Push     │─────>│ Build & Test │─────>│  Publish     │
+│ to develop   │      │   (GitHub    │      │  Artifacts   │
+│              │      │   Actions)   │      │              │
+└──────────────┘      └──────────────┘      └──────────────┘
+```
 
-#### Performance Optimization
-- **CDN**: Azure CDN for static assets and frontend
-- **Response Compression**: Gzip compression for API responses
-- **Output Caching**: Cache frequent queries with short TTL
-- **Database Optimization**: 
-  - Query optimization with execution plans
-  - Index tuning based on query patterns
-  - Periodic statistics updates
+**Pipeline Steps:**
+1. Trigger on push to `develop` or `main`
+2. Restore NuGet packages
+3. Build solution
+4. Run unit tests
+5. Run integration tests
+6. Code coverage analysis
+7. Build Docker images
+8. Push images to registry
+9. Deploy to environment (staging/production)
 
-#### Cost Optimization
-- **Auto-scaling**: Scale down during off-peak hours
-- **Reserved Instances**: 1-3 year reservations for cost savings
-- **Spot Instances**: For non-critical background processing
-- **Tiered Storage**: Hot/Cool/Archive tiers based on access patterns
+**GitHub Actions Workflow:**
+```yaml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+```
+
+### Disaster Recovery
+
+**Recovery Time Objective (RTO):** 4 hours  
+**Recovery Point Objective (RPO):** 15 minutes
+
+**DR Procedures:**
+1. Restore database from latest backup
+2. Deploy API containers from last known good image
+3. Update DNS to point to DR environment
+4. Verify system functionality
+5. Notify users of service restoration
 
 ---
 
-## Related Documentation
+## Additional Architectural Considerations
 
-- [SCOPE-OF-WORK.md](./SCOPE-OF-WORK.md) - Project scope and feature breakdown
-- [DEVELOPER-ONBOARDING.md](./DEVELOPER-ONBOARDING.md) - Developer setup and workflow
-- [API-DOCUMENTATION.md](../API-DOCUMENTATION.md) - API endpoint documentation
-- [TESTING-GUIDE.md](../TESTING-GUIDE.md) - Testing strategies and examples
-- [DOCKER-DEPLOYMENT.md](../DOCKER-DEPLOYMENT.md) - Docker deployment guide
-- [FINANCE-MODULE-IMPLEMENTATION.md](../FINANCE-MODULE-IMPLEMENTATION.md) - Finance module details
-- [INVENTORY-MODULE-IMPLEMENTATION.md](../INVENTORY-MODULE-IMPLEMENTATION.md) - Inventory module details
+### Performance Optimization
+
+**Caching Strategy:**
+- **In-Memory Caching**: Frequently accessed reference data
+- **Distributed Cache (Redis)**: Session data, API responses (planned)
+- **Database Query Caching**: EF Core query cache
+
+**Database Optimization:**
+- Proper indexing on foreign keys and query columns
+- Avoid N+1 queries with `.Include()` and `.ThenInclude()`
+- Use stored procedures for complex queries
+- Query execution plan analysis
+
+**API Performance:**
+- Pagination for large datasets
+- Async/await for I/O operations
+- Compression for API responses
+- CDN for static assets (planned)
+
+### Scalability Patterns
+
+**Microservices (Future Consideration):**
+- Break modules into independent services
+- API Gateway pattern
+- Service-to-service communication (gRPC, REST)
+- Event-driven architecture with message bus
+
+**Database Sharding (Future):**
+- Shard by `CompanyId` for multi-tenant scaling
+- Separate databases per large tenant
+
+### Observability
+
+**Application Performance Monitoring (Planned):**
+- Application Insights or Datadog
+- Real-time performance metrics
+- Distributed tracing
+- Error tracking and alerting
+
+**Business Intelligence (Planned):**
+- Power BI integration
+- Real-time dashboards
+- Custom report builder
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** February 5, 2026  
-**Maintained By:** JERP Development Team
+## Conclusion
+
+JERP 3.0 is built on a solid, modern architecture that balances simplicity with scalability. The clean separation of concerns, use of industry-standard technologies, and focus on security and compliance make it suitable for cannabis businesses and general enterprises alike. The architecture supports future growth through horizontal scaling, modular design, and integration capabilities.
+
+For more information, see:
+- [SCOPE-OF-WORK.md](SCOPE-OF-WORK.md) - Detailed feature breakdown
+- [ONBOARDING.md](ONBOARDING.md) - Developer setup guide
+- [API-DOCUMENTATION.md](API-DOCUMENTATION.md) - API reference
