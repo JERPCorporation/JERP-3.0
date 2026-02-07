@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using JERP.Application.Services.Reports;
 
 namespace JERP.Api.Controllers;
 
@@ -9,55 +10,33 @@ namespace JERP.Api.Controllers;
 public class KPIController : ControllerBase
 {
     private readonly ILogger<KPIController> _logger;
+    private readonly IDashboardService _dashboardService;
 
-    public KPIController(ILogger<KPIController> logger)
+    public KPIController(
+        ILogger<KPIController> logger,
+        IDashboardService dashboardService)
     {
         _logger = logger;
+        _dashboardService = dashboardService;
     }
 
     [HttpGet]
-    public IActionResult GetKPIs()
+    public async Task<IActionResult> GetKPIs([FromQuery] Guid companyId, [FromQuery] DateTime? asOfDate = null)
     {
-        _logger.LogInformation("KPI data requested");
+        _logger.LogInformation("KPI data requested for company {CompanyId}", companyId);
         
-        return Ok(new
-        {
-            revenue = new
-            {
-                current = 150000.00,
-                previous = 120000.00,
-                percentageChange = 25.0
-            },
-            customers = new
-            {
-                total = 450,
-                new_this_month = 25,
-                percentageChange = 5.9
-            },
-            orders = new
-            {
-                total = 320,
-                pending = 15,
-                completed = 305
-            },
-            timestamp = DateTime.UtcNow,
-            message = "Mock KPI data - Implementation pending"
-        });
+        var kpis = await _dashboardService.GetDashboardKPIsAsync(companyId, asOfDate);
+        
+        return Ok(kpis);
     }
 
     [HttpGet("dashboard")]
-    public IActionResult GetDashboardKPIs()
+    public async Task<IActionResult> GetDashboardKPIs([FromQuery] Guid companyId, [FromQuery] DateTime? asOfDate = null)
     {
-        _logger.LogInformation("Dashboard KPI data requested");
+        _logger.LogInformation("Dashboard KPI data requested for company {CompanyId}", companyId);
         
-        return Ok(new
-        {
-            salesThisMonth = 45000.00,
-            ordersThisMonth = 89,
-            activeUsers = 12,
-            inventoryValue = 234500.00,
-            timestamp = DateTime.UtcNow,
-            message = "Mock dashboard data - Implementation pending"
-        });
+        var kpis = await _dashboardService.GetDashboardKPIsAsync(companyId, asOfDate);
+        
+        return Ok(kpis);
     }
 }
