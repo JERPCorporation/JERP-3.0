@@ -72,13 +72,13 @@ public partial class App : System.Windows.Application
         services.AddTransient<ComplianceViewModel>();
         
         // Finance ViewModels
-        services.AddTransient<FinanceViewModel>();
-        services.AddTransient<ChartOfAccountsViewModel>();
-        services.AddTransient<JournalEntriesViewModel>();
-        services.AddTransient<VendorsViewModel>();
-        services.AddTransient<BillsViewModel>();
-        services.AddTransient<CustomersViewModel>();
-        services.AddTransient<InvoicesViewModel>();
+        services.AddTransient<ViewModels.Finance.FinanceViewModel>();
+        services.AddTransient<ViewModels.Finance.ChartOfAccountsViewModel>();
+        services.AddTransient<ViewModels.Finance.JournalEntriesViewModel>();
+        services.AddTransient<ViewModels.Finance.VendorsViewModel>();
+        services.AddTransient<ViewModels.Finance.BillsViewModel>();
+        services.AddTransient<ViewModels.Finance.CustomersViewModel>();
+        services.AddTransient<ViewModels.Finance.InvoicesViewModel>();
 
         services.AddTransient<LoginWindow>();
         services.AddTransient<MainWindow>();

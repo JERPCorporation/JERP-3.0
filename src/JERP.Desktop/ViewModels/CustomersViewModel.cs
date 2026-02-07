@@ -289,7 +289,7 @@ public partial class CustomersViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            await _apiClient.PutAsync($"api/v1/finance/customers/{customer.Id}/toggle-status", new { });
+            await _apiClient.PutAsync<object>($"api/v1/finance/customers/{customer.Id}/toggle-status", new { });
             await LoadCustomerPortfolioAsync();
         }
         catch (Exception ex)

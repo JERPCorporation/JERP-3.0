@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JERP.Application.DTOs.Compliance;
+using JERP.Application.DTOs.Dashboard;
 using JERP.Application.DTOs.Statistics;
 using JERP.Desktop.Services;
 

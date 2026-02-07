@@ -11,6 +11,7 @@
  */
 
 using System.Collections.ObjectModel;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JERP.Application.DTOs.Finance;
@@ -186,7 +187,7 @@ public partial class ChartOfAccountsViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            await _apiClient.PutAsync($"api/v1/finance/accounts/{account.Id}/toggle-status", new { });
+            await _apiClient.PutAsync<object>($"api/v1/finance/accounts/{account.Id}/toggle-status", new { });
             await LoadChartOfAccountsAsync();
         }
         catch (Exception ex)
