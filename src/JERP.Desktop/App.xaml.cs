@@ -71,6 +71,9 @@ public partial class App : System.Windows.Application
         services.AddTransient<PayrollViewModel>();
         services.AddTransient<ComplianceViewModel>();
         
+        // AI Assistant
+        services.AddTransient<AIAssistantViewModel>();
+        
         // Finance ViewModels
         services.AddTransient<ViewModels.Finance.FinanceViewModel>();
         services.AddTransient<ViewModels.Finance.ChartOfAccountsViewModel>();
@@ -87,6 +90,9 @@ public partial class App : System.Windows.Application
         services.AddTransient<TimesheetsView>();
         services.AddTransient<PayrollView>();
         services.AddTransient<ComplianceView>();
+        
+        // AI Assistant
+        services.AddTransient<AIAssistantView>();
         
         // Finance Views
         services.AddTransient<FinanceView>();

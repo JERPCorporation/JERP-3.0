@@ -95,6 +95,14 @@ public partial class MainViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void ShowAIAssistant()
+    {
+        SelectedMenuItem = "AI Assistant";
+        var aiAssistantView = _serviceProvider.GetService(typeof(AIAssistantView)) as AIAssistantView;
+        CurrentView = aiAssistantView;
+    }
+
+    [RelayCommand]
     private async Task LogoutAsync()
     {
         await _authService.LogoutAsync();
