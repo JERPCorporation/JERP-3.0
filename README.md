@@ -180,7 +180,7 @@ February 2026:
 **For Development:**
 1. Never commit secrets to version control
 2. Use `.env` files for local configuration (not tracked in git)
-3. Follow secure coding guidelines in [ONBOARDING.md](ONBOARDING.md)
+3. Follow secure coding guidelines in [docs/ONBOARDING.md](docs/ONBOARDING.md)
 4. Run security scans before committing code
 
 ### 📋 Vulnerability Reporting
