@@ -1,6 +1,7 @@
 using JERP.Api.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
+using System.Text.Json;
 
 namespace JERP.Api.Tests.Controllers;
 
@@ -31,8 +32,9 @@ public class HealthControllerTests
 
         // Assert
         value.Should().NotBeNull();
-        var json = System.Text.Json.JsonSerializer.Serialize(value);
-        json.Should().Contain("\"status\":\"Healthy\"");
+        var json = JsonSerializer.Serialize(value);
+        var doc = JsonDocument.Parse(json);
+        doc.RootElement.GetProperty("status").GetString().Should().Be("Healthy");
     }
 
     [Fact]
@@ -47,8 +49,9 @@ public class HealthControllerTests
 
         // Assert
         value.Should().NotBeNull();
-        var json = System.Text.Json.JsonSerializer.Serialize(value);
-        json.Should().Contain("\"version\":\"1.0.0\"");
+        var json = JsonSerializer.Serialize(value);
+        var doc = JsonDocument.Parse(json);
+        doc.RootElement.GetProperty("version").GetString().Should().Be("1.0.0");
     }
 
     [Fact]
@@ -63,8 +66,9 @@ public class HealthControllerTests
 
         // Assert
         value.Should().NotBeNull();
-        var json = System.Text.Json.JsonSerializer.Serialize(value);
-        json.Should().Contain("\"developer\":\"Julio Cesar Mendez Tobar Jr.\"");
-        json.Should().Contain("\"contact\":\"ichbincesartobar@yahoo.com\"");
+        var json = JsonSerializer.Serialize(value);
+        var doc = JsonDocument.Parse(json);
+        doc.RootElement.GetProperty("developer").GetString().Should().Be("Julio Cesar Mendez Tobar Jr.");
+        doc.RootElement.GetProperty("contact").GetString().Should().Be("ichbincesartobar@yahoo.com");
     }
 }
