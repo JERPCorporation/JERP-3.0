@@ -7,13 +7,16 @@ public class ErrorHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ErrorHandlingMiddleware> _logger;
+    private readonly IWebHostEnvironment _environment;
 
     public ErrorHandlingMiddleware(
         RequestDelegate next,
-        ILogger<ErrorHandlingMiddleware> logger)
+        ILogger<ErrorHandlingMiddleware> logger,
+        IWebHostEnvironment environment)
     {
         _next = next;
         _logger = logger;
+        _environment = environment;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -29,13 +32,14 @@ public class ErrorHandlingMiddleware
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var code = HttpStatusCode.InternalServerError;
+        
         var result = JsonSerializer.Serialize(new
         {
             error = "An error occurred while processing your request",
-            message = exception.Message,
+            message = _environment.IsDevelopment() ? exception.Message : "Please contact support if the problem persists",
             timestamp = DateTime.UtcNow
         });
 

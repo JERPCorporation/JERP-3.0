@@ -57,17 +57,28 @@ public class ClaudeApiService
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
             var jsonResponse = JsonDocument.Parse(responseContent);
             
-            var content = jsonResponse.RootElement
-                .GetProperty("content")[0]
-                .GetProperty("text")
-                .GetString();
+            // Validate response structure
+            if (!jsonResponse.RootElement.TryGetProperty("content", out var contentArray) ||
+                contentArray.ValueKind != JsonValueKind.Array ||
+                contentArray.GetArrayLength() == 0)
+            {
+                _logger.LogError("Claude API returned unexpected response format");
+                return "Claude API returned an unexpected response format";
+            }
 
+            if (!contentArray[0].TryGetProperty("text", out var textElement))
+            {
+                _logger.LogError("Claude API response missing text property");
+                return "Claude API returned an unexpected response format";
+            }
+
+            var content = textElement.GetString();
             return content ?? "No response from Claude API";
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error calling Claude API");
-            return $"Error: {ex.Message}";
+            return "An error occurred while processing your request with the AI assistant";
         }
     }
 }
