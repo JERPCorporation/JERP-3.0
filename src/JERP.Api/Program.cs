@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Serilog;
 using Microsoft.OpenApi.Models;
+using JERP.Api.Services;
+using JERP.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,6 +101,9 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+// HttpClient for ClaudeApiService
+builder.Services.AddHttpClient<ClaudeApiService>();
+
 // Application Services
 builder.Services.AddApplicationServices();
 
@@ -128,6 +133,9 @@ builder.Services.AddHealthChecks()
 
 var app = builder.Build();
 
+// Error handling middleware
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
@@ -151,6 +159,14 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHealthChecks("/health");
+
+app.MapGet("/", () => Results.Json(new 
+{ 
+    name = "JERP 3.0 API",
+    version = "1.0.0",
+    developer = "Julio Cesar Mendez Tobar Jr.",
+    contact = "ichbincesartobar@yahoo.com"
+}));
 
 try
 {
