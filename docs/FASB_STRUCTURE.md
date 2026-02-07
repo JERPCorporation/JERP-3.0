@@ -491,7 +491,7 @@ The old `AccountSubType` enum has been completely removed. All accounts now requ
 For questions about FASB ASC classification:
 - Consult the official FASB website: https://asc.fasb.org
 - Work with your CPA for proper account classification
-- Contact JERP support: support@jerp.io
+- Contact JERP support: ichbincesartobar@yahoo.com
 
 ---
 

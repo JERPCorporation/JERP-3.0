@@ -432,7 +432,7 @@ cp src/JERP.Application/Data/Templates/*.json /path/to/app/Data/Templates/
 ## Support
 
 For questions or issues with the Account Template System:
-- Email: support@jerp.io
+- Email: ichbincesartobar@yahoo.com
 - Documentation: https://docs.jerp.io
 - GitHub Issues: https://github.com/ninoyerbas/JERP-3.0/issues
 

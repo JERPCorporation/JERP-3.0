@@ -662,7 +662,7 @@ To migrate existing finance pages from mock data:
 For issues or questions:
 - Check this README
 - Review API documentation in backend `Controllers/`
-- Contact: licensing@jerp.io
+- Contact: ichbincesartobar@yahoo.com
 
 ---
 
