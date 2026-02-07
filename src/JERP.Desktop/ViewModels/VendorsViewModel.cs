@@ -229,7 +229,7 @@ public partial class VendorsViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            await _apiClient.PutAsync($"api/v1/vendors/{vendor.Id}/toggle-status", new { });
+            await _apiClient.PutAsync<object>($"api/v1/vendors/{vendor.Id}/toggle-status", new { });
             await LoadVendorDirectoryAsync();
         }
         catch (Exception ex)

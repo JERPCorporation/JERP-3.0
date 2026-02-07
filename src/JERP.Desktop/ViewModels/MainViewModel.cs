@@ -102,6 +102,6 @@ public partial class MainViewModel : ViewModelBase
         var loginWindow = _serviceProvider.GetService(typeof(LoginWindow)) as LoginWindow;
         loginWindow?.Show();
         
-        Application.Current.Windows.OfType<MainWindow>().FirstOrDefault()?.Close();
+        System.Windows.Application.Current.Windows.OfType<MainWindow>().FirstOrDefault()?.Close();
     }
 }

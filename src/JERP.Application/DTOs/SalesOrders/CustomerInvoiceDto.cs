@@ -92,7 +92,7 @@ public class CustomerInvoiceDto
     /// <summary>
     /// Formatted subtotal for display
     /// </summary>
-    public string SubTotalDisplay => SubTotal.ToString("C2");
+    public string SubTotalDisplay => Subtotal.ToString("C2");
     
     /// <summary>
     /// Formatted tax amount for display
