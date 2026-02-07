@@ -48,6 +48,11 @@ public class UserDto
     public bool IsActive { get; set; }
 
     /// <summary>
+    /// Company identifier that the user belongs to
+    /// </summary>
+    public Guid CompanyId { get; set; }
+
+    /// <summary>
     /// List of role names assigned to the user
     /// </summary>
     public List<string> Roles { get; set; } = new();
