@@ -57,7 +57,7 @@ public partial class App : System.Windows.Application
 
         services.AddHttpClient<IApiClient, ApiClient>(client =>
         {
-            var baseUrl = Configuration["Api:BaseUrl"] ?? "http://localhost:5000";
+            var baseUrl = Configuration["Api:BaseUrl"] ?? "https://localhost:5000";
             client.BaseAddress = new Uri(baseUrl);
             client.Timeout = TimeSpan.FromSeconds(
                 int.Parse(Configuration["Api:TimeoutSeconds"] ?? "30"));
