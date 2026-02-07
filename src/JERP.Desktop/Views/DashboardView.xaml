@@ -48,7 +48,7 @@
             </Border>
 
             <!-- Statistics Cards -->
-            <UniformGrid Grid.Row="2" Columns="4" Rows="2" Margin="0,0,0,20">
+            <UniformGrid Grid.Row="2" Columns="4" Rows="3" Margin="0,0,0,20">
                 <!-- Critical Violations -->
                 <Border Background="#8B0000" Padding="15" Margin="0,0,5,5" CornerRadius="8">
                     <StackPanel>
@@ -91,7 +91,7 @@
 
                 <!-- Active Employees -->
                 <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" 
-                        Padding="15" Margin="0,5,5,0" CornerRadius="8">
+                        Padding="15" Margin="0,5,5,5" CornerRadius="8">
                     <StackPanel>
                         <TextBlock Text="Active Employees" FontSize="14" Foreground="White" Opacity="0.9"/>
                         <TextBlock Text="{Binding ActiveEmployeeCount}" FontSize="36" 
@@ -101,10 +101,55 @@
 
                 <!-- Pending Timesheets -->
                 <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" 
-                        Padding="15" Margin="5,5,5,0" CornerRadius="8">
+                        Padding="15" Margin="5,5,5,5" CornerRadius="8">
                     <StackPanel>
                         <TextBlock Text="Pending Timesheets" FontSize="14" Foreground="White" Opacity="0.9"/>
                         <TextBlock Text="{Binding PendingTimesheetCount}" FontSize="36" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Revenue MTD -->
+                <Border Background="#228B22" Padding="15" Margin="5,5,5,5" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Revenue MTD" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding TotalRevenueMTD, StringFormat=C}" FontSize="28" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Revenue YTD -->
+                <Border Background="#006400" Padding="15" Margin="5,5,0,5" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Revenue YTD" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding TotalRevenueYTD, StringFormat=C}" FontSize="28" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Cash Balance -->
+                <Border Background="#2E86C1" Padding="15" Margin="0,5,5,0" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Cash Balance" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding CashBalance, StringFormat=C}" FontSize="28" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Payroll Cost MTD -->
+                <Border Background="#8E44AD" Padding="15" Margin="5,5,5,0" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Payroll MTD" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding TotalPayrollCostMTD, StringFormat=C}" FontSize="28" 
+                                   FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Employee Count -->
+                <Border Background="#2C3E50" Padding="15" Margin="5,5,0,0" CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Total Employees" FontSize="14" Foreground="White" Opacity="0.9"/>
+                        <TextBlock Text="{Binding EmployeeCount}" FontSize="36" 
                                    FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
                     </StackPanel>
                 </Border>

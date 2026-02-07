@@ -15,6 +15,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JERP.Application.DTOs.Compliance;
 using JERP.Application.DTOs.Dashboard;
+using JERP.Application.DTOs.Reports;
 using JERP.Application.DTOs.Statistics;
 using JERP.Desktop.Services;
 
@@ -46,6 +47,21 @@ public partial class DashboardViewModel : ViewModelBase
     private int _pendingTimesheetCount;
 
     [ObservableProperty]
+    private decimal _totalRevenueMTD;
+
+    [ObservableProperty]
+    private decimal _totalRevenueYTD;
+
+    [ObservableProperty]
+    private decimal _cashBalance;
+
+    [ObservableProperty]
+    private decimal _totalPayrollCostMTD;
+
+    [ObservableProperty]
+    private int _employeeCount;
+
+    [ObservableProperty]
     private ObservableCollection<ComplianceViolationDto> _recentViolations = new();
 
     public DashboardViewModel(IApiClient apiClient)
@@ -66,8 +82,9 @@ public partial class DashboardViewModel : ViewModelBase
         {
             var overviewTask = _apiClient.GetAsync<DashboardOverviewDto>("api/v1/dashboard/overview");
             var violationsTask = _apiClient.GetAsync<List<ComplianceViolationDto>>("api/v1/compliance/violations/active");
+            var kpisTask = _apiClient.GetAsync<DashboardKPIDto>("api/v1/dashboard/kpis?companyId=" + Guid.Empty);
 
-            await Task.WhenAll(overviewTask, violationsTask);
+            await Task.WhenAll(overviewTask, violationsTask, kpisTask);
 
             var overview = await overviewTask;
             if (overview != null)
@@ -92,6 +109,16 @@ public partial class DashboardViewModel : ViewModelBase
                 {
                     RecentViolations.Add(violation);
                 }
+            }
+
+            var kpis = await kpisTask;
+            if (kpis != null)
+            {
+                TotalRevenueMTD = kpis.TotalRevenueMTD;
+                TotalRevenueYTD = kpis.TotalRevenueYTD;
+                CashBalance = kpis.CashBalance;
+                TotalPayrollCostMTD = kpis.TotalPayrollCostMTD;
+                EmployeeCount = kpis.EmployeeCount;
             }
         }
         catch (Exception ex)
