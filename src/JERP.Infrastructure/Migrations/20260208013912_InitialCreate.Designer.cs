@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JERP.Infrastructure.Migrations
 {
     [DbContext(typeof(JerpDbContext))]
-    [Migration("20260205014727_ReplaceCOAWithFASBStructure")]
-    partial class ReplaceCOAWithFASBStructure
+    [Migration("20260208013912_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -585,6 +585,7 @@ namespace JERP.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("BillId")
@@ -608,9 +609,11 @@ namespace JERP.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)");
 
                     b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -618,9 +621,11 @@ namespace JERP.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("AccountId")
+                        .HasDatabaseName("IX_BillLineItems_AccountId");
 
-                    b.HasIndex("BillId");
+                    b.HasIndex("BillId")
+                        .HasDatabaseName("IX_BillLineItems_BillId");
 
                     b.ToTable("BillLineItems", "dbo");
                 });
@@ -632,6 +637,7 @@ namespace JERP.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("BillId")
@@ -677,11 +683,20 @@ namespace JERP.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BillId");
+                    b.HasIndex("BillId")
+                        .HasDatabaseName("IX_BillPayments_BillId");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyId")
+                        .HasDatabaseName("IX_BillPayments_CompanyId");
 
                     b.HasIndex("JournalEntryId");
+
+                    b.HasIndex("PaymentDate")
+                        .HasDatabaseName("IX_BillPayments_PaymentDate");
+
+                    b.HasIndex("CompanyId", "PaymentNumber")
+                        .IsUnique()
+                        .HasDatabaseName("IX_BillPayments_CompanyId_PaymentNumber");
 
                     b.ToTable("BillPayments", "dbo");
                 });
@@ -802,6 +817,7 @@ namespace JERP.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("AmountPaid")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("CompanyId")
@@ -847,12 +863,15 @@ namespace JERP.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Subtotal")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -860,11 +879,20 @@ namespace JERP.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyId")
+                        .HasDatabaseName("IX_CustomerInvoices_CompanyId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("IX_CustomerInvoices_CustomerId");
+
+                    b.HasIndex("DueDate")
+                        .HasDatabaseName("IX_CustomerInvoices_DueDate");
 
                     b.HasIndex("JournalEntryId");
+
+                    b.HasIndex("CompanyId", "InvoiceNumber")
+                        .IsUnique()
+                        .HasDatabaseName("IX_CustomerInvoices_CompanyId_InvoiceNumber");
 
                     b.ToTable("CustomerInvoices", "dbo");
                 });
@@ -930,4215 +958,4215 @@ namespace JERP.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c7a33ad7-e706-4213-a1cc-959023f4fcc9"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2496),
-                            FASBTopicId = new Guid("bd35979f-8bc1-4b02-83c2-006fe0ef8a2e"),
+                            Id = new Guid("da214900-aaf9-4b1c-a248-67499a294884"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2737),
+                            FASBTopicId = new Guid("9de4b167-0cfa-4694-8933-a6b6cb53e4b6"),
                             FullReference = "ASC 205-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2496)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2737)
                         },
                         new
                         {
-                            Id = new Guid("f8d3b8b9-d448-4527-8cca-d01b5bc06005"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2496),
-                            FASBTopicId = new Guid("bd35979f-8bc1-4b02-83c2-006fe0ef8a2e"),
+                            Id = new Guid("00b53c84-c987-44bf-ac81-f581678ca406"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2737),
+                            FASBTopicId = new Guid("9de4b167-0cfa-4694-8933-a6b6cb53e4b6"),
                             FullReference = "ASC 205-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2496)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2737)
                         },
                         new
                         {
-                            Id = new Guid("d9c2fd7f-57eb-4ad7-9dee-75e8bb299a42"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2496),
-                            FASBTopicId = new Guid("bd35979f-8bc1-4b02-83c2-006fe0ef8a2e"),
+                            Id = new Guid("a5dfbc31-837d-4cfb-8b61-6cd4cad4125a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2737),
+                            FASBTopicId = new Guid("9de4b167-0cfa-4694-8933-a6b6cb53e4b6"),
                             FullReference = "ASC 205-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2496)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2737)
                         },
                         new
                         {
-                            Id = new Guid("50c96d93-22eb-4068-857b-6f3e24e1f75a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2595),
-                            FASBTopicId = new Guid("968d2799-9a5e-459d-a781-762af032cba2"),
+                            Id = new Guid("07ffa2dd-8790-4e4d-ab97-d20c5103e2a2"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2851),
+                            FASBTopicId = new Guid("1cfb178a-1edc-4c5f-aaee-26e8cc8ab752"),
                             FullReference = "ASC 210-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2595)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2851)
                         },
                         new
                         {
-                            Id = new Guid("b0d50f0f-e3d6-40ff-94de-8b7c6fc9695b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2595),
-                            FASBTopicId = new Guid("968d2799-9a5e-459d-a781-762af032cba2"),
+                            Id = new Guid("d40de4a3-e885-4353-bce3-44b5256d6dda"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2851),
+                            FASBTopicId = new Guid("1cfb178a-1edc-4c5f-aaee-26e8cc8ab752"),
                             FullReference = "ASC 210-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2595)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2851)
                         },
                         new
                         {
-                            Id = new Guid("75065260-728d-4db4-b420-4f6e0b5b048c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2642),
-                            FASBTopicId = new Guid("fd700a75-fef2-4700-8dc6-4215819155dd"),
+                            Id = new Guid("b8b6fef5-8420-4a9b-bab9-12682c3ab011"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2911),
+                            FASBTopicId = new Guid("f4e6d3e7-77d5-4e6b-ae6f-d88ccdc94e8f"),
                             FullReference = "ASC 220-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2642)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2911)
                         },
                         new
                         {
-                            Id = new Guid("f9964295-7507-4b2e-ac53-7d8698e35996"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2642),
-                            FASBTopicId = new Guid("fd700a75-fef2-4700-8dc6-4215819155dd"),
+                            Id = new Guid("10ead3b3-5b2f-417e-b72f-51694dc42794"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2911),
+                            FASBTopicId = new Guid("f4e6d3e7-77d5-4e6b-ae6f-d88ccdc94e8f"),
                             FullReference = "ASC 220-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2642)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2911)
                         },
                         new
                         {
-                            Id = new Guid("01cfd371-a7ee-4281-87ff-3f68b2f9c41d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2687),
-                            FASBTopicId = new Guid("4ff63ca9-8e4f-454a-9df9-0d6ca1a213f7"),
+                            Id = new Guid("909373a5-ba86-4924-8eb4-3abb6a6d89d4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2959),
+                            FASBTopicId = new Guid("b0aed4af-8064-42ab-a79a-64590c07fb08"),
                             FullReference = "ASC 225-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2687)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2959)
                         },
                         new
                         {
-                            Id = new Guid("ca2ccd56-ce08-4c71-b4ef-b38de616ff28"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2687),
-                            FASBTopicId = new Guid("4ff63ca9-8e4f-454a-9df9-0d6ca1a213f7"),
+                            Id = new Guid("5e0e7132-d3c3-43f8-a68a-ce4dd854d247"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2959),
+                            FASBTopicId = new Guid("b0aed4af-8064-42ab-a79a-64590c07fb08"),
                             FullReference = "ASC 225-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2687)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2959)
                         },
                         new
                         {
-                            Id = new Guid("b268f77c-4f5f-4e09-bda3-7fe1f1d1696b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2738),
-                            FASBTopicId = new Guid("bebfc796-5a16-4902-8d02-39a3152984d6"),
+                            Id = new Guid("d02c549e-ffe4-40b1-a3ca-9dc77a57680e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3013),
+                            FASBTopicId = new Guid("64347846-2d4a-4f8f-836e-7e4aa5ebbc13"),
                             FullReference = "ASC 230-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3013)
                         },
                         new
                         {
-                            Id = new Guid("87842a1e-1daf-4ef0-8fe0-0cca273e076d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2774),
-                            FASBTopicId = new Guid("8ff41b56-db70-4785-9b6a-72731c7aabab"),
+                            Id = new Guid("222da3d8-2047-4c15-b0b6-2c9ca9ca7d00"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3054),
+                            FASBTopicId = new Guid("d2a4cc6b-6b92-4157-9f69-eabcd79b3238"),
                             FullReference = "ASC 235-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2774)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3054)
                         },
                         new
                         {
-                            Id = new Guid("bb282b37-5f9e-4636-a0e7-f3951f848466"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2814),
-                            FASBTopicId = new Guid("6e6d7609-fffc-45ca-b9f6-0ec66d3316a1"),
+                            Id = new Guid("a6f7fbbb-1452-4a13-a571-156fa5760715"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3086),
+                            FASBTopicId = new Guid("26012a5a-e9fb-46ae-88e9-fe2263a84756"),
                             FullReference = "ASC 250-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2814)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3086)
                         },
                         new
                         {
-                            Id = new Guid("30e3a467-2aa6-4e6c-99aa-5a49939b401a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2843),
-                            FASBTopicId = new Guid("73bdd1e8-dcf8-482a-8ae4-ef2b1673c8a2"),
+                            Id = new Guid("f2a2ac24-04d1-4e98-bdd1-8bfe954dc7da"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3118),
+                            FASBTopicId = new Guid("eb343ca1-3615-407c-8661-0adcf1957c03"),
                             FullReference = "ASC 260-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2843)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3118)
                         },
                         new
                         {
-                            Id = new Guid("3510bc13-9338-45d4-b7ce-93f092eed3cf"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2872),
-                            FASBTopicId = new Guid("20b16cc7-30b3-4e6b-b7bf-bb551e2b0b35"),
+                            Id = new Guid("a516bfad-ca7f-43de-af22-9e0b9aed12c5"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3150),
+                            FASBTopicId = new Guid("3f2d3526-cb74-4fbb-aaa8-e04944684c96"),
                             FullReference = "ASC 270-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2872)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3150)
                         },
                         new
                         {
-                            Id = new Guid("8f4ec71e-167f-4dd5-a56d-c8ef4e731f7f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2902),
-                            FASBTopicId = new Guid("4e7dfdfe-0ba5-4a5b-9902-1e26a45abe1b"),
+                            Id = new Guid("3c8c3f89-f56e-49d7-8cb1-1855e3540576"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3183),
+                            FASBTopicId = new Guid("dad8f023-e82d-4f14-a3e4-51b77d6fa62d"),
                             FullReference = "ASC 272-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2902)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3183)
                         },
                         new
                         {
-                            Id = new Guid("91b157a7-0de4-46c0-b2d0-e490acbad717"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2933),
-                            FASBTopicId = new Guid("a980c07a-27d2-42fb-a3a9-853b8e2858dd"),
+                            Id = new Guid("013cbbc3-815c-45d4-b4a7-dc26f1da17a5"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3216),
+                            FASBTopicId = new Guid("14971929-85b4-434c-b13c-e83f97e4950f"),
                             FullReference = "ASC 273-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2933)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3216)
                         },
                         new
                         {
-                            Id = new Guid("f877d306-873f-4add-9b07-b65a8ad5d5c8"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2961),
-                            FASBTopicId = new Guid("8c8da832-9a43-429a-93f4-865a3f5c3a8b"),
+                            Id = new Guid("4cce0a3a-b2d1-4028-bd25-fedd16892b85"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3247),
+                            FASBTopicId = new Guid("74547aca-c44a-4f42-aaba-c0c10397db51"),
                             FullReference = "ASC 274-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2961)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3247)
                         },
                         new
                         {
-                            Id = new Guid("a82e25cb-c9d5-4a84-9dc5-8e5165dd139d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2991),
-                            FASBTopicId = new Guid("508a714a-ca3b-4acc-9e44-97857ef949fa"),
+                            Id = new Guid("f4738d12-ad24-4528-a246-b2fa8202f820"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3280),
+                            FASBTopicId = new Guid("ba654bf9-01d6-451e-be3b-971df5fb52cd"),
                             FullReference = "ASC 280-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2991)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3280)
                         },
                         new
                         {
-                            Id = new Guid("383eba15-e13f-4fe6-a49a-0d1b85f84e91"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3022),
-                            FASBTopicId = new Guid("6c5bd89e-91bb-4057-bef0-5f6589b0a629"),
+                            Id = new Guid("0e5d5fe8-3974-4884-a496-3d1f3b7f9098"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3312),
+                            FASBTopicId = new Guid("bca62dfe-e7ae-425d-a504-778623129c18"),
                             FullReference = "ASC 305-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3022)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3312)
                         },
                         new
                         {
-                            Id = new Guid("d114abf2-a0d6-4ca8-99e4-6a8ce6fee0a7"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3053),
-                            FASBTopicId = new Guid("5d6fd464-38a4-47db-a2b0-d43c3f2fa319"),
+                            Id = new Guid("b54c514e-64ae-4dd4-b855-373347c88ea7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3344),
+                            FASBTopicId = new Guid("5b03f40f-6175-4de1-aba9-980588495b4e"),
                             FullReference = "ASC 310-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3053)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3344)
                         },
                         new
                         {
-                            Id = new Guid("e1623c5e-f5f2-40ae-a515-94db29591907"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3053),
-                            FASBTopicId = new Guid("5d6fd464-38a4-47db-a2b0-d43c3f2fa319"),
+                            Id = new Guid("265388e0-849f-43f8-98b8-d69d58dbd242"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3344),
+                            FASBTopicId = new Guid("5b03f40f-6175-4de1-aba9-980588495b4e"),
                             FullReference = "ASC 310-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3053)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3344)
                         },
                         new
                         {
-                            Id = new Guid("d4785396-d91a-42c0-a818-2ec0a97a6b88"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3053),
-                            FASBTopicId = new Guid("5d6fd464-38a4-47db-a2b0-d43c3f2fa319"),
+                            Id = new Guid("68b0c9e4-b511-462a-85e7-c1ab467e2287"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3344),
+                            FASBTopicId = new Guid("5b03f40f-6175-4de1-aba9-980588495b4e"),
                             FullReference = "ASC 310-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3053)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3344)
                         },
                         new
                         {
-                            Id = new Guid("115ddac9-69f8-4710-a1fd-54771966f318"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3112),
-                            FASBTopicId = new Guid("de8c2abc-63d9-4ced-aa81-8ae605379d73"),
+                            Id = new Guid("6347510b-6be1-4d94-991e-c5f2e7cfc661"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3407),
+                            FASBTopicId = new Guid("53c01ca9-976f-4519-a1e2-e0d1d82852d0"),
                             FullReference = "ASC 320-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3112)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3407)
                         },
                         new
                         {
-                            Id = new Guid("bb72f98b-d392-4400-ac8e-b8c2d4b0229a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3141),
-                            FASBTopicId = new Guid("eea6366a-82a7-4672-8f59-fcbcf64abdfd"),
+                            Id = new Guid("6746ef16-2e1d-4548-9a83-d4b463298a2c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3442),
+                            FASBTopicId = new Guid("458d7d23-2fb6-4f50-9924-3a93cc4f3b4a"),
                             FullReference = "ASC 321-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3141)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3442)
                         },
                         new
                         {
-                            Id = new Guid("9df2291a-4475-460e-be1a-0bc8fe0778f7"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3171),
-                            FASBTopicId = new Guid("a7a4e2cd-9c72-4531-a004-bc716420cbc4"),
+                            Id = new Guid("8ea3f5cb-032f-4839-b515-a053bc9a7d79"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3476),
+                            FASBTopicId = new Guid("893deb2d-9c5c-4e6e-98de-5c261c02109f"),
                             FullReference = "ASC 323-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3476)
                         },
                         new
                         {
-                            Id = new Guid("63c30b3f-0928-41ce-8391-037655384e7b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3171),
-                            FASBTopicId = new Guid("a7a4e2cd-9c72-4531-a004-bc716420cbc4"),
+                            Id = new Guid("366ff5f9-ead7-411c-a8a1-d149f89ba64e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3476),
+                            FASBTopicId = new Guid("893deb2d-9c5c-4e6e-98de-5c261c02109f"),
                             FullReference = "ASC 323-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3476)
                         },
                         new
                         {
-                            Id = new Guid("f89975ce-be91-4330-b01d-8b01a3bc29f8"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215),
-                            FASBTopicId = new Guid("2051ef90-2112-4e62-bbd7-fed074247313"),
+                            Id = new Guid("37ed7f2b-82c8-46b3-a83a-38764fedf3fc"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523),
+                            FASBTopicId = new Guid("5d8a495c-89c5-4d74-a69f-0e66b4d18374"),
                             FullReference = "ASC 325-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523)
                         },
                         new
                         {
-                            Id = new Guid("9b9bebd3-f38f-43a7-b2a9-731364a212ba"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215),
-                            FASBTopicId = new Guid("2051ef90-2112-4e62-bbd7-fed074247313"),
+                            Id = new Guid("8fdab407-6f84-41c3-8037-75903aac4c71"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523),
+                            FASBTopicId = new Guid("5d8a495c-89c5-4d74-a69f-0e66b4d18374"),
                             FullReference = "ASC 325-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523)
                         },
                         new
                         {
-                            Id = new Guid("5725ca32-f32e-4506-ac2a-afe55645f12d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215),
-                            FASBTopicId = new Guid("2051ef90-2112-4e62-bbd7-fed074247313"),
+                            Id = new Guid("9f779561-00fa-43cf-9170-e3897f50cac5"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523),
+                            FASBTopicId = new Guid("5d8a495c-89c5-4d74-a69f-0e66b4d18374"),
                             FullReference = "ASC 325-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523)
                         },
                         new
                         {
-                            Id = new Guid("36d79ca7-9c8c-46b5-a9e1-c8d2f65ef4ac"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215),
-                            FASBTopicId = new Guid("2051ef90-2112-4e62-bbd7-fed074247313"),
+                            Id = new Guid("2cca34ac-964e-4cd4-8e0e-721d74cd0263"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523),
+                            FASBTopicId = new Guid("5d8a495c-89c5-4d74-a69f-0e66b4d18374"),
                             FullReference = "ASC 325-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523)
                         },
                         new
                         {
-                            Id = new Guid("5c4ff64e-d71d-4965-a438-667142ff63e6"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3299),
-                            FASBTopicId = new Guid("7a99ca57-ff36-4cd5-9458-58729748dea4"),
+                            Id = new Guid("70f93321-5b98-43c0-afa2-ac99f6e5b520"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3606),
+                            FASBTopicId = new Guid("480a7ebf-6cd4-4b31-8986-009e191c82b2"),
                             FullReference = "ASC 326-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3299)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3606)
                         },
                         new
                         {
-                            Id = new Guid("b930ef8e-9a68-4edd-bcd4-c3df358d6c27"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3299),
-                            FASBTopicId = new Guid("7a99ca57-ff36-4cd5-9458-58729748dea4"),
+                            Id = new Guid("d9a00f84-ac03-4d89-b48a-0883542f612d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3606),
+                            FASBTopicId = new Guid("480a7ebf-6cd4-4b31-8986-009e191c82b2"),
                             FullReference = "ASC 326-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3299)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3606)
                         },
                         new
                         {
-                            Id = new Guid("40cdb484-e0f9-4cf5-a569-3e3cf4228d00"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3299),
-                            FASBTopicId = new Guid("7a99ca57-ff36-4cd5-9458-58729748dea4"),
+                            Id = new Guid("85aed8f0-da72-47e0-8c1b-bee242dd97db"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3606),
+                            FASBTopicId = new Guid("480a7ebf-6cd4-4b31-8986-009e191c82b2"),
                             FullReference = "ASC 326-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3299)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3606)
                         },
                         new
                         {
-                            Id = new Guid("f5c6f7a3-13ea-47db-bb50-981d36bd3a77"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3358),
-                            FASBTopicId = new Guid("0fb93137-ae54-4758-9933-881c13b20809"),
+                            Id = new Guid("7072a768-b38e-459a-8875-918da276f0c8"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3671),
+                            FASBTopicId = new Guid("1fce2e37-c411-41ed-86eb-5fd96b14e9e0"),
                             FullReference = "ASC 330-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3358)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3671)
                         },
                         new
                         {
-                            Id = new Guid("2e5e3bd9-3192-4128-962b-b96e109bc3cd"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387),
-                            FASBTopicId = new Guid("b4b4b69b-223b-41f2-b296-517c26c1c1bc"),
+                            Id = new Guid("7606eb33-1992-4e32-b93a-ee4cd16bfb54"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703),
+                            FASBTopicId = new Guid("c755c00c-8bea-49e8-95f6-8da115ebc267"),
                             FullReference = "ASC 340-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703)
                         },
                         new
                         {
-                            Id = new Guid("d3952621-60d4-4533-b418-c09324304328"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387),
-                            FASBTopicId = new Guid("b4b4b69b-223b-41f2-b296-517c26c1c1bc"),
+                            Id = new Guid("21af1392-3302-4b27-b26d-1a73b670371b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703),
+                            FASBTopicId = new Guid("c755c00c-8bea-49e8-95f6-8da115ebc267"),
                             FullReference = "ASC 340-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703)
                         },
                         new
                         {
-                            Id = new Guid("8f7d015f-97bb-48ae-b051-f21d34037e44"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387),
-                            FASBTopicId = new Guid("b4b4b69b-223b-41f2-b296-517c26c1c1bc"),
+                            Id = new Guid("5dcfeab1-e6c2-4e1d-b4e3-27e3bfe505ed"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703),
+                            FASBTopicId = new Guid("c755c00c-8bea-49e8-95f6-8da115ebc267"),
                             FullReference = "ASC 340-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703)
                         },
                         new
                         {
-                            Id = new Guid("006afc48-bb4d-4daa-a06a-efc1ffd52b42"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387),
-                            FASBTopicId = new Guid("b4b4b69b-223b-41f2-b296-517c26c1c1bc"),
+                            Id = new Guid("dac3a967-393a-41d8-a21c-971899d2a1e7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703),
+                            FASBTopicId = new Guid("c755c00c-8bea-49e8-95f6-8da115ebc267"),
                             FullReference = "ASC 340-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703)
                         },
                         new
                         {
-                            Id = new Guid("b01090ed-771e-4111-8ec1-63ff7e9935bf"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460),
-                            FASBTopicId = new Guid("3f5b3a32-9bd0-4245-8c92-88410cc3b83a"),
+                            Id = new Guid("297a0bd8-8ca0-457e-81a9-cfc67b55f00c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783),
+                            FASBTopicId = new Guid("e5d42e70-8a50-428b-97a5-7ceee33e96cb"),
                             FullReference = "ASC 350-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783)
                         },
                         new
                         {
-                            Id = new Guid("5695e75b-560c-4135-be53-4ab2fcf52a6b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460),
-                            FASBTopicId = new Guid("3f5b3a32-9bd0-4245-8c92-88410cc3b83a"),
+                            Id = new Guid("9b92ff60-a6d0-42ba-97db-441b58360bcf"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783),
+                            FASBTopicId = new Guid("e5d42e70-8a50-428b-97a5-7ceee33e96cb"),
                             FullReference = "ASC 350-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783)
                         },
                         new
                         {
-                            Id = new Guid("5a864278-51fc-45bc-bdbd-0c879c429154"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460),
-                            FASBTopicId = new Guid("3f5b3a32-9bd0-4245-8c92-88410cc3b83a"),
+                            Id = new Guid("74cf9159-f34b-4511-8db4-2fdbbc1123ae"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783),
+                            FASBTopicId = new Guid("e5d42e70-8a50-428b-97a5-7ceee33e96cb"),
                             FullReference = "ASC 350-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783)
                         },
                         new
                         {
-                            Id = new Guid("1f30ec5d-24b8-4de3-bad0-5c85ed843671"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460),
-                            FASBTopicId = new Guid("3f5b3a32-9bd0-4245-8c92-88410cc3b83a"),
+                            Id = new Guid("88a60a94-32b5-4727-846c-921c9f093796"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783),
+                            FASBTopicId = new Guid("e5d42e70-8a50-428b-97a5-7ceee33e96cb"),
                             FullReference = "ASC 350-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783)
                         },
                         new
                         {
-                            Id = new Guid("c4462925-b821-4e10-981b-9062597e4e67"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460),
-                            FASBTopicId = new Guid("3f5b3a32-9bd0-4245-8c92-88410cc3b83a"),
+                            Id = new Guid("da1afd4c-6c56-4a80-a7f4-5a215dc11337"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783),
+                            FASBTopicId = new Guid("e5d42e70-8a50-428b-97a5-7ceee33e96cb"),
                             FullReference = "ASC 350-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783)
                         },
                         new
                         {
-                            Id = new Guid("8f4bfc63-b48e-417d-b2f3-54c6d5f8900a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460),
-                            FASBTopicId = new Guid("3f5b3a32-9bd0-4245-8c92-88410cc3b83a"),
+                            Id = new Guid("b62bec2c-5279-4827-9a7d-a937f37aeb7d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783),
+                            FASBTopicId = new Guid("e5d42e70-8a50-428b-97a5-7ceee33e96cb"),
                             FullReference = "ASC 350-60",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "60",
                             SubtopicName = "Relationships",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783)
                         },
                         new
                         {
-                            Id = new Guid("3ae23533-2c0b-4ca7-8e58-4ec845a3454c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3562),
-                            FASBTopicId = new Guid("e931f435-ae90-40c4-b044-c3f2c58646e5"),
+                            Id = new Guid("d8d05df4-6297-454f-a3af-c9f14ba8e3d3"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3894),
+                            FASBTopicId = new Guid("e763fa56-9d5b-4479-b260-77465d3c4e59"),
                             FullReference = "ASC 360-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3562)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3894)
                         },
                         new
                         {
-                            Id = new Guid("11007b8c-cb60-4a1b-8d23-c0a5ca690c75"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3562),
-                            FASBTopicId = new Guid("e931f435-ae90-40c4-b044-c3f2c58646e5"),
+                            Id = new Guid("2805c66c-5a62-47d5-a50c-f6324de02e0e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3894),
+                            FASBTopicId = new Guid("e763fa56-9d5b-4479-b260-77465d3c4e59"),
                             FullReference = "ASC 360-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3562)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3894)
                         },
                         new
                         {
-                            Id = new Guid("b937dc32-669d-44b3-a563-3e4409872e95"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607),
-                            FASBTopicId = new Guid("13f1aa2d-9cab-4e47-b016-ebee1899826d"),
+                            Id = new Guid("c2ba7c4a-45fb-4776-9653-31e0744772c1"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942),
+                            FASBTopicId = new Guid("f9e27196-8bd4-4b03-8627-ee6862ee919a"),
                             FullReference = "ASC 405-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942)
                         },
                         new
                         {
-                            Id = new Guid("9879f86e-c5e6-4020-a5a9-37f2a7ba8c73"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607),
-                            FASBTopicId = new Guid("13f1aa2d-9cab-4e47-b016-ebee1899826d"),
+                            Id = new Guid("e0264091-b542-459b-86b8-688cdd345b87"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942),
+                            FASBTopicId = new Guid("f9e27196-8bd4-4b03-8627-ee6862ee919a"),
                             FullReference = "ASC 405-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942)
                         },
                         new
                         {
-                            Id = new Guid("f3ec4be7-60d2-490d-89d0-02cb6e6d1e93"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607),
-                            FASBTopicId = new Guid("13f1aa2d-9cab-4e47-b016-ebee1899826d"),
+                            Id = new Guid("f6ff5909-d975-4d72-8e2f-7ca2b39ad049"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942),
+                            FASBTopicId = new Guid("f9e27196-8bd4-4b03-8627-ee6862ee919a"),
                             FullReference = "ASC 405-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942)
                         },
                         new
                         {
-                            Id = new Guid("d9e09e52-e687-4b68-af58-c6f609f3ba3f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607),
-                            FASBTopicId = new Guid("13f1aa2d-9cab-4e47-b016-ebee1899826d"),
+                            Id = new Guid("bf8bf86c-65a2-45c4-8215-6b0d425b9f5a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942),
+                            FASBTopicId = new Guid("f9e27196-8bd4-4b03-8627-ee6862ee919a"),
                             FullReference = "ASC 405-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942)
                         },
                         new
                         {
-                            Id = new Guid("05788d35-4286-4ba7-9586-7e073aadbd94"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607),
-                            FASBTopicId = new Guid("13f1aa2d-9cab-4e47-b016-ebee1899826d"),
+                            Id = new Guid("b0c4bf56-726a-4c4e-a7b5-2cbc0417109f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942),
+                            FASBTopicId = new Guid("f9e27196-8bd4-4b03-8627-ee6862ee919a"),
                             FullReference = "ASC 405-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942)
                         },
                         new
                         {
-                            Id = new Guid("cdb826b3-c308-4890-8740-1ae607ce5192"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3694),
-                            FASBTopicId = new Guid("98203b8f-8f43-4c82-a0e1-f78acb36db24"),
+                            Id = new Guid("190ce7f8-ff94-48f7-b3d3-8acd9f847ac3"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4043),
+                            FASBTopicId = new Guid("70237a87-3516-4a85-b2ea-f9561ab7b377"),
                             FullReference = "ASC 410-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3694)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4043)
                         },
                         new
                         {
-                            Id = new Guid("a5ee9ff7-a9a6-4e60-b686-d84a837b0e29"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3694),
-                            FASBTopicId = new Guid("98203b8f-8f43-4c82-a0e1-f78acb36db24"),
+                            Id = new Guid("20b138f0-a2e7-4103-acf0-de551141cc8f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4043),
+                            FASBTopicId = new Guid("70237a87-3516-4a85-b2ea-f9561ab7b377"),
                             FullReference = "ASC 410-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3694)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4043)
                         },
                         new
                         {
-                            Id = new Guid("bb1b3f59-7e17-49dc-acbe-5d65741edd24"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3694),
-                            FASBTopicId = new Guid("98203b8f-8f43-4c82-a0e1-f78acb36db24"),
+                            Id = new Guid("8ae3d6c6-df54-4211-8650-90d1ef01e521"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4043),
+                            FASBTopicId = new Guid("70237a87-3516-4a85-b2ea-f9561ab7b377"),
                             FullReference = "ASC 410-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3694)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4043)
                         },
                         new
                         {
-                            Id = new Guid("d6188a7b-5df4-4178-9cce-eab5aa681190"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3752),
-                            FASBTopicId = new Guid("80388014-bf69-4c8d-a6df-0e7f963073e3"),
+                            Id = new Guid("0400d448-a8af-4af7-8d7c-0c3ec3cc3c50"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4106),
+                            FASBTopicId = new Guid("da357f3d-e650-4e53-a4ec-d819f762f13d"),
                             FullReference = "ASC 420-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3752)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4106)
                         },
                         new
                         {
-                            Id = new Guid("e7baf798-5770-4f14-a82a-f40164bb059d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3789),
-                            FASBTopicId = new Guid("d43d4832-2dcb-4cac-b837-a9dad2ba16eb"),
+                            Id = new Guid("12b16693-3cc5-49a1-a389-f7002080da6c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4138),
+                            FASBTopicId = new Guid("533dd027-683c-4d18-9f3b-6285bf543401"),
                             FullReference = "ASC 430-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3789)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4138)
                         },
                         new
                         {
-                            Id = new Guid("cfb89a0d-033e-4d4c-a1df-e547dab25fa6"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3819),
-                            FASBTopicId = new Guid("bdd61938-8803-475a-9a09-7a9fbfd0f5e8"),
+                            Id = new Guid("ce169fb7-4211-417a-a169-36c06a69ce2e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4169),
+                            FASBTopicId = new Guid("49355be8-175e-4b24-92c8-41e69a8842f8"),
                             FullReference = "ASC 440-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3819)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4169)
                         },
                         new
                         {
-                            Id = new Guid("ab240088-4a18-4e41-9292-2087c019b15f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3848),
-                            FASBTopicId = new Guid("54dd4c12-c037-4169-84c8-78da96e26e1f"),
+                            Id = new Guid("34b4eec3-1ecc-44ba-b634-381c2ea0e2ce"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4201),
+                            FASBTopicId = new Guid("b4b56f83-da49-4b36-bf61-368bb56d4fac"),
                             FullReference = "ASC 450-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3848)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4201)
                         },
                         new
                         {
-                            Id = new Guid("27ca4619-4681-4593-b53e-f5ba4598469a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3848),
-                            FASBTopicId = new Guid("54dd4c12-c037-4169-84c8-78da96e26e1f"),
+                            Id = new Guid("095f1d80-2468-4ffb-8261-2d2dc3ca499f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4201),
+                            FASBTopicId = new Guid("b4b56f83-da49-4b36-bf61-368bb56d4fac"),
                             FullReference = "ASC 450-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3848)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4201)
                         },
                         new
                         {
-                            Id = new Guid("2733e275-1701-40fd-bc55-7ca2dd486c15"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3848),
-                            FASBTopicId = new Guid("54dd4c12-c037-4169-84c8-78da96e26e1f"),
+                            Id = new Guid("dda579a4-2d9d-4815-bf3e-172928be944a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4201),
+                            FASBTopicId = new Guid("b4b56f83-da49-4b36-bf61-368bb56d4fac"),
                             FullReference = "ASC 450-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3848)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4201)
                         },
                         new
                         {
-                            Id = new Guid("7d94e11c-f1fa-4ef4-ae63-6b95745732c9"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3905),
-                            FASBTopicId = new Guid("5bdae584-cd61-4471-9481-2200f1daa86a"),
+                            Id = new Guid("31cbfe72-fe1b-478b-b3be-66c72962350a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4263),
+                            FASBTopicId = new Guid("4f539477-7b39-486a-8a56-8772de9aab8a"),
                             FullReference = "ASC 460-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3905)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4263)
                         },
                         new
                         {
-                            Id = new Guid("3a883878-074f-4b94-9856-d74fda640d8e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935),
-                            FASBTopicId = new Guid("0bab2718-4916-4468-9993-8572a6882f7f"),
+                            Id = new Guid("619baa74-9f11-4c41-8887-91a14fee6e8b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295),
+                            FASBTopicId = new Guid("2748d8fb-5f4d-4d71-8746-54f3af8ae9af"),
                             FullReference = "ASC 470-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295)
                         },
                         new
                         {
-                            Id = new Guid("0f2e5e09-ff1f-4f8e-b108-b1e168732700"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935),
-                            FASBTopicId = new Guid("0bab2718-4916-4468-9993-8572a6882f7f"),
+                            Id = new Guid("ae295c3b-d010-4113-bd14-16e556fa588c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295),
+                            FASBTopicId = new Guid("2748d8fb-5f4d-4d71-8746-54f3af8ae9af"),
                             FullReference = "ASC 470-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295)
                         },
                         new
                         {
-                            Id = new Guid("095098b6-518d-4733-bd56-28ec782dfd0b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935),
-                            FASBTopicId = new Guid("0bab2718-4916-4468-9993-8572a6882f7f"),
+                            Id = new Guid("27cf801c-7815-4e1f-8ad5-7c05b97ed848"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295),
+                            FASBTopicId = new Guid("2748d8fb-5f4d-4d71-8746-54f3af8ae9af"),
                             FullReference = "ASC 470-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295)
                         },
                         new
                         {
-                            Id = new Guid("31276716-b39c-41c7-8443-78093775e925"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935),
-                            FASBTopicId = new Guid("0bab2718-4916-4468-9993-8572a6882f7f"),
+                            Id = new Guid("0b442371-8930-4029-aeae-3404331de5ed"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295),
+                            FASBTopicId = new Guid("2748d8fb-5f4d-4d71-8746-54f3af8ae9af"),
                             FullReference = "ASC 470-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295)
                         },
                         new
                         {
-                            Id = new Guid("ad7c10f6-8523-498d-b04c-bceb509d3974"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935),
-                            FASBTopicId = new Guid("0bab2718-4916-4468-9993-8572a6882f7f"),
+                            Id = new Guid("191ee717-4db1-4985-8662-66729f419932"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295),
+                            FASBTopicId = new Guid("2748d8fb-5f4d-4d71-8746-54f3af8ae9af"),
                             FullReference = "ASC 470-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295)
                         },
                         new
                         {
-                            Id = new Guid("38de07f4-7f1b-42fa-adc6-7e38a96ba562"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935),
-                            FASBTopicId = new Guid("0bab2718-4916-4468-9993-8572a6882f7f"),
+                            Id = new Guid("0f40e1c3-a802-4fb9-908b-cdd0523a5186"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295),
+                            FASBTopicId = new Guid("2748d8fb-5f4d-4d71-8746-54f3af8ae9af"),
                             FullReference = "ASC 470-60",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "60",
                             SubtopicName = "Relationships",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295)
                         },
                         new
                         {
-                            Id = new Guid("36255ee6-4a70-4668-8424-17be68541544"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4037),
-                            FASBTopicId = new Guid("8c233cfd-d89c-47b3-a08c-c123fe2f674c"),
+                            Id = new Guid("af6fe54f-6db4-404d-a64e-943f68613085"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4409),
+                            FASBTopicId = new Guid("c8d394ea-ec5d-472c-9dab-f5b9ec701884"),
                             FullReference = "ASC 480-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4037)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4409)
                         },
                         new
                         {
-                            Id = new Guid("8a80be9f-3b80-4e8f-80f0-c2ae554cba87"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069),
-                            FASBTopicId = new Guid("92d6440c-f5b0-4d5a-b349-e050ce561315"),
+                            Id = new Guid("ef04e21d-b408-4427-914b-87a42b141987"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448),
+                            FASBTopicId = new Guid("41315aea-79db-49e3-8516-feec92acb635"),
                             FullReference = "ASC 505-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448)
                         },
                         new
                         {
-                            Id = new Guid("c9774100-3146-4d99-865e-37d26be54f17"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069),
-                            FASBTopicId = new Guid("92d6440c-f5b0-4d5a-b349-e050ce561315"),
+                            Id = new Guid("538cddbe-f030-47be-880b-310cfa31dc09"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448),
+                            FASBTopicId = new Guid("41315aea-79db-49e3-8516-feec92acb635"),
                             FullReference = "ASC 505-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448)
                         },
                         new
                         {
-                            Id = new Guid("b5f97618-779e-4a83-939b-3072a6c6422c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069),
-                            FASBTopicId = new Guid("92d6440c-f5b0-4d5a-b349-e050ce561315"),
+                            Id = new Guid("97654883-c393-4971-b0d3-c041360c8439"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448),
+                            FASBTopicId = new Guid("41315aea-79db-49e3-8516-feec92acb635"),
                             FullReference = "ASC 505-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448)
                         },
                         new
                         {
-                            Id = new Guid("dd15cabb-0247-4f76-a499-39726c0f3c3c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069),
-                            FASBTopicId = new Guid("92d6440c-f5b0-4d5a-b349-e050ce561315"),
+                            Id = new Guid("6091b7b8-0e33-4070-872a-70e353e5f894"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448),
+                            FASBTopicId = new Guid("41315aea-79db-49e3-8516-feec92acb635"),
                             FullReference = "ASC 505-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448)
                         },
                         new
                         {
-                            Id = new Guid("11bad2ea-7e97-4501-8147-87757ce97323"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069),
-                            FASBTopicId = new Guid("92d6440c-f5b0-4d5a-b349-e050ce561315"),
+                            Id = new Guid("4740e5c4-4a0e-4d3b-b136-c60e533705d6"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448),
+                            FASBTopicId = new Guid("41315aea-79db-49e3-8516-feec92acb635"),
                             FullReference = "ASC 505-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448)
                         },
                         new
                         {
-                            Id = new Guid("b8d72613-5678-4999-b5f5-c74455eb7ae0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069),
-                            FASBTopicId = new Guid("92d6440c-f5b0-4d5a-b349-e050ce561315"),
+                            Id = new Guid("9c083f90-6df2-45cd-81cf-4db9a0f43a9a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448),
+                            FASBTopicId = new Guid("41315aea-79db-49e3-8516-feec92acb635"),
                             FullReference = "ASC 505-60",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "60",
                             SubtopicName = "Relationships",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448)
                         },
                         new
                         {
-                            Id = new Guid("dd8133de-2045-423f-9888-9ff07c5d8a15"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("dafa60a8-63cf-48a1-b873-8c818399e0ce"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("ffd91a95-f58f-48cf-bae9-2b4b935686bd"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("1177f488-9538-4179-8cd7-c90dbdfe46c9"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-15",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "15",
                             SubtopicName = "Scope and Scope Exceptions",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("6334ea8e-5322-42bb-8d26-e35b49d38ce9"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("d0e7e724-f806-4f95-aabb-46dce642725f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("3342e8b8-8f68-4822-a373-11d85bddbe0c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("ea8e2016-3161-42ec-9ad2-1214cd2de656"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-25",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "25",
                             SubtopicName = "Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("28abb56a-30df-41eb-afac-9bc9626d99bc"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("94b843dc-6301-4f05-b22c-3605ac081a59"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-28",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "28",
                             SubtopicName = "Subtopic 28",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("3d1ff7eb-a1c9-4dc1-9370-a8f4ade878a0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("05425698-104b-45d3-8a85-2dcd9593029d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("db893652-241b-41dd-a079-70ccfc519a09"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("b0dfc30a-d475-4467-aad4-936b47e5928f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-35",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "35",
                             SubtopicName = "Subsequent Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("677763d1-d1f2-459d-9364-e7158cf40eae"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("623a3de0-5dbe-45d8-9db1-e43fb4363058"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("f74b15a6-2ccc-4f00-94c2-21e9e0735b65"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("34fff8b8-5d85-4317-8d2a-f1d062917728"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-45",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "45",
                             SubtopicName = "Other Presentation Matters",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("ca36d2b1-317d-49cd-a72f-ae4cbbc783f2"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
-                            FASBTopicId = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("713c2d20-ccdf-4d1e-8fe1-ae314176c40d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
+                            FASBTopicId = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             FullReference = "ASC 605-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("9cacb247-661e-4308-b759-388c3ced129a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4340),
-                            FASBTopicId = new Guid("a57dec8c-ae88-4d01-bfd8-7d01660da54b"),
+                            Id = new Guid("0e0957b4-7def-49a7-9664-f9bf5f8f5459"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4739),
+                            FASBTopicId = new Guid("7cbf4a57-548d-45ca-9aad-96e991104fc6"),
                             FullReference = "ASC 606-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4340)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4739)
                         },
                         new
                         {
-                            Id = new Guid("f664b54f-0cb1-4b38-b0fc-1ab737a6bb61"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4340),
-                            FASBTopicId = new Guid("a57dec8c-ae88-4d01-bfd8-7d01660da54b"),
+                            Id = new Guid("6b35b5a1-ff08-41b2-b838-bbed97a9a358"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4739),
+                            FASBTopicId = new Guid("7cbf4a57-548d-45ca-9aad-96e991104fc6"),
                             FullReference = "ASC 606-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4340)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4739)
                         },
                         new
                         {
-                            Id = new Guid("ca1370aa-2daa-451c-8db1-86a89e1335e5"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4384),
-                            FASBTopicId = new Guid("dac30188-680e-46e5-97ff-efb3a0de4801"),
+                            Id = new Guid("7d9dcdfb-3076-4c9c-ba23-e77802bd9988"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4787),
+                            FASBTopicId = new Guid("1c4739e2-ae7f-461b-8c47-29464fbd6fb0"),
                             FullReference = "ASC 610-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4384)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4787)
                         },
                         new
                         {
-                            Id = new Guid("f92c72f2-cc66-4b1b-b583-b303881aca15"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4384),
-                            FASBTopicId = new Guid("dac30188-680e-46e5-97ff-efb3a0de4801"),
+                            Id = new Guid("3a36e6d1-1415-4d68-a5ec-4dab527f40f1"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4787),
+                            FASBTopicId = new Guid("1c4739e2-ae7f-461b-8c47-29464fbd6fb0"),
                             FullReference = "ASC 610-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4384)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4787)
                         },
                         new
                         {
-                            Id = new Guid("94bec5cd-e754-4042-a990-69aeeb365c03"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4384),
-                            FASBTopicId = new Guid("dac30188-680e-46e5-97ff-efb3a0de4801"),
+                            Id = new Guid("f9a7f5ae-958f-4730-9378-855726b4bd8f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4787),
+                            FASBTopicId = new Guid("1c4739e2-ae7f-461b-8c47-29464fbd6fb0"),
                             FullReference = "ASC 610-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4384)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4787)
                         },
                         new
                         {
-                            Id = new Guid("d65639bc-dbac-4a67-a8bc-d59c0af3e374"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4443),
-                            FASBTopicId = new Guid("3ebaa5cb-e6b5-41cb-bb33-a715ea5d086f"),
+                            Id = new Guid("28a18f0d-5a8b-46f7-87e9-176c3222595f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4851),
+                            FASBTopicId = new Guid("7f4c709c-39ba-49b6-8722-f61f6e8ecd3d"),
                             FullReference = "ASC 705-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4443)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4851)
                         },
                         new
                         {
-                            Id = new Guid("4113021a-f8db-4705-b3a2-02a72a18666e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4443),
-                            FASBTopicId = new Guid("3ebaa5cb-e6b5-41cb-bb33-a715ea5d086f"),
+                            Id = new Guid("4b5e4ce1-4328-4912-93e2-2ba9f9315bb3"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4851),
+                            FASBTopicId = new Guid("7f4c709c-39ba-49b6-8722-f61f6e8ecd3d"),
                             FullReference = "ASC 705-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4443)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4851)
                         },
                         new
                         {
-                            Id = new Guid("ced9b602-82be-4c4c-bec1-ce1006ef7fa5"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4487),
-                            FASBTopicId = new Guid("33603828-3d97-4630-aa08-30182a3116b1"),
+                            Id = new Guid("f669f298-aee7-4599-8c6c-b6d0458df271"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4898),
+                            FASBTopicId = new Guid("566ac39b-be81-4743-a8be-6cd1891ed317"),
                             FullReference = "ASC 710-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4487)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4898)
                         },
                         new
                         {
-                            Id = new Guid("ba7a5223-7c9d-4531-a801-2fdf3b6e7858"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4487),
-                            FASBTopicId = new Guid("33603828-3d97-4630-aa08-30182a3116b1"),
+                            Id = new Guid("04d97fda-64cb-4140-872a-6ff9fd108977"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4898),
+                            FASBTopicId = new Guid("566ac39b-be81-4743-a8be-6cd1891ed317"),
                             FullReference = "ASC 710-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4487)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4898)
                         },
                         new
                         {
-                            Id = new Guid("e493ee8f-dd0a-43bc-a1c8-3b29ea72cffd"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4530),
-                            FASBTopicId = new Guid("5e6cb7d9-0cb6-4f3b-a165-e56a8923337d"),
+                            Id = new Guid("cc0db1bb-6a4c-468c-9c0a-563be8c863a6"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4945),
+                            FASBTopicId = new Guid("da8b03d2-cdd6-4a38-b2c1-125e7938c102"),
                             FullReference = "ASC 712-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4530)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4945)
                         },
                         new
                         {
-                            Id = new Guid("b83079ac-9248-4103-a191-e54b12cee5e0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4530),
-                            FASBTopicId = new Guid("5e6cb7d9-0cb6-4f3b-a165-e56a8923337d"),
+                            Id = new Guid("43b3ea6d-cb97-47f0-b3b1-2bace81189a2"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4945),
+                            FASBTopicId = new Guid("da8b03d2-cdd6-4a38-b2c1-125e7938c102"),
                             FullReference = "ASC 712-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4530)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4945)
                         },
                         new
                         {
-                            Id = new Guid("3b394308-5485-4f63-9fb3-3a3380886123"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573),
-                            FASBTopicId = new Guid("762551f9-e70a-465e-a4be-7c4d99f1bf00"),
+                            Id = new Guid("6eec5704-62ef-4361-88c2-b40a62dedca2"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992),
+                            FASBTopicId = new Guid("aadfc73e-a03f-45fd-9308-32637f75951f"),
                             FullReference = "ASC 715-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992)
                         },
                         new
                         {
-                            Id = new Guid("3cc95d57-9d67-45bc-bf7d-901616caff30"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573),
-                            FASBTopicId = new Guid("762551f9-e70a-465e-a4be-7c4d99f1bf00"),
+                            Id = new Guid("4f3301ae-e1b4-4136-8938-df0db0d5838b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992),
+                            FASBTopicId = new Guid("aadfc73e-a03f-45fd-9308-32637f75951f"),
                             FullReference = "ASC 715-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992)
                         },
                         new
                         {
-                            Id = new Guid("5bf0029e-7355-45f6-aae1-00811ae40ff8"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573),
-                            FASBTopicId = new Guid("762551f9-e70a-465e-a4be-7c4d99f1bf00"),
+                            Id = new Guid("2919157e-95c1-41f3-8919-2a38c2f81db4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992),
+                            FASBTopicId = new Guid("aadfc73e-a03f-45fd-9308-32637f75951f"),
                             FullReference = "ASC 715-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992)
                         },
                         new
                         {
-                            Id = new Guid("5492dc15-2dfd-4d1b-aafd-138c16e81da9"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573),
-                            FASBTopicId = new Guid("762551f9-e70a-465e-a4be-7c4d99f1bf00"),
+                            Id = new Guid("a61b5f8a-5d17-4d8e-9b09-c3d2785869ce"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992),
+                            FASBTopicId = new Guid("aadfc73e-a03f-45fd-9308-32637f75951f"),
                             FullReference = "ASC 715-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992)
                         },
                         new
                         {
-                            Id = new Guid("83392d6c-10a4-4a3f-a096-82631a1b6db3"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573),
-                            FASBTopicId = new Guid("762551f9-e70a-465e-a4be-7c4d99f1bf00"),
+                            Id = new Guid("0abaac99-7c7d-4984-be5a-6ea4ded3380c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992),
+                            FASBTopicId = new Guid("aadfc73e-a03f-45fd-9308-32637f75951f"),
                             FullReference = "ASC 715-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992)
                         },
                         new
                         {
-                            Id = new Guid("4e0da4c1-2ffe-4d68-852e-ebce5b4cfbe5"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573),
-                            FASBTopicId = new Guid("762551f9-e70a-465e-a4be-7c4d99f1bf00"),
+                            Id = new Guid("fe2c2d8a-63de-4a18-bda6-e037bda2b602"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992),
+                            FASBTopicId = new Guid("aadfc73e-a03f-45fd-9308-32637f75951f"),
                             FullReference = "ASC 715-60",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "60",
                             SubtopicName = "Relationships",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992)
                         },
                         new
                         {
-                            Id = new Guid("86e83ceb-b598-46b5-90a4-958f367b4886"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573),
-                            FASBTopicId = new Guid("762551f9-e70a-465e-a4be-7c4d99f1bf00"),
+                            Id = new Guid("b3f01b7d-1498-45b2-9359-5fad7523b298"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992),
+                            FASBTopicId = new Guid("aadfc73e-a03f-45fd-9308-32637f75951f"),
                             FullReference = "ASC 715-70",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "70",
                             SubtopicName = "Grandfathered Guidance",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992)
                         },
                         new
                         {
-                            Id = new Guid("707e726a-52ac-4f4f-92cc-0b5ce8c379d4"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573),
-                            FASBTopicId = new Guid("762551f9-e70a-465e-a4be-7c4d99f1bf00"),
+                            Id = new Guid("39dbbba0-c33a-4895-86b3-8d13cf3b9680"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992),
+                            FASBTopicId = new Guid("aadfc73e-a03f-45fd-9308-32637f75951f"),
                             FullReference = "ASC 715-80",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "80",
                             SubtopicName = "Multiemployer Plans",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992)
                         },
                         new
                         {
-                            Id = new Guid("4d60abfa-b25c-4eef-9d78-a0e57d93146f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704),
-                            FASBTopicId = new Guid("f3afacac-e0a1-41e9-be41-651333013d0a"),
+                            Id = new Guid("69f07ad4-f42d-4b48-869c-0c98ad77ee20"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141),
+                            FASBTopicId = new Guid("c583f5bb-3f80-4609-b96d-c4a90a26539c"),
                             FullReference = "ASC 718-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141)
                         },
                         new
                         {
-                            Id = new Guid("92c24558-c8ae-447d-91e9-ca28c2a5e0ba"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704),
-                            FASBTopicId = new Guid("f3afacac-e0a1-41e9-be41-651333013d0a"),
+                            Id = new Guid("823c6619-c206-4a61-b7d9-d7b8284a0a52"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141),
+                            FASBTopicId = new Guid("c583f5bb-3f80-4609-b96d-c4a90a26539c"),
                             FullReference = "ASC 718-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141)
                         },
                         new
                         {
-                            Id = new Guid("aa97997e-4137-4acf-bd51-352d63ea28b9"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704),
-                            FASBTopicId = new Guid("f3afacac-e0a1-41e9-be41-651333013d0a"),
+                            Id = new Guid("85771918-4fad-4ed1-8184-7bbdba187ddc"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141),
+                            FASBTopicId = new Guid("c583f5bb-3f80-4609-b96d-c4a90a26539c"),
                             FullReference = "ASC 718-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141)
                         },
                         new
                         {
-                            Id = new Guid("ae7ffcf3-7b0e-4e0f-bcdb-d86b5811ea2e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704),
-                            FASBTopicId = new Guid("f3afacac-e0a1-41e9-be41-651333013d0a"),
+                            Id = new Guid("81ed6f45-4cf8-4f0a-ac2b-e8c7096edf8d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141),
+                            FASBTopicId = new Guid("c583f5bb-3f80-4609-b96d-c4a90a26539c"),
                             FullReference = "ASC 718-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141)
                         },
                         new
                         {
-                            Id = new Guid("e6c6debb-b9a8-4f0d-b137-c479c0db4941"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704),
-                            FASBTopicId = new Guid("f3afacac-e0a1-41e9-be41-651333013d0a"),
+                            Id = new Guid("46be626a-a0f3-42db-8673-23908198cd1c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141),
+                            FASBTopicId = new Guid("c583f5bb-3f80-4609-b96d-c4a90a26539c"),
                             FullReference = "ASC 718-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141)
                         },
                         new
                         {
-                            Id = new Guid("a6e26866-727f-4703-83fb-7dea1e5fd600"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704),
-                            FASBTopicId = new Guid("f3afacac-e0a1-41e9-be41-651333013d0a"),
+                            Id = new Guid("b2449063-1ac6-4042-8db4-0c2ea4ffaec4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141),
+                            FASBTopicId = new Guid("c583f5bb-3f80-4609-b96d-c4a90a26539c"),
                             FullReference = "ASC 718-60",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "60",
                             SubtopicName = "Relationships",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141)
                         },
                         new
                         {
-                            Id = new Guid("a6da4411-39e2-46e7-8cd2-5b8772fa96c5"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704),
-                            FASBTopicId = new Guid("f3afacac-e0a1-41e9-be41-651333013d0a"),
+                            Id = new Guid("283452b6-7074-4247-b8d9-71785f4da072"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141),
+                            FASBTopicId = new Guid("c583f5bb-3f80-4609-b96d-c4a90a26539c"),
                             FullReference = "ASC 718-740",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "740",
                             SubtopicName = "Income Taxes",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141)
                         },
                         new
                         {
-                            Id = new Guid("e6ef7e1d-935e-4c0a-bbc0-5e1b95c62755"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
-                            FASBTopicId = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("0542631d-0585-4008-9cf7-a95b40d89161"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
+                            FASBTopicId = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             FullReference = "ASC 720-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("332d3abc-d550-4e12-bf6d-88641c8c7826"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
-                            FASBTopicId = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("a3961ac6-197d-4622-9754-806ca26e33b7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
+                            FASBTopicId = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             FullReference = "ASC 720-15",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "15",
                             SubtopicName = "Scope and Scope Exceptions",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("02139fe6-c949-435f-b886-0398600b0a9d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
-                            FASBTopicId = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("70100ff9-f12e-4370-b81c-203a47c43297"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
+                            FASBTopicId = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             FullReference = "ASC 720-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("13d6e2c2-e47c-4cfb-8d97-603330444378"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
-                            FASBTopicId = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("27e49312-e3c7-476f-bf92-3741dc83cd3b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
+                            FASBTopicId = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             FullReference = "ASC 720-25",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "25",
                             SubtopicName = "Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("4b656b6d-0ba2-4fe6-b93f-69cda18bc20f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
-                            FASBTopicId = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("39b46fe9-3b12-4aab-b021-2cab495b7e06"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
+                            FASBTopicId = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             FullReference = "ASC 720-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("4fdf5b58-25df-433e-be2d-4941ad548df3"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
-                            FASBTopicId = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("9f074fbe-5184-49c8-ae6d-8d409742a11f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
+                            FASBTopicId = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             FullReference = "ASC 720-35",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "35",
                             SubtopicName = "Subsequent Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("7248046a-a071-4546-9662-fe3d82bab4d0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
-                            FASBTopicId = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("ae837e60-fe60-41a9-a519-f2a278753ef6"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
+                            FASBTopicId = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             FullReference = "ASC 720-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("649e4ce9-75c9-4a50-8567-931cf701da76"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
-                            FASBTopicId = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("73d8164d-ae7e-4f08-921e-9567000072da"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
+                            FASBTopicId = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             FullReference = "ASC 720-45",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "45",
                             SubtopicName = "Other Presentation Matters",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("e64da626-b5ed-4c29-94e5-edd0d3f6066a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
-                            FASBTopicId = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("bc42b663-cb3b-47f2-b571-2bfcd98e50bd"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
+                            FASBTopicId = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             FullReference = "ASC 720-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("70cbc79e-accb-4ecd-b4a6-e7a4ba5a5a17"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4975),
-                            FASBTopicId = new Guid("90855ac4-9f5c-4d4a-a187-5efaf9f29c35"),
+                            Id = new Guid("7c0ba2d4-537c-458f-a77a-13fac2548761"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5429),
+                            FASBTopicId = new Guid("8980ce4d-95a9-4576-a1a8-8f2948a333dd"),
                             FullReference = "ASC 730-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4975)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5429)
                         },
                         new
                         {
-                            Id = new Guid("2a3e0cab-fea8-46bd-b9f2-8d99c999ebb1"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4975),
-                            FASBTopicId = new Guid("90855ac4-9f5c-4d4a-a187-5efaf9f29c35"),
+                            Id = new Guid("98b94bce-9093-4acc-8974-be9bb82202b4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5429),
+                            FASBTopicId = new Guid("8980ce4d-95a9-4576-a1a8-8f2948a333dd"),
                             FullReference = "ASC 730-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4975)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5429)
                         },
                         new
                         {
-                            Id = new Guid("cf7bc84c-d954-46e8-9bd7-92d197fc4ae1"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019),
-                            FASBTopicId = new Guid("48ded176-92fe-45d5-a422-0ad570370a88"),
+                            Id = new Guid("4a0cece8-a58e-4b85-9501-9cf831a1172b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478),
+                            FASBTopicId = new Guid("b4f105da-bb4f-43e8-8059-c8d488d7349d"),
                             FullReference = "ASC 740-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478)
                         },
                         new
                         {
-                            Id = new Guid("0ef65bdf-5466-452d-9f5e-3ed5f531aed4"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019),
-                            FASBTopicId = new Guid("48ded176-92fe-45d5-a422-0ad570370a88"),
+                            Id = new Guid("82c9ece8-9ad4-47c7-b1d2-57f40f5d8acd"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478),
+                            FASBTopicId = new Guid("b4f105da-bb4f-43e8-8059-c8d488d7349d"),
                             FullReference = "ASC 740-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478)
                         },
                         new
                         {
-                            Id = new Guid("60cd9973-a01f-4997-bc46-4a0d281fd7e2"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019),
-                            FASBTopicId = new Guid("48ded176-92fe-45d5-a422-0ad570370a88"),
+                            Id = new Guid("c9fb9e31-1ab6-4cfd-b621-661cf746940f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478),
+                            FASBTopicId = new Guid("b4f105da-bb4f-43e8-8059-c8d488d7349d"),
                             FullReference = "ASC 740-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478)
                         },
                         new
                         {
-                            Id = new Guid("43dee448-6ea4-4496-a02d-d384ac892ff5"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019),
-                            FASBTopicId = new Guid("48ded176-92fe-45d5-a422-0ad570370a88"),
+                            Id = new Guid("9bcefa32-7b43-41ea-b722-a206665c562e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478),
+                            FASBTopicId = new Guid("b4f105da-bb4f-43e8-8059-c8d488d7349d"),
                             FullReference = "ASC 740-270",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "270",
                             SubtopicName = "Interim Reporting",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478)
                         },
                         new
                         {
-                            Id = new Guid("8432cd01-b516-4d73-8efc-b0f9ecf74223"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019),
-                            FASBTopicId = new Guid("48ded176-92fe-45d5-a422-0ad570370a88"),
+                            Id = new Guid("eb81d492-65fb-4c74-819d-116c37a14079"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478),
+                            FASBTopicId = new Guid("b4f105da-bb4f-43e8-8059-c8d488d7349d"),
                             FullReference = "ASC 740-323",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "323",
                             SubtopicName = "Investments—Equity Method and Joint Ventures",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478)
                         },
                         new
                         {
-                            Id = new Guid("17998002-0fd1-434f-a563-e705879f01bf"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
-                            FASBTopicId = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("f36418b7-f9ee-4f2c-beeb-d2ccbf4e3b69"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
+                            FASBTopicId = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             FullReference = "ASC 805-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("120bc7f6-99ef-4f4c-8369-c686f04183b9"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
-                            FASBTopicId = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("74d0fa3c-a61d-4cb7-b7f3-af02532469e1"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
+                            FASBTopicId = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             FullReference = "ASC 805-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("8a9dfaa7-2824-45d6-9536-dfc59551488a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
-                            FASBTopicId = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("b4b0b21b-1d35-4cdd-8ce7-4008291d5308"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
+                            FASBTopicId = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             FullReference = "ASC 805-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("6b7a8dc7-ae1a-4a8a-a23f-67f10c034f8a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
-                            FASBTopicId = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("5129d7ce-721a-4c99-820f-154ffb0b8a3e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
+                            FASBTopicId = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             FullReference = "ASC 805-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("7bb515ab-0f6e-4019-a952-2a91fd8f0805"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
-                            FASBTopicId = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("3d9a3dc9-2630-453f-a7e1-754bcc784c37"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
+                            FASBTopicId = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             FullReference = "ASC 805-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("0fded2d2-1a3e-489a-b041-b1d5dda46182"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
-                            FASBTopicId = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("68f5afe5-c6b1-49a7-8bc8-c5ee29a78027"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
+                            FASBTopicId = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             FullReference = "ASC 805-60",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "60",
                             SubtopicName = "Relationships",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("b170bc18-ac47-4c86-9330-59e8f452aba0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
-                            FASBTopicId = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("1384fb9a-2077-4036-b4df-8e18b5edbc92"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
+                            FASBTopicId = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             FullReference = "ASC 805-740",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "740",
                             SubtopicName = "Income Taxes",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("61b03f62-5e8c-4526-b05b-9a6ddec97583"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
-                            FASBTopicId = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("715784d2-6ef9-4016-b5b9-41cfe7e3a2c6"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
+                            FASBTopicId = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             FullReference = "ASC 805-810",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "810",
                             SubtopicName = "Consolidation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("1a557148-aec7-4599-af80-011a77374262"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
-                            FASBTopicId = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("0e8e4a44-ae2b-49d2-8571-1f0b4818a6c8"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
+                            FASBTopicId = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             FullReference = "ASC 805-920",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "920",
                             SubtopicName = "Entertainment—Broadcasters",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("b9232506-d812-4e57-99d2-d1c58fbb0034"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5268),
-                            FASBTopicId = new Guid("37cd1131-3500-4c1a-90ce-b9dbfcb806e9"),
+                            Id = new Guid("03cd2bc8-de10-47e1-82ee-f995b710996a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5741),
+                            FASBTopicId = new Guid("b1d1f905-76a1-4848-bb6f-6e4b44736e5f"),
                             FullReference = "ASC 808-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5268)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5741)
                         },
                         new
                         {
-                            Id = new Guid("2df53f2a-ad80-4378-b4e3-e25d2f20b53d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5297),
-                            FASBTopicId = new Guid("dda2660b-f000-48a8-b02d-d31029e07cff"),
+                            Id = new Guid("55089e7d-46c8-4710-9872-cdeb03f11d2b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5773),
+                            FASBTopicId = new Guid("6e20c679-339e-434d-974d-c4a3d842712b"),
                             FullReference = "ASC 810-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5297)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5773)
                         },
                         new
                         {
-                            Id = new Guid("d9a1f9d0-03ba-4551-a0fb-80e976568d40"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326),
-                            FASBTopicId = new Guid("6a442129-9af3-4ef0-8e7a-c68fb52f8665"),
+                            Id = new Guid("7807427f-9aff-44b7-aa6b-f24868e02764"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804),
+                            FASBTopicId = new Guid("5a349f7c-7ed1-4398-a35f-8701783ad8d6"),
                             FullReference = "ASC 815-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804)
                         },
                         new
                         {
-                            Id = new Guid("aa5fbe22-f69c-4036-9127-dd8529167c87"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326),
-                            FASBTopicId = new Guid("6a442129-9af3-4ef0-8e7a-c68fb52f8665"),
+                            Id = new Guid("838d0397-f32e-4b24-93e8-f1f3ed02250f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804),
+                            FASBTopicId = new Guid("5a349f7c-7ed1-4398-a35f-8701783ad8d6"),
                             FullReference = "ASC 815-15",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "15",
                             SubtopicName = "Scope and Scope Exceptions",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804)
                         },
                         new
                         {
-                            Id = new Guid("b891cb1c-852c-42b9-9d59-e576d1653a20"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326),
-                            FASBTopicId = new Guid("6a442129-9af3-4ef0-8e7a-c68fb52f8665"),
+                            Id = new Guid("1dc83d44-75fb-494e-8e1b-2bd9f916200b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804),
+                            FASBTopicId = new Guid("5a349f7c-7ed1-4398-a35f-8701783ad8d6"),
                             FullReference = "ASC 815-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804)
                         },
                         new
                         {
-                            Id = new Guid("ccb4c09c-f3b0-41f7-8dce-62984a765c61"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326),
-                            FASBTopicId = new Guid("6a442129-9af3-4ef0-8e7a-c68fb52f8665"),
+                            Id = new Guid("08470254-a768-4f8b-8331-bc6f08ab998d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804),
+                            FASBTopicId = new Guid("5a349f7c-7ed1-4398-a35f-8701783ad8d6"),
                             FullReference = "ASC 815-25",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "25",
                             SubtopicName = "Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804)
                         },
                         new
                         {
-                            Id = new Guid("b7048920-c5aa-4762-9f0d-346cb0e7cd66"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326),
-                            FASBTopicId = new Guid("6a442129-9af3-4ef0-8e7a-c68fb52f8665"),
+                            Id = new Guid("f0d1e1e5-82b3-43cb-91df-f562724b08de"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804),
+                            FASBTopicId = new Guid("5a349f7c-7ed1-4398-a35f-8701783ad8d6"),
                             FullReference = "ASC 815-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804)
                         },
                         new
                         {
-                            Id = new Guid("1d771ad0-8a13-4323-b349-c5bf5070aef7"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326),
-                            FASBTopicId = new Guid("6a442129-9af3-4ef0-8e7a-c68fb52f8665"),
+                            Id = new Guid("4c6aa8f8-96d3-4b66-88f6-b42017f226df"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804),
+                            FASBTopicId = new Guid("5a349f7c-7ed1-4398-a35f-8701783ad8d6"),
                             FullReference = "ASC 815-35",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "35",
                             SubtopicName = "Subsequent Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804)
                         },
                         new
                         {
-                            Id = new Guid("073443b6-057f-4489-982d-fa192dfea3f7"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326),
-                            FASBTopicId = new Guid("6a442129-9af3-4ef0-8e7a-c68fb52f8665"),
+                            Id = new Guid("7fd6fecb-ee2b-4ea1-8f91-c9a024d82539"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804),
+                            FASBTopicId = new Guid("5a349f7c-7ed1-4398-a35f-8701783ad8d6"),
                             FullReference = "ASC 815-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804)
                         },
                         new
                         {
-                            Id = new Guid("945ea77b-ca50-4467-92b2-b8d3a010c29e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326),
-                            FASBTopicId = new Guid("6a442129-9af3-4ef0-8e7a-c68fb52f8665"),
+                            Id = new Guid("bc62ae41-4515-4836-9d7d-69e99e5de662"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804),
+                            FASBTopicId = new Guid("5a349f7c-7ed1-4398-a35f-8701783ad8d6"),
                             FullReference = "ASC 815-45",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "45",
                             SubtopicName = "Other Presentation Matters",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804)
                         },
                         new
                         {
-                            Id = new Guid("b0118891-a710-4615-a804-ee2516d0f3e4"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5456),
-                            FASBTopicId = new Guid("140669f0-9543-45bd-ae29-765473abcfe7"),
+                            Id = new Guid("a858a579-cfa1-4517-bd43-fdc32105eb95"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5947),
+                            FASBTopicId = new Guid("8ff77034-41f5-4149-8f5c-bb891ba401dc"),
                             FullReference = "ASC 820-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5456)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5947)
                         },
                         new
                         {
-                            Id = new Guid("38806a68-6d44-4f84-b37d-7e1fc73c89b6"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5485),
-                            FASBTopicId = new Guid("5c7a4384-70cf-4959-ae78-252f029a08e3"),
+                            Id = new Guid("e19133c4-0bf4-4226-ab97-a941e7718956"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5979),
+                            FASBTopicId = new Guid("2ff1fdc5-3b41-4992-b088-4f41a27ad085"),
                             FullReference = "ASC 825-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5485)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5979)
                         },
                         new
                         {
-                            Id = new Guid("69c7fcc5-e58d-4922-89a0-3571de2223f3"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514),
-                            FASBTopicId = new Guid("26b0bc87-ba06-42b1-95ef-b47413d5f0ab"),
+                            Id = new Guid("ec8957bc-cd48-4972-b4fb-432b5d7481fa"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011),
+                            FASBTopicId = new Guid("79722770-7977-4825-8e68-6fa9880c89c9"),
                             FullReference = "ASC 830-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011)
                         },
                         new
                         {
-                            Id = new Guid("511482f3-e79a-44ad-b169-598b1d749902"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514),
-                            FASBTopicId = new Guid("26b0bc87-ba06-42b1-95ef-b47413d5f0ab"),
+                            Id = new Guid("e0d47c2d-ecdb-4e06-841c-824b5ee4f537"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011),
+                            FASBTopicId = new Guid("79722770-7977-4825-8e68-6fa9880c89c9"),
                             FullReference = "ASC 830-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011)
                         },
                         new
                         {
-                            Id = new Guid("75c63d98-7311-4640-89d6-7c1c4b47918d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514),
-                            FASBTopicId = new Guid("26b0bc87-ba06-42b1-95ef-b47413d5f0ab"),
+                            Id = new Guid("26e44ec3-9d6e-4718-beb5-b1f8c3037b8e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011),
+                            FASBTopicId = new Guid("79722770-7977-4825-8e68-6fa9880c89c9"),
                             FullReference = "ASC 830-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011)
                         },
                         new
                         {
-                            Id = new Guid("8f26b1ac-7a55-45fa-96ee-edd7b4235d93"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514),
-                            FASBTopicId = new Guid("26b0bc87-ba06-42b1-95ef-b47413d5f0ab"),
+                            Id = new Guid("503204d9-0717-43c6-8141-76940bc7210c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011),
+                            FASBTopicId = new Guid("79722770-7977-4825-8e68-6fa9880c89c9"),
                             FullReference = "ASC 830-230",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "230",
                             SubtopicName = "Statement of Cash Flows",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011)
                         },
                         new
                         {
-                            Id = new Guid("a20f8ef1-fd78-4ead-918a-ed29373887ae"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5594),
-                            FASBTopicId = new Guid("73c3f842-71ac-449b-91b5-14e7999c2226"),
+                            Id = new Guid("ad450c93-b3e5-470b-b312-482f41514326"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6094),
+                            FASBTopicId = new Guid("1d163fec-da53-466a-a7c8-548ee374ec4a"),
                             FullReference = "ASC 835-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5594)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6094)
                         },
                         new
                         {
-                            Id = new Guid("2e6790d4-b06b-4577-9efa-a5ca7d524174"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5594),
-                            FASBTopicId = new Guid("73c3f842-71ac-449b-91b5-14e7999c2226"),
+                            Id = new Guid("11306b61-ef47-4b58-9be4-39a0a75cfd46"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6094),
+                            FASBTopicId = new Guid("1d163fec-da53-466a-a7c8-548ee374ec4a"),
                             FullReference = "ASC 835-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5594)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6094)
                         },
                         new
                         {
-                            Id = new Guid("42a27edd-5352-4700-b6d2-2cd5a5e75a66"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5594),
-                            FASBTopicId = new Guid("73c3f842-71ac-449b-91b5-14e7999c2226"),
+                            Id = new Guid("6c957901-0270-44f9-8324-61d6e2b41080"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6094),
+                            FASBTopicId = new Guid("1d163fec-da53-466a-a7c8-548ee374ec4a"),
                             FullReference = "ASC 835-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5594)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6094)
                         },
                         new
                         {
-                            Id = new Guid("65e1ade8-d72f-45d8-997f-696080765893"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651),
-                            FASBTopicId = new Guid("508cf940-b141-4f77-9bdf-aaf0dfa15075"),
+                            Id = new Guid("61e4e0fa-f296-4791-8083-c5ed6bbde298"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157),
+                            FASBTopicId = new Guid("1966c860-0152-4939-b0f6-e784f094344f"),
                             FullReference = "ASC 840-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157)
                         },
                         new
                         {
-                            Id = new Guid("4c7d8cf2-5296-4c67-ab1e-4b4440a164f1"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651),
-                            FASBTopicId = new Guid("508cf940-b141-4f77-9bdf-aaf0dfa15075"),
+                            Id = new Guid("26d092ad-61ae-4629-bb33-c066d0a061d7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157),
+                            FASBTopicId = new Guid("1966c860-0152-4939-b0f6-e784f094344f"),
                             FullReference = "ASC 840-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157)
                         },
                         new
                         {
-                            Id = new Guid("2fa706e3-2d98-486f-b560-1288bda2612d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651),
-                            FASBTopicId = new Guid("508cf940-b141-4f77-9bdf-aaf0dfa15075"),
+                            Id = new Guid("a5826db8-44fa-4867-8852-91a2296eafa4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157),
+                            FASBTopicId = new Guid("1966c860-0152-4939-b0f6-e784f094344f"),
                             FullReference = "ASC 840-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157)
                         },
                         new
                         {
-                            Id = new Guid("61e82f04-c0f1-4c0b-92dd-8377a12b2c18"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651),
-                            FASBTopicId = new Guid("508cf940-b141-4f77-9bdf-aaf0dfa15075"),
+                            Id = new Guid("c9d16fd5-9176-47d7-bf50-eb0028fedd40"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157),
+                            FASBTopicId = new Guid("1966c860-0152-4939-b0f6-e784f094344f"),
                             FullReference = "ASC 840-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157)
                         },
                         new
                         {
-                            Id = new Guid("72053b56-31fe-4481-a1a6-96cc5b9a95f8"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724),
-                            FASBTopicId = new Guid("3995e9be-88fa-4f50-9702-6c0cb0e44636"),
+                            Id = new Guid("e32d0fec-ec12-42a6-b3df-ec2521e7196c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238),
+                            FASBTopicId = new Guid("5c1c7c81-3afd-4460-9933-b29e23ae483c"),
                             FullReference = "ASC 842-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238)
                         },
                         new
                         {
-                            Id = new Guid("86551bae-a9ae-4eba-8240-e0d2e76f48d0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724),
-                            FASBTopicId = new Guid("3995e9be-88fa-4f50-9702-6c0cb0e44636"),
+                            Id = new Guid("ceb91611-af31-4d9d-8134-9615fe918428"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238),
+                            FASBTopicId = new Guid("5c1c7c81-3afd-4460-9933-b29e23ae483c"),
                             FullReference = "ASC 842-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238)
                         },
                         new
                         {
-                            Id = new Guid("72187175-99d6-4ab5-9cca-0dba084fb95b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724),
-                            FASBTopicId = new Guid("3995e9be-88fa-4f50-9702-6c0cb0e44636"),
+                            Id = new Guid("68f1a0c7-7259-4e16-81b3-37663b625be7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238),
+                            FASBTopicId = new Guid("5c1c7c81-3afd-4460-9933-b29e23ae483c"),
                             FullReference = "ASC 842-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238)
                         },
                         new
                         {
-                            Id = new Guid("f96041bd-7ff0-4764-bf89-897e00bcf86f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724),
-                            FASBTopicId = new Guid("3995e9be-88fa-4f50-9702-6c0cb0e44636"),
+                            Id = new Guid("af3a78be-5af5-41ab-a156-0da4c4d67610"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238),
+                            FASBTopicId = new Guid("5c1c7c81-3afd-4460-9933-b29e23ae483c"),
                             FullReference = "ASC 842-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238)
                         },
                         new
                         {
-                            Id = new Guid("55ed87eb-fc6c-4c78-a2c9-221c86646092"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724),
-                            FASBTopicId = new Guid("3995e9be-88fa-4f50-9702-6c0cb0e44636"),
+                            Id = new Guid("2b2f0b02-2481-438f-b827-c0ed7ac817ef"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238),
+                            FASBTopicId = new Guid("5c1c7c81-3afd-4460-9933-b29e23ae483c"),
                             FullReference = "ASC 842-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238)
                         },
                         new
                         {
-                            Id = new Guid("a7fa6116-6864-4021-b583-bb47dd165f30"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5810),
-                            FASBTopicId = new Guid("a565b1ee-acff-4236-96de-b7bb96620f4b"),
+                            Id = new Guid("b9b58644-3ae4-4207-99ca-0142e06ec8ef"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6333),
+                            FASBTopicId = new Guid("6b0ec7f5-edb0-445f-86de-cfe630e0e92a"),
                             FullReference = "ASC 845-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5810)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6333)
                         },
                         new
                         {
-                            Id = new Guid("82fa8157-35c5-4577-8be1-21305753fb36"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5839),
-                            FASBTopicId = new Guid("8c8f4c68-7004-49e7-80f2-1efde75c55fd"),
+                            Id = new Guid("e9860c4f-a5ca-45e7-8324-974d1091ca2f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6365),
+                            FASBTopicId = new Guid("66a0e322-ad7a-492f-a96a-70d5f5422f17"),
                             FullReference = "ASC 848-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5839)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6365)
                         },
                         new
                         {
-                            Id = new Guid("6b02abd2-4886-4f98-ac62-c2ea001a55bb"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5868),
-                            FASBTopicId = new Guid("72b48ffd-3ca1-4a63-93d9-5082f902a89e"),
+                            Id = new Guid("08ac03e3-4a25-4723-b811-196dd8f8c1a3"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6396),
+                            FASBTopicId = new Guid("e9bc16e8-83e8-4ed7-bf20-e888b5e94ba3"),
                             FullReference = "ASC 850-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5868)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6396)
                         },
                         new
                         {
-                            Id = new Guid("8ffa20d7-e8b2-4329-bb57-f89eaaf288d3"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5897),
-                            FASBTopicId = new Guid("6084f16f-0cae-4b5e-91cf-a8a2602581b0"),
+                            Id = new Guid("ab327cda-9681-4b8a-9bc1-d99b7d511fd4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6428),
+                            FASBTopicId = new Guid("62f462c0-31df-4bc9-bf36-34530af5ad62"),
                             FullReference = "ASC 852-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5897)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6428)
                         },
                         new
                         {
-                            Id = new Guid("542783dc-bc49-4240-b934-8a981fe6f3f9"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5897),
-                            FASBTopicId = new Guid("6084f16f-0cae-4b5e-91cf-a8a2602581b0"),
+                            Id = new Guid("921a9879-fbf1-4a76-8a0a-dc6a5ee36840"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6428),
+                            FASBTopicId = new Guid("62f462c0-31df-4bc9-bf36-34530af5ad62"),
                             FullReference = "ASC 852-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5897)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6428)
                         },
                         new
                         {
-                            Id = new Guid("23b43bd5-78a1-451c-beb6-4463ed9429fe"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5940),
-                            FASBTopicId = new Guid("5a5dfcd8-d1a2-40f1-9edb-03c01e459145"),
+                            Id = new Guid("2b5ade3e-cddc-4fad-b79b-c804708697b6"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6475),
+                            FASBTopicId = new Guid("bc994793-83a0-4ec1-bf6a-96275e6e0c5e"),
                             FullReference = "ASC 855-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5940)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6475)
                         },
                         new
                         {
-                            Id = new Guid("2684bf37-4bbf-4b17-8467-ce36d5327a09"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969),
-                            FASBTopicId = new Guid("4a7b9ce7-07a8-469c-b63e-51acb7ca8e4c"),
+                            Id = new Guid("9fef26e0-c9c6-49f5-9827-cfd093647bb9"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506),
+                            FASBTopicId = new Guid("37895a36-59b0-4024-8aaa-84c2678aeecd"),
                             FullReference = "ASC 860-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506)
                         },
                         new
                         {
-                            Id = new Guid("8987e20a-c2e1-4d30-9f73-12f8f76e8e23"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969),
-                            FASBTopicId = new Guid("4a7b9ce7-07a8-469c-b63e-51acb7ca8e4c"),
+                            Id = new Guid("16ecb36e-26d6-4c17-91cd-ac6d859e7ec4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506),
+                            FASBTopicId = new Guid("37895a36-59b0-4024-8aaa-84c2678aeecd"),
                             FullReference = "ASC 860-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506)
                         },
                         new
                         {
-                            Id = new Guid("9784b037-d171-4bcf-9a50-293ea7fb31d2"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969),
-                            FASBTopicId = new Guid("4a7b9ce7-07a8-469c-b63e-51acb7ca8e4c"),
+                            Id = new Guid("9c20f5fc-774e-499b-b7b3-fedd5a16e723"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506),
+                            FASBTopicId = new Guid("37895a36-59b0-4024-8aaa-84c2678aeecd"),
                             FullReference = "ASC 860-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506)
                         },
                         new
                         {
-                            Id = new Guid("768b2224-fd7c-468d-bf47-f5bde7893ddc"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969),
-                            FASBTopicId = new Guid("4a7b9ce7-07a8-469c-b63e-51acb7ca8e4c"),
+                            Id = new Guid("5aa50992-e268-4626-a48f-1fa4b2971c5c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506),
+                            FASBTopicId = new Guid("37895a36-59b0-4024-8aaa-84c2678aeecd"),
                             FullReference = "ASC 860-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506)
                         },
                         new
                         {
-                            Id = new Guid("90983952-8dce-4f74-927c-833da5667353"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969),
-                            FASBTopicId = new Guid("4a7b9ce7-07a8-469c-b63e-51acb7ca8e4c"),
+                            Id = new Guid("36fbca02-0309-46f0-bbdf-3cfdf8836a2e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506),
+                            FASBTopicId = new Guid("37895a36-59b0-4024-8aaa-84c2678aeecd"),
                             FullReference = "ASC 860-50",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "50",
                             SubtopicName = "Disclosure",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506)
                         },
                         new
                         {
-                            Id = new Guid("9d85e686-8d27-4502-9eab-93d3fc9afd31"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6057),
-                            FASBTopicId = new Guid("1e7905d2-5e14-4190-b0e3-44584949a981"),
+                            Id = new Guid("f9c86ba0-89cc-4256-b150-66888d8efe64"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6607),
+                            FASBTopicId = new Guid("f89b4ec5-f1b9-483b-8769-bb97609d3063"),
                             FullReference = "ASC 905-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6057)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6607)
                         },
                         new
                         {
-                            Id = new Guid("351c82e6-0517-4439-a401-b58b18b1a3c0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6057),
-                            FASBTopicId = new Guid("1e7905d2-5e14-4190-b0e3-44584949a981"),
+                            Id = new Guid("3b8b696f-bc7a-4972-9c6b-599cc4afed0b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6607),
+                            FASBTopicId = new Guid("f89b4ec5-f1b9-483b-8769-bb97609d3063"),
                             FullReference = "ASC 905-330",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "330",
                             SubtopicName = "Inventory",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6057)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6607)
                         },
                         new
                         {
-                            Id = new Guid("ef42e821-e09a-4405-8f25-a0782b53364d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6057),
-                            FASBTopicId = new Guid("1e7905d2-5e14-4190-b0e3-44584949a981"),
+                            Id = new Guid("68d5cc02-11c1-499a-917c-262e803e59d7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6607),
+                            FASBTopicId = new Guid("f89b4ec5-f1b9-483b-8769-bb97609d3063"),
                             FullReference = "ASC 905-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6057)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6607)
                         },
                         new
                         {
-                            Id = new Guid("e4494f16-295d-4de7-9934-da31e1647154"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6121),
-                            FASBTopicId = new Guid("868579dc-b374-4864-8380-f7fe6d73f438"),
+                            Id = new Guid("36628551-5f6b-4233-9a79-ffb916c81aa4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6672),
+                            FASBTopicId = new Guid("168e5d04-6fc7-425b-a346-f1980d5feda7"),
                             FullReference = "ASC 908-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6121)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6672)
                         },
                         new
                         {
-                            Id = new Guid("f96aac50-f697-44b4-b8da-21c69eba1b3c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6121),
-                            FASBTopicId = new Guid("868579dc-b374-4864-8380-f7fe6d73f438"),
+                            Id = new Guid("8f5ea539-1518-45fd-8f23-7371caa42957"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6672),
+                            FASBTopicId = new Guid("168e5d04-6fc7-425b-a346-f1980d5feda7"),
                             FullReference = "ASC 908-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6121)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6672)
                         },
                         new
                         {
-                            Id = new Guid("918a9afd-e20d-4c66-93e8-4c3288aeab3a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6164),
-                            FASBTopicId = new Guid("d0657f37-3d70-4f1f-b88a-4b3ba2e74c38"),
+                            Id = new Guid("88c9cbfe-e4bd-406e-b7b7-d4fb2bc879e3"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6719),
+                            FASBTopicId = new Guid("9879d9c7-8bd3-466e-ac86-41812598eacf"),
                             FullReference = "ASC 910-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6164)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6719)
                         },
                         new
                         {
-                            Id = new Guid("7c6c9ddf-80d4-4784-b1fd-c17bf18e583c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6164),
-                            FASBTopicId = new Guid("d0657f37-3d70-4f1f-b88a-4b3ba2e74c38"),
+                            Id = new Guid("30a76aac-870a-4269-b453-9cf32bc192bd"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6719),
+                            FASBTopicId = new Guid("9879d9c7-8bd3-466e-ac86-41812598eacf"),
                             FullReference = "ASC 910-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6164)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6719)
                         },
                         new
                         {
-                            Id = new Guid("5b035f34-fe03-49d5-a0e5-8fa9b3910df3"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208),
-                            FASBTopicId = new Guid("8556d81f-1d65-4f82-b254-b098d88a460e"),
+                            Id = new Guid("d96a746c-bf7a-449d-8c5c-7d30b76e5015"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766),
+                            FASBTopicId = new Guid("6f278363-8ff4-4ee5-95f9-41aa77805d28"),
                             FullReference = "ASC 912-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766)
                         },
                         new
                         {
-                            Id = new Guid("302d8abb-399f-4e82-ab7f-676c2aef6203"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208),
-                            FASBTopicId = new Guid("8556d81f-1d65-4f82-b254-b098d88a460e"),
+                            Id = new Guid("0b3d2256-402f-4dbe-8c1f-9618a016b408"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766),
+                            FASBTopicId = new Guid("6f278363-8ff4-4ee5-95f9-41aa77805d28"),
                             FullReference = "ASC 912-330",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "330",
                             SubtopicName = "Inventory",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766)
                         },
                         new
                         {
-                            Id = new Guid("a5f5445b-cb53-4377-8545-84fd0d39882a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208),
-                            FASBTopicId = new Guid("8556d81f-1d65-4f82-b254-b098d88a460e"),
+                            Id = new Guid("ffa80d34-c568-40fe-a19c-56317b8e3ae7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766),
+                            FASBTopicId = new Guid("6f278363-8ff4-4ee5-95f9-41aa77805d28"),
                             FullReference = "ASC 912-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766)
                         },
                         new
                         {
-                            Id = new Guid("5e70a924-bbd6-4350-8aa2-ca33993f9af5"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208),
-                            FASBTopicId = new Guid("8556d81f-1d65-4f82-b254-b098d88a460e"),
+                            Id = new Guid("02e8a244-26c8-4757-9467-808f3d44d7b5"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766),
+                            FASBTopicId = new Guid("6f278363-8ff4-4ee5-95f9-41aa77805d28"),
                             FullReference = "ASC 912-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766)
                         },
                         new
                         {
-                            Id = new Guid("b9f1c190-7d6f-46cf-91e5-84036f071d48"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6282),
-                            FASBTopicId = new Guid("7fcec6a5-68e6-4e7c-94f6-1c7f4f4189d6"),
+                            Id = new Guid("93a492fa-7f77-4a56-b3f2-6b6aaa0b2611"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6848),
+                            FASBTopicId = new Guid("ed1f0540-5952-4343-b57c-de52e1c80a4f"),
                             FullReference = "ASC 920-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6282)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6848)
                         },
                         new
                         {
-                            Id = new Guid("308a0402-c861-49c4-a448-4d21279aa0f6"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6282),
-                            FASBTopicId = new Guid("7fcec6a5-68e6-4e7c-94f6-1c7f4f4189d6"),
+                            Id = new Guid("4edb3a77-de70-4cc0-b75e-7d1342ef9aac"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6848),
+                            FASBTopicId = new Guid("ed1f0540-5952-4343-b57c-de52e1c80a4f"),
                             FullReference = "ASC 920-350",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "350",
                             SubtopicName = "Intangibles—Goodwill and Other",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6282)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6848)
                         },
                         new
                         {
-                            Id = new Guid("12fd3a8b-f9a2-4c38-aef9-36525d6c1818"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6282),
-                            FASBTopicId = new Guid("7fcec6a5-68e6-4e7c-94f6-1c7f4f4189d6"),
+                            Id = new Guid("787a5330-5df4-438f-a6f2-b0e5db4ed0f8"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6848),
+                            FASBTopicId = new Guid("ed1f0540-5952-4343-b57c-de52e1c80a4f"),
                             FullReference = "ASC 920-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6282)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6848)
                         },
                         new
                         {
-                            Id = new Guid("c11d530a-ed89-4045-97c7-d6e1bc673285"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6340),
-                            FASBTopicId = new Guid("5dd91913-6cc1-4134-abb9-6034604f53e7"),
+                            Id = new Guid("82c67225-6175-4aa9-8077-6f383d58f1ef"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6911),
+                            FASBTopicId = new Guid("1b7a6f4c-83f5-4a02-a4ea-5c7536801979"),
                             FullReference = "ASC 922-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6340)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6911)
                         },
                         new
                         {
-                            Id = new Guid("a159e660-bb27-499d-b458-cfc4cb9770a1"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6340),
-                            FASBTopicId = new Guid("5dd91913-6cc1-4134-abb9-6034604f53e7"),
+                            Id = new Guid("35286200-c109-4501-bc51-d912e6fa1165"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6911),
+                            FASBTopicId = new Guid("1b7a6f4c-83f5-4a02-a4ea-5c7536801979"),
                             FullReference = "ASC 922-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6340)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6911)
                         },
                         new
                         {
-                            Id = new Guid("ccbbed03-0896-41ec-ab9e-62336018c1b7"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6383),
-                            FASBTopicId = new Guid("efa8e7f4-0a44-4537-a0cc-1ab0480a6627"),
+                            Id = new Guid("ca7f3885-7582-4e0c-bbe0-8e2a236e7d80"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6958),
+                            FASBTopicId = new Guid("f547e1b2-e99a-4a6d-a2a4-5d6cc1ae64e6"),
                             FullReference = "ASC 924-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6383)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6958)
                         },
                         new
                         {
-                            Id = new Guid("63ba1212-d384-4ff6-bbbb-54c5c49efb4b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6383),
-                            FASBTopicId = new Guid("efa8e7f4-0a44-4537-a0cc-1ab0480a6627"),
+                            Id = new Guid("01195ae3-4685-44ab-b708-8580a2405e5d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6958),
+                            FASBTopicId = new Guid("f547e1b2-e99a-4a6d-a2a4-5d6cc1ae64e6"),
                             FullReference = "ASC 924-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6383)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6958)
                         },
                         new
                         {
-                            Id = new Guid("6cff6635-e8e2-4343-b7fb-8f9156326122"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6426),
-                            FASBTopicId = new Guid("612110f5-28e0-4b9a-9661-d4921d84e22c"),
+                            Id = new Guid("fa5802d2-e851-43b3-8a68-6582d6a558f7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7006),
+                            FASBTopicId = new Guid("417c4dcb-ee80-4595-9386-eebb125b0026"),
                             FullReference = "ASC 926-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6426)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7006)
                         },
                         new
                         {
-                            Id = new Guid("6c10f3e7-e5e5-42d4-9b4e-5929f0f2b85c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6426),
-                            FASBTopicId = new Guid("612110f5-28e0-4b9a-9661-d4921d84e22c"),
+                            Id = new Guid("5c460e76-4236-432a-94df-3680cdc201cc"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7006),
+                            FASBTopicId = new Guid("417c4dcb-ee80-4595-9386-eebb125b0026"),
                             FullReference = "ASC 926-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6426)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7006)
                         },
                         new
                         {
-                            Id = new Guid("c0856748-76dd-4196-9967-7ddb96ac28a3"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6426),
-                            FASBTopicId = new Guid("612110f5-28e0-4b9a-9661-d4921d84e22c"),
+                            Id = new Guid("41b6edb0-f3ac-4a11-93a5-169b60c8cf35"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7006),
+                            FASBTopicId = new Guid("417c4dcb-ee80-4595-9386-eebb125b0026"),
                             FullReference = "ASC 926-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6426)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7006)
                         },
                         new
                         {
-                            Id = new Guid("cb3bb55c-364a-45a1-bb5a-8c23a86ff846"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6483),
-                            FASBTopicId = new Guid("311082fb-cca2-4507-a64e-64b7998debd9"),
+                            Id = new Guid("74cc6e02-b386-41cb-ab77-03f2be75d041"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7069),
+                            FASBTopicId = new Guid("02850fcf-a040-4b84-a68d-4ac86a7983de"),
                             FullReference = "ASC 928-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6483)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7069)
                         },
                         new
                         {
-                            Id = new Guid("933785d6-1089-4d01-b85c-b70363dd751f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6483),
-                            FASBTopicId = new Guid("311082fb-cca2-4507-a64e-64b7998debd9"),
+                            Id = new Guid("539182fa-3d00-4bee-a606-99aff35f48c4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7069),
+                            FASBTopicId = new Guid("02850fcf-a040-4b84-a68d-4ac86a7983de"),
                             FullReference = "ASC 928-340",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "340",
                             SubtopicName = "Other Assets and Deferred Costs",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6483)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7069)
                         },
                         new
                         {
-                            Id = new Guid("fab2efcc-2dc5-4acf-a10b-a32c07aef997"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6527),
-                            FASBTopicId = new Guid("e4fe5587-f9ba-45d4-aae6-18b4f098ae04"),
+                            Id = new Guid("9cd81a98-be99-469d-9364-494b68e22e53"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7121),
+                            FASBTopicId = new Guid("8a1e39ec-a7ca-47b0-b586-55931ac93001"),
                             FullReference = "ASC 930-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6527)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7121)
                         },
                         new
                         {
-                            Id = new Guid("62b628e2-f706-4949-a3e1-5a08941cfa88"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6527),
-                            FASBTopicId = new Guid("e4fe5587-f9ba-45d4-aae6-18b4f098ae04"),
+                            Id = new Guid("aa9400cb-0120-4ee0-b675-a64074c280e8"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7121),
+                            FASBTopicId = new Guid("8a1e39ec-a7ca-47b0-b586-55931ac93001"),
                             FullReference = "ASC 930-330",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "330",
                             SubtopicName = "Inventory",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6527)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7121)
                         },
                         new
                         {
-                            Id = new Guid("3ed6b758-e77c-46ef-8b3b-8ed0851a2473"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6527),
-                            FASBTopicId = new Guid("e4fe5587-f9ba-45d4-aae6-18b4f098ae04"),
+                            Id = new Guid("ee7da4c9-2852-4c51-a6fa-6babfa283052"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7121),
+                            FASBTopicId = new Guid("8a1e39ec-a7ca-47b0-b586-55931ac93001"),
                             FullReference = "ASC 930-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6527)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7121)
                         },
                         new
                         {
-                            Id = new Guid("526e70a2-0679-4cb4-bf68-bf930bf019b2"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6591),
-                            FASBTopicId = new Guid("f73eee2c-ae4e-4ef5-a720-2d56e5399c09"),
+                            Id = new Guid("51dcf5cc-d8f7-4e71-856a-b15ca5d4113b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7185),
+                            FASBTopicId = new Guid("8d28c94e-7389-4766-b69b-88e473161adc"),
                             FullReference = "ASC 932-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6591)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7185)
                         },
                         new
                         {
-                            Id = new Guid("2f77e28a-83aa-456a-a91b-e28b7cb5d575"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6591),
-                            FASBTopicId = new Guid("f73eee2c-ae4e-4ef5-a720-2d56e5399c09"),
+                            Id = new Guid("25c47668-3d31-4b98-9842-47cf82017dac"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7185),
+                            FASBTopicId = new Guid("8d28c94e-7389-4766-b69b-88e473161adc"),
                             FullReference = "ASC 932-235",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "235",
                             SubtopicName = "Notes to Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6591)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7185)
                         },
                         new
                         {
-                            Id = new Guid("3af0a415-b4c8-412e-b1bf-b2f06a3f8052"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6591),
-                            FASBTopicId = new Guid("f73eee2c-ae4e-4ef5-a720-2d56e5399c09"),
+                            Id = new Guid("fb96abe2-872e-48ec-8b1c-482096635e97"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7185),
+                            FASBTopicId = new Guid("8d28c94e-7389-4766-b69b-88e473161adc"),
                             FullReference = "ASC 932-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6591)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7185)
                         },
                         new
                         {
-                            Id = new Guid("264aa248-93d7-4bf0-a253-7d9077825257"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649),
-                            FASBTopicId = new Guid("26e07710-3918-4bf0-b327-c6466e635576"),
+                            Id = new Guid("4f66dc10-f71f-416e-89a7-520df3619cda"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249),
+                            FASBTopicId = new Guid("827fd89a-5eca-4cc3-b206-07186f134963"),
                             FullReference = "ASC 940-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249)
                         },
                         new
                         {
-                            Id = new Guid("966c6a84-72b4-4441-92d6-5259aff9d743"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649),
-                            FASBTopicId = new Guid("26e07710-3918-4bf0-b327-c6466e635576"),
+                            Id = new Guid("f23c7564-3ebb-4242-b3ae-431381a3f731"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249),
+                            FASBTopicId = new Guid("827fd89a-5eca-4cc3-b206-07186f134963"),
                             FullReference = "ASC 940-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249)
                         },
                         new
                         {
-                            Id = new Guid("f07b192c-5096-45a9-87ce-9786039afd2a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649),
-                            FASBTopicId = new Guid("26e07710-3918-4bf0-b327-c6466e635576"),
+                            Id = new Guid("c7e64be7-5404-4437-9cf2-70afb864dda5"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249),
+                            FASBTopicId = new Guid("827fd89a-5eca-4cc3-b206-07186f134963"),
                             FullReference = "ASC 940-320",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "320",
                             SubtopicName = "Investments—Debt and Equity Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249)
                         },
                         new
                         {
-                            Id = new Guid("8cac6ec4-d53b-44a5-a776-b15c5dcd7860"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649),
-                            FASBTopicId = new Guid("26e07710-3918-4bf0-b327-c6466e635576"),
+                            Id = new Guid("2ca2028b-75ed-4a0b-bdba-eaa5465f19d0"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249),
+                            FASBTopicId = new Guid("827fd89a-5eca-4cc3-b206-07186f134963"),
                             FullReference = "ASC 940-405",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "405",
                             SubtopicName = "Liabilities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249)
                         },
                         new
                         {
-                            Id = new Guid("4ac3fdf2-2320-4c5e-aed3-f8ee9c42f52d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649),
-                            FASBTopicId = new Guid("26e07710-3918-4bf0-b327-c6466e635576"),
+                            Id = new Guid("cefcca41-d6c6-415d-a7ab-18c378a6c74e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249),
+                            FASBTopicId = new Guid("827fd89a-5eca-4cc3-b206-07186f134963"),
                             FullReference = "ASC 940-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249)
                         },
                         new
                         {
-                            Id = new Guid("6e66146b-197f-49ff-9639-a2f4d0d9fa31"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("6668f806-4800-40d7-b0aa-fbefa0fcc554"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("2f5347ce-dd0d-4641-9faf-6cc055f9e173"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("5cfdc949-6bb9-4dec-a909-0a7f6b041070"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-210",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "210",
                             SubtopicName = "Balance Sheet",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("9d18d787-15db-41f2-bdd8-5a4829f9aa26"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("33a37130-25ab-4dd2-9e4b-dca32bd44c2a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-220",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "220",
                             SubtopicName = "Income Statement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("51dda8a2-150e-410a-81c1-8f8ed77d1c89"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("9ca64863-659a-4f1c-904a-2acfc363761b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-230",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "230",
                             SubtopicName = "Statement of Cash Flows",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("206e39fa-6af9-4b51-b4f4-56b894ede286"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("7b0ceb93-56bc-48cf-a4f3-0cd9c2d7523f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-235",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "235",
                             SubtopicName = "Notes to Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("862e2ba2-3f1b-4168-9cf3-08254ff8c84f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("1ff006aa-49b2-4f85-8aec-f55793b2dad0"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-320",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "320",
                             SubtopicName = "Investments—Debt and Equity Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("9ddb2cc4-1f0e-456c-b266-965a1579c98b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("79269d88-f4e9-4cc7-8084-f3f5525fd3c0"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-325",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "325",
                             SubtopicName = "Investments—Other",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("a9382478-5890-4c1e-9be5-3fd1daca0d73"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("00f6239b-7fef-4690-95da-c99f77fe2af0"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-405",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "405",
                             SubtopicName = "Liabilities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("ee93ce2a-0b2e-4421-a362-e49340e5fc91"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("d84f4df5-677a-4064-bfba-db9be8a2866d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-470",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "470",
                             SubtopicName = "Debt",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("b9fcc2b6-e91f-4385-8fc7-43cf14859d16"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("b2231718-1a6b-4aa6-8bff-7199026a6066"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-505",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "505",
                             SubtopicName = "Equity",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("85dacc06-3fcd-46a7-844c-b9bcefe01f1b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("19a542ba-fd3d-4caa-93c1-d810338a7e27"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-715",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "715",
                             SubtopicName = "Compensation—Retirement Benefits",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("d7e5deee-9187-4531-a53e-cbf0cdbfe17b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
-                            FASBTopicId = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("f6a8515d-edb1-4f22-b9a6-a0d452cf5b93"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
+                            FASBTopicId = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             FullReference = "ASC 942-825",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "825",
                             SubtopicName = "Financial Instruments",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("f7703242-8697-4eff-bf15-2fbbd1779837"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("50e05231-1811-4d63-8951-9fbe0733df3a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("53b31ede-1d1f-4b9d-80ee-42cdf44c0ca1"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("877578b2-3a83-4953-b3bb-66aa1516d055"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("96bdd269-61f8-4f4a-85af-93f729e8ddd3"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("3001d827-82aa-40f0-899e-ca33a4d1b0cc"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("4f5a5c28-0583-4ba7-8433-54e9886ca585"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("edf4353a-3cee-4240-9547-6026f3cf8584"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-40",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "40",
                             SubtopicName = "Derecognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("d5884d3c-080c-4c3c-a92f-27567a1e112c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("3e3f2632-c51d-406e-8117-455b426dcbdd"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-210",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "210",
                             SubtopicName = "Balance Sheet",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("1b504b7e-34e5-49fc-a658-a3254ef26813"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("4c4adf05-0a94-4f6b-8b17-553957f691aa"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-220",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "220",
                             SubtopicName = "Income Statement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("d7132967-f2e9-4c5b-b17f-70d72ab03c89"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("b1e6b4ca-e6c1-4efb-8c67-4bd88976399f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-235",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "235",
                             SubtopicName = "Notes to Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("3b1c3de5-6c81-4d6b-af3f-e305d5508d1f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("78b812c1-42ec-46f2-b71c-d3a1958450f0"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("48766df4-6970-4faa-b995-b26b5890c413"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("aa073ec9-e014-49b7-a8b5-1e72d84ea03a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-405",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "405",
                             SubtopicName = "Liabilities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("6034bfdd-b3f9-49fe-88fb-56341290e3f2"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("f7a3a613-268e-4386-a57d-18806a8a680d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-470",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "470",
                             SubtopicName = "Debt",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("ed3b7131-e1d9-4c61-9d9b-83327e46ae0d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("b6c09240-e994-43bd-ad86-8e564bdcb72f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-505",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "505",
                             SubtopicName = "Equity",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("a1ef57a6-2bba-4ccd-8e89-27658a0aa17b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("a862ae35-85d8-415b-8b5f-0871b67b0d62"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("f6eee19a-3c6d-47a0-838f-cd033b7c4c03"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("6522021a-449c-4437-9383-1efdc96997b0"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-715",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "715",
                             SubtopicName = "Compensation—Retirement Benefits",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("f0611c17-8940-4311-a477-3fd0efc87721"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
-                            FASBTopicId = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("821410b9-d50d-4bcc-b2e3-40e1beb55a19"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
+                            FASBTopicId = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             FullReference = "ASC 944-825",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "825",
                             SubtopicName = "Financial Instruments",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("bd77d122-ad67-4873-9032-0107b4f9a371"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("d8b3f16f-e5f2-4e2f-847e-22bc0c0e07f3"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("97c2ff6d-676d-4344-966e-a048a35d3ddb"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("4d08e2ed-c6f3-49b7-a9cc-0f59ddfd51fa"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("5c542d87-4436-4d6a-97a1-e39bd145376f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("fbd740e7-4183-43d9-9dcc-c02f6b2dcf9c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-205",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "205",
                             SubtopicName = "Presentation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("a7a5a21a-b407-4e09-9d4b-d394dea84252"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("95a0bc1e-f100-44dc-9432-c1c97bc8f2c9"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-210",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "210",
                             SubtopicName = "Balance Sheet",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("46fc0bf4-2a93-4bf6-ae71-d9a2bb4c3cbd"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("f88ca7fd-9c56-4deb-a9a9-a903755c0935"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-220",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "220",
                             SubtopicName = "Income Statement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("ba43060c-b207-4019-a33a-c97cf2933024"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("748316f3-2d77-4934-8b3a-a5aea474ca62"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-235",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "235",
                             SubtopicName = "Notes to Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("fbd89cd0-1cb9-4eba-8709-8c82f09ae56d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("39c99eff-9b01-47b8-8a50-cffd2c6c0e8c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("95b2a906-1ed8-490b-8d12-09cd2cd16f58"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("30d2a0e8-5a35-4aae-9243-6126baa64b2d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-320",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "320",
                             SubtopicName = "Investments—Debt and Equity Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("e2020cc6-1032-4e84-8b2d-b41dddb48bf0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("81972da2-8192-437a-a9db-b977e849582f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-405",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "405",
                             SubtopicName = "Liabilities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("20ea0702-61f0-4e8f-bd78-1bf0d211e45c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("2f49ed1c-58dd-4199-992c-201e2520411a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-505",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "505",
                             SubtopicName = "Equity",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("3a775203-cac8-4279-8b42-c07635408d64"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("56f4e943-faa8-4f43-bd34-4317bbbc1002"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("290fb12c-254b-4352-8f33-06457e38aaf3"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("e9b997e3-9ef7-4e6f-8221-6b9892f5911d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-715",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "715",
                             SubtopicName = "Compensation—Retirement Benefits",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("96320718-7b96-4187-888f-a4bfd77fdae8"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
-                            FASBTopicId = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("3ab280f1-63dd-46ec-95dd-ee8c0e369f0c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
+                            FASBTopicId = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             FullReference = "ASC 946-830",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "830",
                             SubtopicName = "Foreign Currency Matters",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("52aed62b-f590-49ee-b4b8-8a42c9515806"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7359),
-                            FASBTopicId = new Guid("af448d74-6f8f-4f1f-b189-05b63f7d3806"),
+                            Id = new Guid("5cd4697b-b1f4-43d1-b16d-b38431a8a4dd"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8027),
+                            FASBTopicId = new Guid("b4e7a434-175e-45ec-80de-3490478782d6"),
                             FullReference = "ASC 948-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7359)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8027)
                         },
                         new
                         {
-                            Id = new Guid("832560d5-e0f3-480c-9df1-f11656600232"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7359),
-                            FASBTopicId = new Guid("af448d74-6f8f-4f1f-b189-05b63f7d3806"),
+                            Id = new Guid("5b372cfe-ae82-4123-9f5b-27fdb801ed94"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8027),
+                            FASBTopicId = new Guid("b4e7a434-175e-45ec-80de-3490478782d6"),
                             FullReference = "ASC 948-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7359)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8027)
                         },
                         new
                         {
-                            Id = new Guid("f6c96070-f5ab-40e0-8d65-f31c6d9e77f0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7359),
-                            FASBTopicId = new Guid("af448d74-6f8f-4f1f-b189-05b63f7d3806"),
+                            Id = new Guid("3a1d6800-76d4-42b8-b88e-b64b91931f50"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8027),
+                            FASBTopicId = new Guid("b4e7a434-175e-45ec-80de-3490478782d6"),
                             FullReference = "ASC 948-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7359)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8027)
                         },
                         new
                         {
-                            Id = new Guid("3d511cc6-f98b-422e-810b-80c21a900546"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7417),
-                            FASBTopicId = new Guid("ec7225f8-c8c6-4530-a1db-a51d385facf7"),
+                            Id = new Guid("83d7935b-a775-4227-8da2-8fe13aef426c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8091),
+                            FASBTopicId = new Guid("8d585a5a-6fa4-4b4b-99f5-b564c1efcee8"),
                             FullReference = "ASC 950-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7417)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8091)
                         },
                         new
                         {
-                            Id = new Guid("0b5b1bde-8b0b-4f2c-891c-54bbc352796c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7417),
-                            FASBTopicId = new Guid("ec7225f8-c8c6-4530-a1db-a51d385facf7"),
+                            Id = new Guid("3f860153-a0ee-4dfb-b69e-f734e2eb7fc8"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8091),
+                            FASBTopicId = new Guid("8d585a5a-6fa4-4b4b-99f5-b564c1efcee8"),
                             FullReference = "ASC 950-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7417)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8091)
                         },
                         new
                         {
-                            Id = new Guid("b10de13b-014c-49ff-96c2-93e52c7bbc61"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("0f5fa995-0c9e-43f1-8335-ffdfb0f655f2"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("b088a41b-c7a8-47a8-89dd-58cdc7876105"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("9a4cc363-5755-4729-8755-6931bbecfd15"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-205",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "205",
                             SubtopicName = "Presentation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("1c9e0bd7-2251-46a1-a782-b5a5e401c1df"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("d7c10a58-0997-4cff-a7e0-d4068d53b472"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-210",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "210",
                             SubtopicName = "Balance Sheet",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("a2d5161c-4138-4378-ae85-c47f5794dc06"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("5ea81ce0-0ac9-465c-bd26-05a047417b69"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-220",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "220",
                             SubtopicName = "Income Statement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("a2801c3a-a7db-409f-b2db-ed0eb2cb4676"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("f34bdb16-5084-44a1-8f57-9b8260031c40"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-225",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "225",
                             SubtopicName = "Income Statement—Discontinued Operations",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("34e236c1-c0fd-40e5-8379-cfe7a78abc26"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("7e75b5b5-5f1a-45c4-92f8-e29121b05512"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-235",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "235",
                             SubtopicName = "Notes to Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("1c25fed3-f860-4631-b523-c65531ef3762"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("9d9a095d-5901-42d5-92fb-d35eb895f5d6"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("cf188434-114f-475a-8eb5-1a07b63db612"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("7be40145-fc1c-4b52-a461-5dd40b9fc16f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("f144a4de-f67f-48fe-9862-78da8682a85b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("62f3dda1-6ac0-403a-a62b-602d19b1c362"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-440",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "440",
                             SubtopicName = "Commitments",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("32375f76-0d00-43f0-98c9-a6bec042dd25"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("a0efaba0-904b-4653-9f89-ea9626c41b00"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-450",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "450",
                             SubtopicName = "Contingencies",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("e9d94689-2b1c-4250-aa64-c8dbe386270e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("3d80652b-e914-449f-bfe0-2542c895188a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("20f1812a-588a-415d-a557-2f2864eab331"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("6d6696ac-9210-41ad-af30-7fb4f2f8975c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-715",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "715",
                             SubtopicName = "Compensation—Retirement Benefits",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("61ee0edf-8d5e-4e9a-a7ca-51ed9aa09166"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("8fb38b3e-9515-4b89-a6ca-1b1747d5e94f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-810",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "810",
                             SubtopicName = "Consolidation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("84c3f9e6-b037-4611-ab0e-397d6860fab6"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
-                            FASBTopicId = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("e83e9951-fe5e-4db9-a8af-5a06d1b6c949"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
+                            FASBTopicId = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             FullReference = "ASC 954-958",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "958",
                             SubtopicName = "Not-for-Profit Entities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("ddfd5513-dc96-490e-a912-a8b64f9c62c1"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("96c6241c-3806-45b7-af8a-13ad8f669a19"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("2b6f4abe-d73c-4c43-a806-e7fb6fee2c89"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("92107b7b-1eac-46e0-bcbb-7deabdb07eb6"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-205",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "205",
                             SubtopicName = "Presentation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("913622d4-5e5b-4562-8733-34d72d4e9e74"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("29665446-7b83-4da5-a3fc-df7306889cc7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-210",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "210",
                             SubtopicName = "Balance Sheet",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("d5bfe6d3-d35c-4aa9-9b6a-63452720b555"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("3c184109-a80c-4f44-95f6-de5c84a4d65e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-220",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "220",
                             SubtopicName = "Income Statement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("db6c6268-5ac9-4a18-a797-3085957d9ae8"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("9a7baea8-70c7-4259-8cf0-ba1d267eba77"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-225",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "225",
                             SubtopicName = "Income Statement—Discontinued Operations",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("d584e1f4-3ca0-48be-9722-1566e1b0daeb"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("feba2a93-fe69-4929-bd86-940f28b1112e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-230",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "230",
                             SubtopicName = "Statement of Cash Flows",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("859d56dc-90c0-4df3-8b14-d69fd2a8a507"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("637952a9-032b-4a45-868e-bd1e5c8a6d21"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-235",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "235",
                             SubtopicName = "Notes to Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("70d5641f-1125-4d0f-b28b-eaae857ba773"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("912f3903-fbe9-469e-846d-4c5252cf71f7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("34771f76-5428-4f7a-8e3b-cd48c020aec4"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("2f2c57c2-5618-4ffa-b759-c93b336e0291"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-320",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "320",
                             SubtopicName = "Investments—Debt and Equity Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("69ef82b6-98b4-42d7-a275-2e45e081d87a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("cfff8182-fa90-4891-a7a1-6b89ebdefa5f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-325",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "325",
                             SubtopicName = "Investments—Other",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("612fd488-13ef-417a-9ac7-c53eb761d372"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("c8545e44-e87a-4f45-975a-29762bff2028"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("32bd5ec6-b19b-478c-9d55-da2f437809b4"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("eb4bbfcd-8044-48de-acc5-1ea8900025b5"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-405",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "405",
                             SubtopicName = "Liabilities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("91b5fc8d-3913-401b-a876-076b7200994c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("9c133f2f-a827-44bd-a0ff-ae81b58441dc"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-450",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "450",
                             SubtopicName = "Contingencies",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("3196b28c-e891-4b72-a880-031656f1c7d8"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("198cb15f-5af8-4899-85f5-27183848118b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("f7b9e500-dc45-4aae-952f-5d95442a28ea"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("47502fb3-8383-42e1-b14f-0ab2aa2e1e9f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-715",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "715",
                             SubtopicName = "Compensation—Retirement Benefits",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("657f3216-e42a-4b10-be0b-9c4399bd94c8"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("cfd6412a-4a37-4779-9ff6-5a61931107fa"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-720",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "720",
                             SubtopicName = "Other Expenses",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("4e204740-02db-440d-8d38-cc628eba2e00"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("cf871af6-219d-45cd-a626-2fc375ae012d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-810",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "810",
                             SubtopicName = "Consolidation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("d4029560-12ee-42d8-a268-4cfab2eb42d7"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("b9ca31c1-ba4e-4a7f-b683-15471fabc2dc"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-815",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "815",
                             SubtopicName = "Derivatives and Hedging",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("c264bc8f-372d-41bc-a305-641a7acf4f4e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("9a5daba2-cf76-470a-9a12-f766d2e6cc6f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-825",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "825",
                             SubtopicName = "Financial Instruments",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("5af7a7c3-110c-47d4-aa52-5b7510a26aeb"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
-                            FASBTopicId = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("485ca423-d11b-4c4a-965c-4f9e41940cb4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
+                            FASBTopicId = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             FullReference = "ASC 958-954",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "954",
                             SubtopicName = "Health Care Entities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("f5a65d80-7c89-4e7a-a280-d0cb47ec61fb"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002),
-                            FASBTopicId = new Guid("20c94d8d-3a64-4858-a19b-a0834e5eda87"),
+                            Id = new Guid("fe0529fd-cd59-49d6-bc8e-d93721684939"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731),
+                            FASBTopicId = new Guid("983687a9-c988-441d-807c-728062d0b327"),
                             FullReference = "ASC 960-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731)
                         },
                         new
                         {
-                            Id = new Guid("d5bf2853-a771-431b-a727-d84b34d70b51"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002),
-                            FASBTopicId = new Guid("20c94d8d-3a64-4858-a19b-a0834e5eda87"),
+                            Id = new Guid("31ab2696-0e0c-4cb4-a293-f4825c81f2d2"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731),
+                            FASBTopicId = new Guid("983687a9-c988-441d-807c-728062d0b327"),
                             FullReference = "ASC 960-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731)
                         },
                         new
                         {
-                            Id = new Guid("03eab407-68a7-4c8e-a284-e8e66465f662"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002),
-                            FASBTopicId = new Guid("20c94d8d-3a64-4858-a19b-a0834e5eda87"),
+                            Id = new Guid("c85bfac6-24c5-431d-abd2-3f390570aca2"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731),
+                            FASBTopicId = new Guid("983687a9-c988-441d-807c-728062d0b327"),
                             FullReference = "ASC 960-205",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "205",
                             SubtopicName = "Presentation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731)
                         },
                         new
                         {
-                            Id = new Guid("53872a41-c248-4e6d-b278-e57c3866afcd"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002),
-                            FASBTopicId = new Guid("20c94d8d-3a64-4858-a19b-a0834e5eda87"),
+                            Id = new Guid("cf895ccc-3995-4669-9ca1-0e7a5284fb48"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731),
+                            FASBTopicId = new Guid("983687a9-c988-441d-807c-728062d0b327"),
                             FullReference = "ASC 960-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731)
                         },
                         new
                         {
-                            Id = new Guid("a5c91a1d-d46e-4827-85b0-1c290ea27a1e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002),
-                            FASBTopicId = new Guid("20c94d8d-3a64-4858-a19b-a0834e5eda87"),
+                            Id = new Guid("be2cfd2e-c362-4298-90a4-21835c9653ea"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731),
+                            FASBTopicId = new Guid("983687a9-c988-441d-807c-728062d0b327"),
                             FullReference = "ASC 960-320",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "320",
                             SubtopicName = "Investments—Debt and Equity Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731)
                         },
                         new
                         {
-                            Id = new Guid("79d65b23-5657-4d8c-8fe9-05e70e224ebf"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002),
-                            FASBTopicId = new Guid("20c94d8d-3a64-4858-a19b-a0834e5eda87"),
+                            Id = new Guid("7d283e13-7a65-414e-bf15-648015d40200"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731),
+                            FASBTopicId = new Guid("983687a9-c988-441d-807c-728062d0b327"),
                             FullReference = "ASC 960-325",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "325",
                             SubtopicName = "Investments—Other",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731)
                         },
                         new
                         {
-                            Id = new Guid("0e17efe9-19e0-4f3d-82b3-0df30f51e40c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103),
-                            FASBTopicId = new Guid("e11e1e10-fa8f-43b9-be78-a91c68791130"),
+                            Id = new Guid("f0f85c3c-8f2b-4ed4-8c4f-2150d4d07383"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988),
+                            FASBTopicId = new Guid("f3d8e7cd-dda8-4530-8581-be231a94f80e"),
                             FullReference = "ASC 962-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988)
                         },
                         new
                         {
-                            Id = new Guid("2a9678c7-df12-4219-9254-093dc52d7647"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103),
-                            FASBTopicId = new Guid("e11e1e10-fa8f-43b9-be78-a91c68791130"),
+                            Id = new Guid("5a9e22e4-0c3b-430e-a179-e0ea2131b258"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988),
+                            FASBTopicId = new Guid("f3d8e7cd-dda8-4530-8581-be231a94f80e"),
                             FullReference = "ASC 962-205",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "205",
                             SubtopicName = "Presentation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988)
                         },
                         new
                         {
-                            Id = new Guid("212f0997-9dca-41fb-9bf5-dea6148790fb"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103),
-                            FASBTopicId = new Guid("e11e1e10-fa8f-43b9-be78-a91c68791130"),
+                            Id = new Guid("13f23e64-f1ff-4c5c-a24d-a085aec4611e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988),
+                            FASBTopicId = new Guid("f3d8e7cd-dda8-4530-8581-be231a94f80e"),
                             FullReference = "ASC 962-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988)
                         },
                         new
                         {
-                            Id = new Guid("4eb34567-dc5b-4d5d-afd7-5d25ef509e34"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103),
-                            FASBTopicId = new Guid("e11e1e10-fa8f-43b9-be78-a91c68791130"),
+                            Id = new Guid("dd2d9be3-7438-47eb-bd09-f7fd20bf4b8e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988),
+                            FASBTopicId = new Guid("f3d8e7cd-dda8-4530-8581-be231a94f80e"),
                             FullReference = "ASC 962-320",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "320",
                             SubtopicName = "Investments—Debt and Equity Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988)
                         },
                         new
                         {
-                            Id = new Guid("deccbb30-9212-44cd-b83d-229f9450a82c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103),
-                            FASBTopicId = new Guid("e11e1e10-fa8f-43b9-be78-a91c68791130"),
+                            Id = new Guid("b488dbdd-2c05-471b-a1f5-7708ccb7f649"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988),
+                            FASBTopicId = new Guid("f3d8e7cd-dda8-4530-8581-be231a94f80e"),
                             FullReference = "ASC 962-325",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "325",
                             SubtopicName = "Investments—Other",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988)
                         },
                         new
                         {
-                            Id = new Guid("6212fc8c-f53e-4615-95e2-7f5f4beba0ca"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190),
-                            FASBTopicId = new Guid("0a80cf3c-126b-499b-adfc-90365ec76731"),
+                            Id = new Guid("5928672e-4e68-4815-b381-ca60063da15b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084),
+                            FASBTopicId = new Guid("592aaf19-12e0-41e8-813c-f6978ff4566b"),
                             FullReference = "ASC 965-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084)
                         },
                         new
                         {
-                            Id = new Guid("e7780a84-1dfb-41ab-a7fd-52eabd072a8d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190),
-                            FASBTopicId = new Guid("0a80cf3c-126b-499b-adfc-90365ec76731"),
+                            Id = new Guid("b835d701-e14b-4984-b1fc-7204dd304600"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084),
+                            FASBTopicId = new Guid("592aaf19-12e0-41e8-813c-f6978ff4566b"),
                             FullReference = "ASC 965-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084)
                         },
                         new
                         {
-                            Id = new Guid("b991847d-8de3-4fe1-a8f5-c6af145746f5"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190),
-                            FASBTopicId = new Guid("0a80cf3c-126b-499b-adfc-90365ec76731"),
+                            Id = new Guid("abbf4f5a-4299-4762-bacc-ce7fb70fa159"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084),
+                            FASBTopicId = new Guid("592aaf19-12e0-41e8-813c-f6978ff4566b"),
                             FullReference = "ASC 965-205",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "205",
                             SubtopicName = "Presentation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084)
                         },
                         new
                         {
-                            Id = new Guid("785fa3c1-5720-4152-bbd7-8558cd275065"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190),
-                            FASBTopicId = new Guid("0a80cf3c-126b-499b-adfc-90365ec76731"),
+                            Id = new Guid("f790efd5-915d-43b4-bf3d-66470781fb30"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084),
+                            FASBTopicId = new Guid("592aaf19-12e0-41e8-813c-f6978ff4566b"),
                             FullReference = "ASC 965-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084)
                         },
                         new
                         {
-                            Id = new Guid("59ef7798-e41f-40ad-be65-8bcc507f55a9"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190),
-                            FASBTopicId = new Guid("0a80cf3c-126b-499b-adfc-90365ec76731"),
+                            Id = new Guid("a5bf0e7a-7cd8-4578-84f5-ef8685555972"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084),
+                            FASBTopicId = new Guid("592aaf19-12e0-41e8-813c-f6978ff4566b"),
                             FullReference = "ASC 965-320",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "320",
                             SubtopicName = "Investments—Debt and Equity Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084)
                         },
                         new
                         {
-                            Id = new Guid("a7471542-51b0-4b2d-ba4b-5e11e1ff1cb9"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190),
-                            FASBTopicId = new Guid("0a80cf3c-126b-499b-adfc-90365ec76731"),
+                            Id = new Guid("51b6e8fb-b233-4cda-b438-8101030c75db"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084),
+                            FASBTopicId = new Guid("592aaf19-12e0-41e8-813c-f6978ff4566b"),
                             FullReference = "ASC 965-325",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "325",
                             SubtopicName = "Investments—Other",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084)
                         },
                         new
                         {
-                            Id = new Guid("8d40353a-0572-4f63-983f-f9963c2371b4"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("97ce123f-6608-4606-b567-1b6409ecac41"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("3ea2d7c2-306c-416c-a700-9701ea3d66db"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("09d0ebc0-99ed-4005-8035-d70fefb3e097"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("b89528ec-1fab-4294-b9c8-8e8f9eb40d22"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("9ee9ea3f-68f8-43d9-baec-8578722c1088"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("443f8888-9cb4-4c90-a1d3-c506fb7df591"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("40ede6ea-83e8-4d44-9bbc-98eeb7b56383"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("17737085-54a3-4723-ba28-8c73ddf89d56"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("2de0c6cc-787c-428b-9836-437701f8d294"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-323",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "323",
                             SubtopicName = "Investments—Equity Method and Joint Ventures",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("f1435e20-a012-408a-8f1a-83abb5f386ae"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("f9e4eeca-4cb7-463c-bc8a-34777eb15f90"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-340",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "340",
                             SubtopicName = "Other Assets and Deferred Costs",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("763b7b4c-51b5-4174-910e-06bf67dfc224"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("58b8fa3a-72ef-4789-bec2-9d7845741457"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("884abe49-ecf4-4d33-9832-ff7552291759"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("0cf91eb5-0981-4697-b815-32e4aa574046"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-405",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "405",
                             SubtopicName = "Liabilities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("82de3b3b-dd17-4607-85e6-c4fdfd79b39f"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("6b22066d-1978-41cb-b7c9-c0f0cfe34679"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-470",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "470",
                             SubtopicName = "Debt",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("be6fa73b-a62c-46c9-a272-c916e922a653"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("65a28439-ef3e-4d9c-9974-8c2c3bec68e8"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("0a7381aa-fa67-4e11-b8c4-950489d9205e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("bf5f0375-ce78-48d8-92e6-5c1e8a9371f7"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-606",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "606",
                             SubtopicName = "Revenue from Contracts with Customers",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("6466bbfb-381b-45f1-a951-65d4aff05b77"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("182e4e05-4150-4de5-9611-54c07868370d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-810",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "810",
                             SubtopicName = "Consolidation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("8552d153-5e88-46e6-80bd-d65f84cc516c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
-                            FASBTopicId = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("2f44d9fb-445e-44d1-b982-dca825fca988"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
+                            FASBTopicId = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             FullReference = "ASC 970-835",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "835",
                             SubtopicName = "Interest",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("5fbb0ee2-bdeb-40af-b8aa-2b10dfedd82d"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8503),
-                            FASBTopicId = new Guid("331a667b-c7c5-45cc-8c5c-04a93807034d"),
+                            Id = new Guid("3760ca2c-11c9-41c4-9dec-665dd50de751"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9427),
+                            FASBTopicId = new Guid("f6ca923d-5ad8-462c-9a60-71544249ca18"),
                             FullReference = "ASC 972-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8503)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9427)
                         },
                         new
                         {
-                            Id = new Guid("c4ae74bc-839f-4f89-ab6e-6ae9610b6129"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8503),
-                            FASBTopicId = new Guid("331a667b-c7c5-45cc-8c5c-04a93807034d"),
+                            Id = new Guid("53b3892a-0bcc-49ce-9ef8-01844134b572"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9427),
+                            FASBTopicId = new Guid("f6ca923d-5ad8-462c-9a60-71544249ca18"),
                             FullReference = "ASC 972-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8503)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9427)
                         },
                         new
                         {
-                            Id = new Guid("8400f141-07b4-4182-9e36-d051465d2a89"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8503),
-                            FASBTopicId = new Guid("331a667b-c7c5-45cc-8c5c-04a93807034d"),
+                            Id = new Guid("c22ef2ce-42b2-40b7-9e2c-ee2d233c0952"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9427),
+                            FASBTopicId = new Guid("f6ca923d-5ad8-462c-9a60-71544249ca18"),
                             FullReference = "ASC 972-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8503)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9427)
                         },
                         new
                         {
-                            Id = new Guid("1f901080-169e-468f-ab51-691fe0cf079c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("37a64ad2-6d7f-4581-8963-5df437fb50f9"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("7ca07817-c869-46ec-8d21-555cf7897638"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("16f2415a-2598-4c96-9dd0-b73e856e74f3"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-205",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "205",
                             SubtopicName = "Presentation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("8cbb5133-56b8-4fd7-ad2d-bb2311892a24"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("c568b2d6-31d2-4bf7-acb4-1952c95aef58"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-210",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "210",
                             SubtopicName = "Balance Sheet",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("054ae04e-ceba-450f-99fb-b2937f57e2de"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("4704f11d-770e-46c2-ac21-e5a870ef0153"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-220",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "220",
                             SubtopicName = "Income Statement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("712b089f-5b12-405d-8638-3ad0db533738"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("ffb85677-106f-4b99-abcc-c927942a9810"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-235",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "235",
                             SubtopicName = "Notes to Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("1cce5572-46c2-48f8-881f-84958cff2b83"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("bc04a3ac-625f-484b-9ef2-8844d9158496"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("fc846537-8634-47a4-8084-60dd52d20c0a"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("396b3bc5-0790-4709-8b03-a2a22b61412d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-320",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "320",
                             SubtopicName = "Investments—Debt and Equity Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("ceef44e8-d813-4c45-ad63-f11f4ec6da68"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("e1652ccf-b3e0-489a-9f22-a2973b1c0dc3"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-323",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "323",
                             SubtopicName = "Investments—Equity Method and Joint Ventures",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("bc3aff30-cb44-4e8b-8e19-cfa739afc31c"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("2cde94ed-4152-44d2-9e3f-736391eaa82f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-325",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "325",
                             SubtopicName = "Investments—Other",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("b34531a0-8cc4-4641-b5df-2d05c0e502f4"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("ffe308a2-e50d-4360-8d98-bd07d2e07261"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("3a324e3c-fb84-4ae7-9dda-44e18cfbf233"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("bc2daf3d-23b8-4105-89c0-8d6f5d907632"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-470",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "470",
                             SubtopicName = "Debt",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("59c90420-f536-4ab0-a092-b0f9e6f1d3c5"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("f5a8db0d-df42-4144-9ced-4e0d41763928"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("468f6232-8eb2-4e21-94a7-ba6550719192"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("db26fe81-1012-4879-8941-7c27c1a5b839"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-715",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "715",
                             SubtopicName = "Compensation—Retirement Benefits",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("2ae640b8-2791-4dec-85c1-df98d3870fac"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("7daec215-17fa-4789-b551-3deee9b023bc"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-810",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "810",
                             SubtopicName = "Consolidation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("2fe77f84-b13e-40ce-a392-08bf3fb00c45"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
-                            FASBTopicId = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("4aa0b28e-f0f0-467f-a20f-e054e89b7d4c"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
+                            FASBTopicId = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             FullReference = "ASC 974-815",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "815",
                             SubtopicName = "Derivatives and Hedging",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("f5afb076-246b-47c4-ae4b-a8f296682634"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8796),
-                            FASBTopicId = new Guid("11ddc8e2-1154-458b-9b7d-15f1def71110"),
+                            Id = new Guid("7a9403d8-3f15-44d3-b658-d62646263ab4"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9749),
+                            FASBTopicId = new Guid("6cdc0bfc-d83b-424e-9be9-d8890647fa99"),
                             FullReference = "ASC 976-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8796)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9749)
                         },
                         new
                         {
-                            Id = new Guid("c1b613c6-7508-4441-bf7f-9dd749c221e1"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8796),
-                            FASBTopicId = new Guid("11ddc8e2-1154-458b-9b7d-15f1def71110"),
+                            Id = new Guid("9220c35e-4d41-4d93-b46f-170519ced6a8"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9749),
+                            FASBTopicId = new Guid("6cdc0bfc-d83b-424e-9be9-d8890647fa99"),
                             FullReference = "ASC 976-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8796)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9749)
                         },
                         new
                         {
-                            Id = new Guid("977f3665-55bb-462e-b895-87ed6db6f69b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840),
-                            FASBTopicId = new Guid("40843736-5c8d-44d0-8a81-b7304b276609"),
+                            Id = new Guid("0efa2f86-5d7d-4160-830e-473eae5b626b"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797),
+                            FASBTopicId = new Guid("40344988-bb55-4cdd-b217-806ac8dec4f5"),
                             FullReference = "ASC 978-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797)
                         },
                         new
                         {
-                            Id = new Guid("162e4908-3ce5-4692-a83f-0100e2746ba6"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840),
-                            FASBTopicId = new Guid("40843736-5c8d-44d0-8a81-b7304b276609"),
+                            Id = new Guid("6ef74f3a-cfb0-4c60-a001-bfcefe96f1c1"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797),
+                            FASBTopicId = new Guid("40344988-bb55-4cdd-b217-806ac8dec4f5"),
                             FullReference = "ASC 978-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797)
                         },
                         new
                         {
-                            Id = new Guid("cce28a7d-4034-4cfe-97c0-bf57f46c69a0"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840),
-                            FASBTopicId = new Guid("40843736-5c8d-44d0-8a81-b7304b276609"),
+                            Id = new Guid("2710afe1-7267-4b62-bff9-2aec53030423"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797),
+                            FASBTopicId = new Guid("40344988-bb55-4cdd-b217-806ac8dec4f5"),
                             FullReference = "ASC 978-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797)
                         },
                         new
                         {
-                            Id = new Guid("69184902-221e-443b-bcde-469e3d2d6bcc"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840),
-                            FASBTopicId = new Guid("40843736-5c8d-44d0-8a81-b7304b276609"),
+                            Id = new Guid("4a8b7317-5041-4c89-90f8-c79f049d7e6d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797),
+                            FASBTopicId = new Guid("40344988-bb55-4cdd-b217-806ac8dec4f5"),
                             FullReference = "ASC 978-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797)
                         },
                         new
                         {
-                            Id = new Guid("d482491d-8c10-494f-91ae-cccd7ea4febd"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912),
-                            FASBTopicId = new Guid("0c8a1211-4e80-4723-9ad6-1a0af7f686b9"),
+                            Id = new Guid("58c34bf0-59d5-46a0-87dd-f312ae54e94e"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881),
+                            FASBTopicId = new Guid("bdf61523-544b-4d76-b526-387bdb87de08"),
                             FullReference = "ASC 980-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881)
                         },
                         new
                         {
-                            Id = new Guid("ff622bb8-b1a8-4236-9cee-d4320c52cbbe"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912),
-                            FASBTopicId = new Guid("0c8a1211-4e80-4723-9ad6-1a0af7f686b9"),
+                            Id = new Guid("1b9124eb-6640-43f5-bb84-7f01250f2dc2"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881),
+                            FASBTopicId = new Guid("bdf61523-544b-4d76-b526-387bdb87de08"),
                             FullReference = "ASC 980-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881)
                         },
                         new
                         {
-                            Id = new Guid("49c2ae54-f237-4030-83ae-a08899459468"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912),
-                            FASBTopicId = new Guid("0c8a1211-4e80-4723-9ad6-1a0af7f686b9"),
+                            Id = new Guid("3d9a9588-b19e-49ab-acb8-40ce4087a530"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881),
+                            FASBTopicId = new Guid("bdf61523-544b-4d76-b526-387bdb87de08"),
                             FullReference = "ASC 980-30",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "30",
                             SubtopicName = "Initial Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881)
                         },
                         new
                         {
-                            Id = new Guid("653e60d6-ea67-4ba1-b3ff-fcba0fe60afe"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912),
-                            FASBTopicId = new Guid("0c8a1211-4e80-4723-9ad6-1a0af7f686b9"),
+                            Id = new Guid("c0146b37-e885-4c0b-a678-13a8100e5166"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881),
+                            FASBTopicId = new Guid("bdf61523-544b-4d76-b526-387bdb87de08"),
                             FullReference = "ASC 980-310",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "310",
                             SubtopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881)
                         },
                         new
                         {
-                            Id = new Guid("24477952-a987-4136-96a2-819f7b2f385e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912),
-                            FASBTopicId = new Guid("0c8a1211-4e80-4723-9ad6-1a0af7f686b9"),
+                            Id = new Guid("ac764775-80b5-4b9c-ade7-9396c37a2f89"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881),
+                            FASBTopicId = new Guid("bdf61523-544b-4d76-b526-387bdb87de08"),
                             FullReference = "ASC 980-340",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "340",
                             SubtopicName = "Other Assets and Deferred Costs",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881)
                         },
                         new
                         {
-                            Id = new Guid("b2d5a544-9350-4290-a292-353601feae2b"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912),
-                            FASBTopicId = new Guid("0c8a1211-4e80-4723-9ad6-1a0af7f686b9"),
+                            Id = new Guid("538b4d1c-acea-4708-b4a4-8f363d3ba185"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881),
+                            FASBTopicId = new Guid("bdf61523-544b-4d76-b526-387bdb87de08"),
                             FullReference = "ASC 980-360",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "360",
                             SubtopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881)
                         },
                         new
                         {
-                            Id = new Guid("0f494812-e424-4013-b8c1-7790d1cdd34e"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912),
-                            FASBTopicId = new Guid("0c8a1211-4e80-4723-9ad6-1a0af7f686b9"),
+                            Id = new Guid("d392c0b2-13d7-4940-99b3-5744f9da469a"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881),
+                            FASBTopicId = new Guid("bdf61523-544b-4d76-b526-387bdb87de08"),
                             FullReference = "ASC 980-405",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "405",
                             SubtopicName = "Liabilities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881)
                         },
                         new
                         {
-                            Id = new Guid("80c1c487-4f5a-4082-8685-7283b7481fe6"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912),
-                            FASBTopicId = new Guid("0c8a1211-4e80-4723-9ad6-1a0af7f686b9"),
+                            Id = new Guid("274ea04c-1fb8-483c-83bf-104e9ed31dfb"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881),
+                            FASBTopicId = new Guid("bdf61523-544b-4d76-b526-387bdb87de08"),
                             FullReference = "ASC 980-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881)
                         },
                         new
                         {
-                            Id = new Guid("2b2d8202-313b-405f-8a2f-37c741c550ed"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(9052),
-                            FASBTopicId = new Guid("0f82980a-1dfc-419a-b99a-fa081c7d7589"),
+                            Id = new Guid("6776dc8f-dd8c-4a8c-a139-3a420d90a81f"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 651, DateTimeKind.Utc).AddTicks(24),
+                            FASBTopicId = new Guid("27de3b74-99d3-42e3-9841-8bd22c5b9a06"),
                             FullReference = "ASC 985-10",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "10",
                             SubtopicName = "Overall",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(9052)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 651, DateTimeKind.Utc).AddTicks(24)
                         },
                         new
                         {
-                            Id = new Guid("978f97df-a81b-495e-9c14-253a3f8227af"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(9052),
-                            FASBTopicId = new Guid("0f82980a-1dfc-419a-b99a-fa081c7d7589"),
+                            Id = new Guid("ebb593a5-db25-4b22-9379-f52f33a3ecc8"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 651, DateTimeKind.Utc).AddTicks(24),
+                            FASBTopicId = new Guid("27de3b74-99d3-42e3-9841-8bd22c5b9a06"),
                             FullReference = "ASC 985-20",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "20",
                             SubtopicName = "Specialized Industry Requirements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(9052)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 651, DateTimeKind.Utc).AddTicks(24)
                         },
                         new
                         {
-                            Id = new Guid("32ee97a9-19d5-411a-8573-e0d096392270"),
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(9052),
-                            FASBTopicId = new Guid("0f82980a-1dfc-419a-b99a-fa081c7d7589"),
+                            Id = new Guid("86475d1e-b54d-4f15-b2fa-1a133d6ff29d"),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 651, DateTimeKind.Utc).AddTicks(24),
+                            FASBTopicId = new Guid("27de3b74-99d3-42e3-9841-8bd22c5b9a06"),
                             FullReference = "ASC 985-605",
                             IsDeleted = false,
                             IsRepealed = false,
                             SubtopicCode = "605",
                             SubtopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(9052)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 651, DateTimeKind.Utc).AddTicks(24)
                         });
                 });
 
@@ -5199,998 +5227,998 @@ namespace JERP.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bd35979f-8bc1-4b02-83c2-006fe0ef8a2e"),
+                            Id = new Guid("9de4b167-0cfa-4694-8933-a6b6cb53e4b6"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2496),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2737),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "205",
                             TopicName = "Presentation of Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2496)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2737)
                         },
                         new
                         {
-                            Id = new Guid("968d2799-9a5e-459d-a781-762af032cba2"),
+                            Id = new Guid("1cfb178a-1edc-4c5f-aaee-26e8cc8ab752"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2595),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2851),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "210",
                             TopicName = "Balance Sheet",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2595)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2851)
                         },
                         new
                         {
-                            Id = new Guid("fd700a75-fef2-4700-8dc6-4215819155dd"),
+                            Id = new Guid("f4e6d3e7-77d5-4e6b-ae6f-d88ccdc94e8f"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2642),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2911),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "220",
                             TopicName = "Income Statement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2642)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2911)
                         },
                         new
                         {
-                            Id = new Guid("4ff63ca9-8e4f-454a-9df9-0d6ca1a213f7"),
+                            Id = new Guid("b0aed4af-8064-42ab-a79a-64590c07fb08"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2687),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2959),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "225",
                             TopicName = "Income Statement—Discontinued Operations",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2687)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(2959)
                         },
                         new
                         {
-                            Id = new Guid("bebfc796-5a16-4902-8d02-39a3152984d6"),
+                            Id = new Guid("64347846-2d4a-4f8f-836e-7e4aa5ebbc13"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2738),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3013),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "230",
                             TopicName = "Statement of Cash Flows",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3013)
                         },
                         new
                         {
-                            Id = new Guid("8ff41b56-db70-4785-9b6a-72731c7aabab"),
+                            Id = new Guid("d2a4cc6b-6b92-4157-9f69-eabcd79b3238"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2774),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3054),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "235",
                             TopicName = "Notes to Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2774)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3054)
                         },
                         new
                         {
-                            Id = new Guid("6e6d7609-fffc-45ca-b9f6-0ec66d3316a1"),
+                            Id = new Guid("26012a5a-e9fb-46ae-88e9-fe2263a84756"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2814),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3086),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "250",
                             TopicName = "Accounting Changes and Error Corrections",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2814)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3086)
                         },
                         new
                         {
-                            Id = new Guid("73bdd1e8-dcf8-482a-8ae4-ef2b1673c8a2"),
+                            Id = new Guid("eb343ca1-3615-407c-8661-0adcf1957c03"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2843),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3118),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "260",
                             TopicName = "Earnings Per Share",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2843)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3118)
                         },
                         new
                         {
-                            Id = new Guid("20b16cc7-30b3-4e6b-b7bf-bb551e2b0b35"),
+                            Id = new Guid("3f2d3526-cb74-4fbb-aaa8-e04944684c96"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2872),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3150),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "270",
                             TopicName = "Interim Reporting",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2872)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3150)
                         },
                         new
                         {
-                            Id = new Guid("4e7dfdfe-0ba5-4a5b-9902-1e26a45abe1b"),
+                            Id = new Guid("dad8f023-e82d-4f14-a3e4-51b77d6fa62d"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2902),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3183),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "272",
                             TopicName = "Limited Liability Entities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2902)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3183)
                         },
                         new
                         {
-                            Id = new Guid("a980c07a-27d2-42fb-a3a9-853b8e2858dd"),
+                            Id = new Guid("14971929-85b4-434c-b13c-e83f97e4950f"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2933),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3216),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "273",
                             TopicName = "Corporate Joint Ventures",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2933)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3216)
                         },
                         new
                         {
-                            Id = new Guid("8c8da832-9a43-429a-93f4-865a3f5c3a8b"),
+                            Id = new Guid("74547aca-c44a-4f42-aaba-c0c10397db51"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2961),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3247),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "274",
                             TopicName = "Personal Financial Statements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2961)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3247)
                         },
                         new
                         {
-                            Id = new Guid("508a714a-ca3b-4acc-9e44-97857ef949fa"),
+                            Id = new Guid("ba654bf9-01d6-451e-be3b-971df5fb52cd"),
                             Category = "Presentation",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2991),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3280),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "280",
                             TopicName = "Segment Reporting",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(2991)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3280)
                         },
                         new
                         {
-                            Id = new Guid("6c5bd89e-91bb-4057-bef0-5f6589b0a629"),
+                            Id = new Guid("bca62dfe-e7ae-425d-a504-778623129c18"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3022),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3312),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "305",
                             TopicName = "Cash and Cash Equivalents",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3022)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3312)
                         },
                         new
                         {
-                            Id = new Guid("5d6fd464-38a4-47db-a2b0-d43c3f2fa319"),
+                            Id = new Guid("5b03f40f-6175-4de1-aba9-980588495b4e"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3053),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3344),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "310",
                             TopicName = "Receivables",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3053)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3344)
                         },
                         new
                         {
-                            Id = new Guid("de8c2abc-63d9-4ced-aa81-8ae605379d73"),
+                            Id = new Guid("53c01ca9-976f-4519-a1e2-e0d1d82852d0"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3112),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3407),
                             IsDeleted = false,
                             IsSuperseded = true,
                             SupersededBy = "ASC 321 and ASC 326",
                             TopicCode = "320",
                             TopicName = "Investments—Debt Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3112)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3407)
                         },
                         new
                         {
-                            Id = new Guid("eea6366a-82a7-4672-8f59-fcbcf64abdfd"),
+                            Id = new Guid("458d7d23-2fb6-4f50-9924-3a93cc4f3b4a"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3141),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3442),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "321",
                             TopicName = "Investments—Equity Securities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3141)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3442)
                         },
                         new
                         {
-                            Id = new Guid("a7a4e2cd-9c72-4531-a004-bc716420cbc4"),
+                            Id = new Guid("893deb2d-9c5c-4e6e-98de-5c261c02109f"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3171),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3476),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "323",
                             TopicName = "Investments—Equity Method and Joint Ventures",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3476)
                         },
                         new
                         {
-                            Id = new Guid("2051ef90-2112-4e62-bbd7-fed074247313"),
+                            Id = new Guid("5d8a495c-89c5-4d74-a69f-0e66b4d18374"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "325",
                             TopicName = "Investments—Other",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3215)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3523)
                         },
                         new
                         {
-                            Id = new Guid("7a99ca57-ff36-4cd5-9458-58729748dea4"),
+                            Id = new Guid("480a7ebf-6cd4-4b31-8986-009e191c82b2"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3299),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3606),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "326",
                             TopicName = "Financial Instruments—Credit Losses",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3299)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3606)
                         },
                         new
                         {
-                            Id = new Guid("0fb93137-ae54-4758-9933-881c13b20809"),
+                            Id = new Guid("1fce2e37-c411-41ed-86eb-5fd96b14e9e0"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3358),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3671),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "330",
                             TopicName = "Inventory",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3358)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3671)
                         },
                         new
                         {
-                            Id = new Guid("b4b4b69b-223b-41f2-b296-517c26c1c1bc"),
+                            Id = new Guid("c755c00c-8bea-49e8-95f6-8da115ebc267"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "340",
                             TopicName = "Other Assets and Deferred Costs",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3387)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3703)
                         },
                         new
                         {
-                            Id = new Guid("3f5b3a32-9bd0-4245-8c92-88410cc3b83a"),
+                            Id = new Guid("e5d42e70-8a50-428b-97a5-7ceee33e96cb"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "350",
                             TopicName = "Intangibles—Goodwill and Other",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3460)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3783)
                         },
                         new
                         {
-                            Id = new Guid("e931f435-ae90-40c4-b044-c3f2c58646e5"),
+                            Id = new Guid("e763fa56-9d5b-4479-b260-77465d3c4e59"),
                             Category = "Assets",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3562),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3894),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "360",
                             TopicName = "Property, Plant, and Equipment",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3562)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3894)
                         },
                         new
                         {
-                            Id = new Guid("13f1aa2d-9cab-4e47-b016-ebee1899826d"),
+                            Id = new Guid("f9e27196-8bd4-4b03-8627-ee6862ee919a"),
                             Category = "Liabilities",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "405",
                             TopicName = "Liabilities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3607)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(3942)
                         },
                         new
                         {
-                            Id = new Guid("98203b8f-8f43-4c82-a0e1-f78acb36db24"),
+                            Id = new Guid("70237a87-3516-4a85-b2ea-f9561ab7b377"),
                             Category = "Liabilities",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3694),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4043),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "410",
                             TopicName = "Asset Retirement and Environmental Obligations",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3694)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4043)
                         },
                         new
                         {
-                            Id = new Guid("80388014-bf69-4c8d-a6df-0e7f963073e3"),
+                            Id = new Guid("da357f3d-e650-4e53-a4ec-d819f762f13d"),
                             Category = "Liabilities",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3752),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4106),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "420",
                             TopicName = "Exit or Disposal Cost Obligations",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3752)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4106)
                         },
                         new
                         {
-                            Id = new Guid("d43d4832-2dcb-4cac-b837-a9dad2ba16eb"),
+                            Id = new Guid("533dd027-683c-4d18-9f3b-6285bf543401"),
                             Category = "Liabilities",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3789),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4138),
                             IsDeleted = false,
                             IsSuperseded = true,
                             SupersededBy = "ASC 606",
                             TopicCode = "430",
                             TopicName = "Deferred Revenue",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3789)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4138)
                         },
                         new
                         {
-                            Id = new Guid("bdd61938-8803-475a-9a09-7a9fbfd0f5e8"),
+                            Id = new Guid("49355be8-175e-4b24-92c8-41e69a8842f8"),
                             Category = "Liabilities",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3819),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4169),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "440",
                             TopicName = "Commitments",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3819)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4169)
                         },
                         new
                         {
-                            Id = new Guid("54dd4c12-c037-4169-84c8-78da96e26e1f"),
+                            Id = new Guid("b4b56f83-da49-4b36-bf61-368bb56d4fac"),
                             Category = "Liabilities",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3848),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4201),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "450",
                             TopicName = "Contingencies",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3848)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4201)
                         },
                         new
                         {
-                            Id = new Guid("5bdae584-cd61-4471-9481-2200f1daa86a"),
+                            Id = new Guid("4f539477-7b39-486a-8a56-8772de9aab8a"),
                             Category = "Liabilities",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3905),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4263),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "460",
                             TopicName = "Guarantees",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3905)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4263)
                         },
                         new
                         {
-                            Id = new Guid("0bab2718-4916-4468-9993-8572a6882f7f"),
+                            Id = new Guid("2748d8fb-5f4d-4d71-8746-54f3af8ae9af"),
                             Category = "Liabilities",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "470",
                             TopicName = "Debt",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(3935)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4295)
                         },
                         new
                         {
-                            Id = new Guid("8c233cfd-d89c-47b3-a08c-c123fe2f674c"),
+                            Id = new Guid("c8d394ea-ec5d-472c-9dab-f5b9ec701884"),
                             Category = "Liabilities",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4037),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4409),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "480",
                             TopicName = "Distinguishing Liabilities from Equity",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4037)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4409)
                         },
                         new
                         {
-                            Id = new Guid("92d6440c-f5b0-4d5a-b349-e050ce561315"),
+                            Id = new Guid("41315aea-79db-49e3-8516-feec92acb635"),
                             Category = "Equity",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "505",
                             TopicName = "Equity",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4069)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4448)
                         },
                         new
                         {
-                            Id = new Guid("c0811370-c923-4771-a419-9e06a60afeaf"),
+                            Id = new Guid("c95d5647-c98f-44ab-8c93-f0a55a30320d"),
                             Category = "Revenue",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561),
                             IsDeleted = false,
                             IsSuperseded = true,
                             SupersededBy = "ASC 606",
                             TopicCode = "605",
                             TopicName = "Revenue Recognition",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4171)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4561)
                         },
                         new
                         {
-                            Id = new Guid("a57dec8c-ae88-4d01-bfd8-7d01660da54b"),
+                            Id = new Guid("7cbf4a57-548d-45ca-9aad-96e991104fc6"),
                             Category = "Revenue",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4340),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4739),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "606",
                             TopicName = "Revenue from Contracts with Customers",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4340)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4739)
                         },
                         new
                         {
-                            Id = new Guid("dac30188-680e-46e5-97ff-efb3a0de4801"),
+                            Id = new Guid("1c4739e2-ae7f-461b-8c47-29464fbd6fb0"),
                             Category = "Revenue",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4384),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4787),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "610",
                             TopicName = "Other Income",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4384)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4787)
                         },
                         new
                         {
-                            Id = new Guid("3ebaa5cb-e6b5-41cb-bb33-a715ea5d086f"),
+                            Id = new Guid("7f4c709c-39ba-49b6-8722-f61f6e8ecd3d"),
                             Category = "Expenses",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4443),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4851),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "705",
                             TopicName = "Cost of Sales and Services",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4443)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4851)
                         },
                         new
                         {
-                            Id = new Guid("33603828-3d97-4630-aa08-30182a3116b1"),
+                            Id = new Guid("566ac39b-be81-4743-a8be-6cd1891ed317"),
                             Category = "Expenses",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4487),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4898),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "710",
                             TopicName = "Compensation—General",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4487)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4898)
                         },
                         new
                         {
-                            Id = new Guid("5e6cb7d9-0cb6-4f3b-a165-e56a8923337d"),
+                            Id = new Guid("da8b03d2-cdd6-4a38-b2c1-125e7938c102"),
                             Category = "Expenses",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4530),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4945),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "712",
                             TopicName = "Compensation—Nonretirement Postemployment Benefits",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4530)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4945)
                         },
                         new
                         {
-                            Id = new Guid("762551f9-e70a-465e-a4be-7c4d99f1bf00"),
+                            Id = new Guid("aadfc73e-a03f-45fd-9308-32637f75951f"),
                             Category = "Expenses",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "715",
                             TopicName = "Compensation—Retirement Benefits",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4573)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(4992)
                         },
                         new
                         {
-                            Id = new Guid("f3afacac-e0a1-41e9-be41-651333013d0a"),
+                            Id = new Guid("c583f5bb-3f80-4609-b96d-c4a90a26539c"),
                             Category = "Expenses",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "718",
                             TopicName = "Compensation—Stock Compensation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4704)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5141)
                         },
                         new
                         {
-                            Id = new Guid("47e7d3dc-7491-4fc5-952c-b15c378dc883"),
+                            Id = new Guid("6543bfbd-914a-4ebf-9dbc-b659da965a65"),
                             Category = "Expenses",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "720",
                             TopicName = "Other Expenses",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4829)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5269)
                         },
                         new
                         {
-                            Id = new Guid("90855ac4-9f5c-4d4a-a187-5efaf9f29c35"),
+                            Id = new Guid("8980ce4d-95a9-4576-a1a8-8f2948a333dd"),
                             Category = "Expenses",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4975),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5429),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "730",
                             TopicName = "Research and Development",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(4975)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5429)
                         },
                         new
                         {
-                            Id = new Guid("48ded176-92fe-45d5-a422-0ad570370a88"),
+                            Id = new Guid("b4f105da-bb4f-43e8-8059-c8d488d7349d"),
                             Category = "Expenses",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "740",
                             TopicName = "Income Taxes",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5019)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5478)
                         },
                         new
                         {
-                            Id = new Guid("da66bd0d-cab5-4356-876e-52b3f07393de"),
+                            Id = new Guid("9ebbda86-0b68-45a8-8642-72f591e2f62d"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "805",
                             TopicName = "Business Combinations",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5108)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5574)
                         },
                         new
                         {
-                            Id = new Guid("37cd1131-3500-4c1a-90ce-b9dbfcb806e9"),
+                            Id = new Guid("b1d1f905-76a1-4848-bb6f-6e4b44736e5f"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5268),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5741),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "808",
                             TopicName = "Collaborative Arrangements",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5268)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5741)
                         },
                         new
                         {
-                            Id = new Guid("dda2660b-f000-48a8-b02d-d31029e07cff"),
+                            Id = new Guid("6e20c679-339e-434d-974d-c4a3d842712b"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5297),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5773),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "810",
                             TopicName = "Consolidation",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5297)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5773)
                         },
                         new
                         {
-                            Id = new Guid("6a442129-9af3-4ef0-8e7a-c68fb52f8665"),
+                            Id = new Guid("5a349f7c-7ed1-4398-a35f-8701783ad8d6"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "815",
                             TopicName = "Derivatives and Hedging",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5326)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5804)
                         },
                         new
                         {
-                            Id = new Guid("140669f0-9543-45bd-ae29-765473abcfe7"),
+                            Id = new Guid("8ff77034-41f5-4149-8f5c-bb891ba401dc"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5456),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5947),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "820",
                             TopicName = "Fair Value Measurement",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5456)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5947)
                         },
                         new
                         {
-                            Id = new Guid("5c7a4384-70cf-4959-ae78-252f029a08e3"),
+                            Id = new Guid("2ff1fdc5-3b41-4992-b088-4f41a27ad085"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5485),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5979),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "825",
                             TopicName = "Financial Instruments",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5485)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(5979)
                         },
                         new
                         {
-                            Id = new Guid("26b0bc87-ba06-42b1-95ef-b47413d5f0ab"),
+                            Id = new Guid("79722770-7977-4825-8e68-6fa9880c89c9"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "830",
                             TopicName = "Foreign Currency Matters",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5514)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6011)
                         },
                         new
                         {
-                            Id = new Guid("73c3f842-71ac-449b-91b5-14e7999c2226"),
+                            Id = new Guid("1d163fec-da53-466a-a7c8-548ee374ec4a"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5594),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6094),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "835",
                             TopicName = "Interest",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5594)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6094)
                         },
                         new
                         {
-                            Id = new Guid("508cf940-b141-4f77-9bdf-aaf0dfa15075"),
+                            Id = new Guid("1966c860-0152-4939-b0f6-e784f094344f"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157),
                             IsDeleted = false,
                             IsSuperseded = true,
                             SupersededBy = "ASC 842",
                             TopicCode = "840",
                             TopicName = "Leases",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5651)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6157)
                         },
                         new
                         {
-                            Id = new Guid("3995e9be-88fa-4f50-9702-6c0cb0e44636"),
+                            Id = new Guid("5c1c7c81-3afd-4460-9933-b29e23ae483c"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "842",
                             TopicName = "Leases",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5724)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6238)
                         },
                         new
                         {
-                            Id = new Guid("a565b1ee-acff-4236-96de-b7bb96620f4b"),
+                            Id = new Guid("6b0ec7f5-edb0-445f-86de-cfe630e0e92a"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5810),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6333),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "845",
                             TopicName = "Nonmonetary Transactions",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5810)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6333)
                         },
                         new
                         {
-                            Id = new Guid("8c8f4c68-7004-49e7-80f2-1efde75c55fd"),
+                            Id = new Guid("66a0e322-ad7a-492f-a96a-70d5f5422f17"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5839),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6365),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "848",
                             TopicName = "Reference Rate Reform",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5839)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6365)
                         },
                         new
                         {
-                            Id = new Guid("72b48ffd-3ca1-4a63-93d9-5082f902a89e"),
+                            Id = new Guid("e9bc16e8-83e8-4ed7-bf20-e888b5e94ba3"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5868),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6396),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "850",
                             TopicName = "Related Party Disclosures",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5868)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6396)
                         },
                         new
                         {
-                            Id = new Guid("6084f16f-0cae-4b5e-91cf-a8a2602581b0"),
+                            Id = new Guid("62f462c0-31df-4bc9-bf36-34530af5ad62"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5897),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6428),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "852",
                             TopicName = "Reorganizations",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5897)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6428)
                         },
                         new
                         {
-                            Id = new Guid("5a5dfcd8-d1a2-40f1-9edb-03c01e459145"),
+                            Id = new Guid("bc994793-83a0-4ec1-bf6a-96275e6e0c5e"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5940),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6475),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "855",
                             TopicName = "Subsequent Events",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5940)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6475)
                         },
                         new
                         {
-                            Id = new Guid("4a7b9ce7-07a8-469c-b63e-51acb7ca8e4c"),
+                            Id = new Guid("37895a36-59b0-4024-8aaa-84c2678aeecd"),
                             Category = "BroadTransactions",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "860",
                             TopicName = "Transfers and Servicing",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(5969)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6506)
                         },
                         new
                         {
-                            Id = new Guid("1e7905d2-5e14-4190-b0e3-44584949a981"),
+                            Id = new Guid("f89b4ec5-f1b9-483b-8769-bb97609d3063"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6057),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6607),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "905",
                             TopicName = "Agriculture",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6057)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6607)
                         },
                         new
                         {
-                            Id = new Guid("868579dc-b374-4864-8380-f7fe6d73f438"),
+                            Id = new Guid("168e5d04-6fc7-425b-a346-f1980d5feda7"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6121),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6672),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "908",
                             TopicName = "Airlines",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6121)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6672)
                         },
                         new
                         {
-                            Id = new Guid("d0657f37-3d70-4f1f-b88a-4b3ba2e74c38"),
+                            Id = new Guid("9879d9c7-8bd3-466e-ac86-41812598eacf"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6164),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6719),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "910",
                             TopicName = "Contractors—Construction",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6164)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6719)
                         },
                         new
                         {
-                            Id = new Guid("8556d81f-1d65-4f82-b254-b098d88a460e"),
+                            Id = new Guid("6f278363-8ff4-4ee5-95f9-41aa77805d28"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "912",
                             TopicName = "Contractors—Federal Government",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6208)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6766)
                         },
                         new
                         {
-                            Id = new Guid("7fcec6a5-68e6-4e7c-94f6-1c7f4f4189d6"),
+                            Id = new Guid("ed1f0540-5952-4343-b57c-de52e1c80a4f"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6282),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6848),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "920",
                             TopicName = "Entertainment—Broadcasters",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6282)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6848)
                         },
                         new
                         {
-                            Id = new Guid("5dd91913-6cc1-4134-abb9-6034604f53e7"),
+                            Id = new Guid("1b7a6f4c-83f5-4a02-a4ea-5c7536801979"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6340),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6911),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "922",
                             TopicName = "Entertainment—Cable Television",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6340)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6911)
                         },
                         new
                         {
-                            Id = new Guid("efa8e7f4-0a44-4537-a0cc-1ab0480a6627"),
+                            Id = new Guid("f547e1b2-e99a-4a6d-a2a4-5d6cc1ae64e6"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6383),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6958),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "924",
                             TopicName = "Entertainment—Casinos",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6383)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(6958)
                         },
                         new
                         {
-                            Id = new Guid("612110f5-28e0-4b9a-9661-d4921d84e22c"),
+                            Id = new Guid("417c4dcb-ee80-4595-9386-eebb125b0026"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6426),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7006),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "926",
                             TopicName = "Entertainment—Films",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6426)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7006)
                         },
                         new
                         {
-                            Id = new Guid("311082fb-cca2-4507-a64e-64b7998debd9"),
+                            Id = new Guid("02850fcf-a040-4b84-a68d-4ac86a7983de"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6483),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7069),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "928",
                             TopicName = "Entertainment—Music",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6483)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7069)
                         },
                         new
                         {
-                            Id = new Guid("e4fe5587-f9ba-45d4-aae6-18b4f098ae04"),
+                            Id = new Guid("8a1e39ec-a7ca-47b0-b586-55931ac93001"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6527),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7121),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "930",
                             TopicName = "Extractive Activities—Mining",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6527)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7121)
                         },
                         new
                         {
-                            Id = new Guid("f73eee2c-ae4e-4ef5-a720-2d56e5399c09"),
+                            Id = new Guid("8d28c94e-7389-4766-b69b-88e473161adc"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6591),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7185),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "932",
                             TopicName = "Extractive Activities—Oil and Gas",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6591)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7185)
                         },
                         new
                         {
-                            Id = new Guid("26e07710-3918-4bf0-b327-c6466e635576"),
+                            Id = new Guid("827fd89a-5eca-4cc3-b206-07186f134963"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "940",
                             TopicName = "Financial Services—Brokers and Dealers",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6649)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7249)
                         },
                         new
                         {
-                            Id = new Guid("f810c4b7-8a42-4eb6-b184-edc455d8031c"),
+                            Id = new Guid("4d789e26-f8d0-470a-820b-4aa2b108fde0"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "942",
                             TopicName = "Financial Services—Depository and Lending",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6738)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7347)
                         },
                         new
                         {
-                            Id = new Guid("c61dfb77-85d0-4bd6-91ff-771066e99b14"),
+                            Id = new Guid("77bdd9c5-ae8b-4ec4-b773-dd69bcee5b05"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "944",
                             TopicName = "Financial Services—Insurance",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(6930)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7556)
                         },
                         new
                         {
-                            Id = new Guid("88db397c-7c88-4f4a-95e2-a951d587f9e4"),
+                            Id = new Guid("4cacbddf-249e-4db9-ae8a-1f317ea4cd3c"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "946",
                             TopicName = "Financial Services—Investment Companies",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7156)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(7804)
                         },
                         new
                         {
-                            Id = new Guid("af448d74-6f8f-4f1f-b189-05b63f7d3806"),
+                            Id = new Guid("b4e7a434-175e-45ec-80de-3490478782d6"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7359),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8027),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "948",
                             TopicName = "Financial Services—Mortgage Banking",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7359)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8027)
                         },
                         new
                         {
-                            Id = new Guid("ec7225f8-c8c6-4530-a1db-a51d385facf7"),
+                            Id = new Guid("8d585a5a-6fa4-4b4b-99f5-b564c1efcee8"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7417),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8091),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "950",
                             TopicName = "Financial Services—Title Plant",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7417)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8091)
                         },
                         new
                         {
-                            Id = new Guid("9c59f402-cf05-48d2-8707-ee0b5debc587"),
+                            Id = new Guid("9034bd9e-d80c-4ba1-9b79-41902a4a9d20"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "954",
                             TopicName = "Health Care Entities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7461)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8140)
                         },
                         new
                         {
-                            Id = new Guid("27519e3c-97bc-4f50-8e4f-0747067ad655"),
+                            Id = new Guid("1b24f6c1-1813-4f1b-b2d2-3bcd83b49651"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "958",
                             TopicName = "Not-for-Profit Entities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(7689)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8388)
                         },
                         new
                         {
-                            Id = new Guid("20c94d8d-3a64-4858-a19b-a0834e5eda87"),
+                            Id = new Guid("983687a9-c988-441d-807c-728062d0b327"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "960",
                             TopicName = "Plan Accounting—Defined Benefit Pension Plans",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8002)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8731)
                         },
                         new
                         {
-                            Id = new Guid("e11e1e10-fa8f-43b9-be78-a91c68791130"),
+                            Id = new Guid("f3d8e7cd-dda8-4530-8581-be231a94f80e"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "962",
                             TopicName = "Plan Accounting—Defined Contribution Pension Plans",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8103)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(8988)
                         },
                         new
                         {
-                            Id = new Guid("0a80cf3c-126b-499b-adfc-90365ec76731"),
+                            Id = new Guid("592aaf19-12e0-41e8-813c-f6978ff4566b"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "965",
                             TopicName = "Plan Accounting—Health and Welfare Benefit Plans",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8190)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9084)
                         },
                         new
                         {
-                            Id = new Guid("a43f68ed-1e00-4306-8fbe-4daecf79ce7a"),
+                            Id = new Guid("f26466a0-1fde-4e61-8217-21d3674a4a5c"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "970",
                             TopicName = "Real Estate—General",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8293)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9196)
                         },
                         new
                         {
-                            Id = new Guid("331a667b-c7c5-45cc-8c5c-04a93807034d"),
+                            Id = new Guid("f6ca923d-5ad8-462c-9a60-71544249ca18"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8503),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9427),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "972",
                             TopicName = "Real Estate—Common Interest Realty Associations",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8503)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9427)
                         },
                         new
                         {
-                            Id = new Guid("7b44c979-8c98-4c1a-997e-b97e21cc1464"),
+                            Id = new Guid("45f8189a-febf-4545-85f1-f36939386ebd"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "974",
                             TopicName = "Real Estate—Real Estate Investment Trusts",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8564)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9494)
                         },
                         new
                         {
-                            Id = new Guid("11ddc8e2-1154-458b-9b7d-15f1def71110"),
+                            Id = new Guid("6cdc0bfc-d83b-424e-9be9-d8890647fa99"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8796),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9749),
                             IsDeleted = false,
                             IsSuperseded = true,
                             SupersededBy = "ASC 606",
                             TopicCode = "976",
                             TopicName = "Real Estate—Retail Land",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8796)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9749)
                         },
                         new
                         {
-                            Id = new Guid("40843736-5c8d-44d0-8a81-b7304b276609"),
+                            Id = new Guid("40344988-bb55-4cdd-b217-806ac8dec4f5"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "978",
                             TopicName = "Real Estate—Time-Sharing Activities",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8840)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9797)
                         },
                         new
                         {
-                            Id = new Guid("0c8a1211-4e80-4723-9ad6-1a0af7f686b9"),
+                            Id = new Guid("bdf61523-544b-4d76-b526-387bdb87de08"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "980",
                             TopicName = "Regulated Operations",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(8912)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 650, DateTimeKind.Utc).AddTicks(9881)
                         },
                         new
                         {
-                            Id = new Guid("0f82980a-1dfc-419a-b99a-fa081c7d7589"),
+                            Id = new Guid("27de3b74-99d3-42e3-9841-8bd22c5b9a06"),
                             Category = "Industry",
-                            CreatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(9052),
+                            CreatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 651, DateTimeKind.Utc).AddTicks(24),
                             IsDeleted = false,
                             IsSuperseded = false,
                             TopicCode = "985",
                             TopicName = "Software",
-                            UpdatedAt = new DateTime(2026, 2, 5, 1, 47, 25, 672, DateTimeKind.Utc).AddTicks(9052)
+                            UpdatedAt = new DateTime(2026, 2, 8, 1, 39, 11, 651, DateTimeKind.Utc).AddTicks(24)
                         });
                 });
 
@@ -6280,6 +6308,7 @@ namespace JERP.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -6300,9 +6329,11 @@ namespace JERP.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)");
 
                     b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -6310,9 +6341,11 @@ namespace JERP.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("AccountId")
+                        .HasDatabaseName("IX_InvoiceLineItems_AccountId");
 
-                    b.HasIndex("InvoiceId");
+                    b.HasIndex("InvoiceId")
+                        .HasDatabaseName("IX_InvoiceLineItems_InvoiceId");
 
                     b.ToTable("InvoiceLineItems", "dbo");
                 });
@@ -6324,6 +6357,7 @@ namespace JERP.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("CompanyId")
@@ -6369,11 +6403,20 @@ namespace JERP.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("CompanyId")
+                        .HasDatabaseName("IX_InvoicePayments_CompanyId");
 
-                    b.HasIndex("InvoiceId");
+                    b.HasIndex("InvoiceId")
+                        .HasDatabaseName("IX_InvoicePayments_InvoiceId");
 
                     b.HasIndex("JournalEntryId");
+
+                    b.HasIndex("PaymentDate")
+                        .HasDatabaseName("IX_InvoicePayments_PaymentDate");
+
+                    b.HasIndex("CompanyId", "ReceiptNumber")
+                        .IsUnique()
+                        .HasDatabaseName("IX_InvoicePayments_CompanyId_ReceiptNumber");
 
                     b.ToTable("InvoicePayments", "dbo");
                 });
@@ -7952,6 +7995,215 @@ namespace JERP.Infrastructure.Migrations
                     b.ToTable("Warehouses", "dbo");
                 });
 
+            modelBuilder.Entity("JERP.Core.Entities.Licensing.EmployeeCountTracking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeCount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LicenseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("RecordedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LicenseId", "RecordedAt");
+
+                    b.ToTable("EmployeeCountTracking", "dbo");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.Licensing.License", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrentCompanies")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("CurrentEmployees")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("CustomerEmail")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAnnualBilling")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("IssueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastValidatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LicenseKey")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MachineId")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("MaxCompanies")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxEmployees")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Plan")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StripeCustomerId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("StripeSubscriptionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LicenseKey")
+                        .IsUnique();
+
+                    b.ToTable("Licenses", "dbo");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.Licensing.PlanFeature", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FeatureCode")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FeatureName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<Guid>("LicenseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LicenseId", "FeatureCode");
+
+                    b.ToTable("PlanFeatures", "dbo");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.Licensing.SubscriptionHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LicenseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Plan")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LicenseId", "OccurredAt");
+
+                    b.ToTable("SubscriptionHistory", "dbo");
+                });
+
             modelBuilder.Entity("JERP.Core.Entities.PayPeriod", b =>
                 {
                     b.Property<Guid>("Id")
@@ -8288,6 +8540,604 @@ namespace JERP.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles", "dbo");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SOShipment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Carrier")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("MetrcManifestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MetrcManifestNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("PackedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("SalesOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ShipDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ShipmentNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("ShippedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ShippedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal?>("ShippingCost")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ShippingMethod")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TrackingNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("WarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId")
+                        .HasDatabaseName("IX_SOShipments_CompanyId");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("IX_SOShipments_CustomerId");
+
+                    b.HasIndex("SalesOrderId")
+                        .HasDatabaseName("IX_SOShipments_SalesOrderId");
+
+                    b.HasIndex("ShipDate")
+                        .HasDatabaseName("IX_SOShipments_ShipDate");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.HasIndex("CompanyId", "ShipmentNumber")
+                        .IsUnique()
+                        .HasDatabaseName("IX_SOShipments_CompanyId_ShipmentNumber");
+
+                    b.ToTable("SOShipments", "dbo");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SOShipmentLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BatchLotId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BinLocation")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("InventoryItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("QuantityShipped")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("SalesOrderLineId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SerialNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("ShipmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BatchLotId");
+
+                    b.HasIndex("InventoryItemId")
+                        .HasDatabaseName("IX_SOShipmentLines_InventoryItemId");
+
+                    b.HasIndex("SalesOrderLineId")
+                        .HasDatabaseName("IX_SOShipmentLines_SalesOrderLineId");
+
+                    b.HasIndex("ShipmentId")
+                        .HasDatabaseName("IX_SOShipmentLines_ShipmentId");
+
+                    b.ToTable("SOShipmentLines", "dbo");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesOrder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApprovedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CustomerPONumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("InternalNotes")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFullyInvoiced")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFullyShipped")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MetrcManifestNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentTerms")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("PromisedShipDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RequestedShipDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("RequiresMetrcTracking")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SONumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid?>("SalesQuoteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SalesQuoteNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid?>("SalesRepId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ShipToAddressLine1")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ShipToAddressLine2")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ShipToCity")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ShipToCountry")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ShipToPostalCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ShipToState")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("ShippingAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ShippingMethod")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ShippingTerms")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalInvoiced")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalShipped")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("WarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId")
+                        .HasDatabaseName("IX_SalesOrders_CompanyId");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("IX_SalesOrders_CustomerId");
+
+                    b.HasIndex("OrderDate")
+                        .HasDatabaseName("IX_SalesOrders_OrderDate");
+
+                    b.HasIndex("Status")
+                        .HasDatabaseName("IX_SalesOrders_Status");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.HasIndex("CompanyId", "SONumber")
+                        .IsUnique()
+                        .HasDatabaseName("IX_SalesOrders_CompanyId_SONumber");
+
+                    b.ToTable("SalesOrders", "dbo");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesOrderLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("DiscountPercent")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<Guid>("InventoryItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LineNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("LineTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("QuantityInvoiced")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("QuantityShipped")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("RevenueAccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SalesOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TaxPercent")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventoryItemId")
+                        .HasDatabaseName("IX_SalesOrderLines_InventoryItemId");
+
+                    b.HasIndex("RevenueAccountId");
+
+                    b.HasIndex("SalesOrderId")
+                        .HasDatabaseName("IX_SalesOrderLines_SalesOrderId");
+
+                    b.ToTable("SalesOrderLines", "dbo");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesReturn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApprovedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("RMANumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("ReceivedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReceivedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReturnType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid?>("SalesOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId")
+                        .HasDatabaseName("IX_SalesReturns_CompanyId");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("IX_SalesReturns_CustomerId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("ReturnDate")
+                        .HasDatabaseName("IX_SalesReturns_ReturnDate");
+
+                    b.HasIndex("SalesOrderId");
+
+                    b.HasIndex("CompanyId", "RMANumber")
+                        .IsUnique()
+                        .HasDatabaseName("IX_SalesReturns_CompanyId_RMANumber");
+
+                    b.ToTable("SalesReturns", "dbo");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesReturnLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("InventoryItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("LineTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("RestockingFee")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("SalesOrderLineId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SalesReturnId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventoryItemId")
+                        .HasDatabaseName("IX_SalesReturnLines_InventoryItemId");
+
+                    b.HasIndex("SalesOrderLineId");
+
+                    b.HasIndex("SalesReturnId")
+                        .HasDatabaseName("IX_SalesReturnLines_SalesReturnId");
+
+                    b.ToTable("SalesReturnLines", "dbo");
                 });
 
             modelBuilder.Entity("JERP.Core.Entities.TaxWithholding", b =>
@@ -8627,13 +9477,13 @@ namespace JERP.Infrastructure.Migrations
                     b.HasOne("JERP.Core.Entities.Finance.FASBSubtopic", "FASBSubtopic")
                         .WithMany("Accounts")
                         .HasForeignKey("FASBSubtopicId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JERP.Core.Entities.Finance.FASBTopic", "FASBTopic")
                         .WithMany("Accounts")
                         .HasForeignKey("FASBTopicId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Company");
@@ -8648,7 +9498,7 @@ namespace JERP.Infrastructure.Migrations
                     b.HasOne("JERP.Core.Entities.Finance.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JERP.Core.Entities.Finance.VendorBill", "Bill")
@@ -8667,18 +9517,19 @@ namespace JERP.Infrastructure.Migrations
                     b.HasOne("JERP.Core.Entities.Finance.VendorBill", "Bill")
                         .WithMany("Payments")
                         .HasForeignKey("BillId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JERP.Core.Entities.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JERP.Core.Entities.Finance.JournalEntry", "JournalEntry")
                         .WithMany()
-                        .HasForeignKey("JournalEntryId");
+                        .HasForeignKey("JournalEntryId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Bill");
 
@@ -8710,18 +9561,19 @@ namespace JERP.Infrastructure.Migrations
                     b.HasOne("JERP.Core.Entities.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JERP.Core.Entities.Finance.Customer", "Customer")
                         .WithMany("Invoices")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JERP.Core.Entities.Finance.JournalEntry", "JournalEntry")
                         .WithMany()
-                        .HasForeignKey("JournalEntryId");
+                        .HasForeignKey("JournalEntryId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Company");
 
@@ -8773,7 +9625,7 @@ namespace JERP.Infrastructure.Migrations
                     b.HasOne("JERP.Core.Entities.Finance.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JERP.Core.Entities.Finance.CustomerInvoice", "Invoice")
@@ -8792,18 +9644,19 @@ namespace JERP.Infrastructure.Migrations
                     b.HasOne("JERP.Core.Entities.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JERP.Core.Entities.Finance.CustomerInvoice", "Invoice")
                         .WithMany("Payments")
                         .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JERP.Core.Entities.Finance.JournalEntry", "JournalEntry")
                         .WithMany()
-                        .HasForeignKey("JournalEntryId");
+                        .HasForeignKey("JournalEntryId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Company");
 
@@ -9289,6 +10142,39 @@ namespace JERP.Infrastructure.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("JERP.Core.Entities.Licensing.EmployeeCountTracking", b =>
+                {
+                    b.HasOne("JERP.Core.Entities.Licensing.License", "License")
+                        .WithMany("EmployeeCountHistory")
+                        .HasForeignKey("LicenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("License");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.Licensing.PlanFeature", b =>
+                {
+                    b.HasOne("JERP.Core.Entities.Licensing.License", "License")
+                        .WithMany("EnabledFeatures")
+                        .HasForeignKey("LicenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("License");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.Licensing.SubscriptionHistory", b =>
+                {
+                    b.HasOne("JERP.Core.Entities.Licensing.License", "License")
+                        .WithMany("SubscriptionHistory")
+                        .HasForeignKey("LicenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("License");
+                });
+
             modelBuilder.Entity("JERP.Core.Entities.PayPeriod", b =>
                 {
                     b.HasOne("JERP.Core.Entities.Employee", "ApprovedBy")
@@ -9335,6 +10221,185 @@ namespace JERP.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("PayrollRecord");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SOShipment", b =>
+                {
+                    b.HasOne("JERP.Core.Entities.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.Finance.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.SalesOrders.SalesOrder", "SalesOrder")
+                        .WithMany("Shipments")
+                        .HasForeignKey("SalesOrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.Inventory.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("SalesOrder");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SOShipmentLine", b =>
+                {
+                    b.HasOne("JERP.Core.Entities.Inventory.ProductBatch", "BatchLot")
+                        .WithMany()
+                        .HasForeignKey("BatchLotId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("JERP.Core.Entities.Inventory.Product", "InventoryItem")
+                        .WithMany()
+                        .HasForeignKey("InventoryItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.SalesOrders.SalesOrderLine", "SalesOrderLine")
+                        .WithMany()
+                        .HasForeignKey("SalesOrderLineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.SalesOrders.SOShipment", "Shipment")
+                        .WithMany("LineItems")
+                        .HasForeignKey("ShipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BatchLot");
+
+                    b.Navigation("InventoryItem");
+
+                    b.Navigation("SalesOrderLine");
+
+                    b.Navigation("Shipment");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesOrder", b =>
+                {
+                    b.HasOne("JERP.Core.Entities.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.Finance.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.Inventory.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesOrderLine", b =>
+                {
+                    b.HasOne("JERP.Core.Entities.Inventory.Product", "InventoryItem")
+                        .WithMany()
+                        .HasForeignKey("InventoryItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.Finance.Account", "RevenueAccount")
+                        .WithMany()
+                        .HasForeignKey("RevenueAccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("JERP.Core.Entities.SalesOrders.SalesOrder", "SalesOrder")
+                        .WithMany("LineItems")
+                        .HasForeignKey("SalesOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InventoryItem");
+
+                    b.Navigation("RevenueAccount");
+
+                    b.Navigation("SalesOrder");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesReturn", b =>
+                {
+                    b.HasOne("JERP.Core.Entities.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.Finance.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.Finance.CustomerInvoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("JERP.Core.Entities.SalesOrders.SalesOrder", "SalesOrder")
+                        .WithMany()
+                        .HasForeignKey("SalesOrderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("SalesOrder");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesReturnLine", b =>
+                {
+                    b.HasOne("JERP.Core.Entities.Inventory.Product", "InventoryItem")
+                        .WithMany()
+                        .HasForeignKey("InventoryItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JERP.Core.Entities.SalesOrders.SalesOrderLine", "SalesOrderLine")
+                        .WithMany()
+                        .HasForeignKey("SalesOrderLineId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("JERP.Core.Entities.SalesOrders.SalesReturn", "SalesReturn")
+                        .WithMany("LineItems")
+                        .HasForeignKey("SalesReturnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InventoryItem");
+
+                    b.Navigation("SalesOrderLine");
+
+                    b.Navigation("SalesReturn");
                 });
 
             modelBuilder.Entity("JERP.Core.Entities.TaxWithholding", b =>
@@ -9513,6 +10578,15 @@ namespace JERP.Infrastructure.Migrations
                     b.Navigation("InventoryLevels");
                 });
 
+            modelBuilder.Entity("JERP.Core.Entities.Licensing.License", b =>
+                {
+                    b.Navigation("EmployeeCountHistory");
+
+                    b.Navigation("EnabledFeatures");
+
+                    b.Navigation("SubscriptionHistory");
+                });
+
             modelBuilder.Entity("JERP.Core.Entities.PayPeriod", b =>
                 {
                     b.Navigation("PayrollRecords");
@@ -9521,6 +10595,23 @@ namespace JERP.Infrastructure.Migrations
             modelBuilder.Entity("JERP.Core.Entities.PayrollRecord", b =>
                 {
                     b.Navigation("Details");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SOShipment", b =>
+                {
+                    b.Navigation("LineItems");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesOrder", b =>
+                {
+                    b.Navigation("LineItems");
+
+                    b.Navigation("Shipments");
+                });
+
+            modelBuilder.Entity("JERP.Core.Entities.SalesOrders.SalesReturn", b =>
+                {
+                    b.Navigation("LineItems");
                 });
 #pragma warning restore 612, 618
         }
