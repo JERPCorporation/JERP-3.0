@@ -121,7 +121,7 @@ public class SalesOrderConfiguration : IEntityTypeConfiguration<SalesOrder>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(so => so.Customer)
-            .WithMany(c => c.SalesOrders)
+            .WithMany()
             .HasForeignKey(so => so.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
