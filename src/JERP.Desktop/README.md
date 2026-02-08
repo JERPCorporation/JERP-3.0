@@ -13,6 +13,7 @@ WPF Desktop Application for Just Employee Resource Planning (JERP) system.
 - **Timesheet Management**: Time tracking with approval workflow
 - **Payroll Processing**: Pay period management and pay stub generation
 - **Compliance Monitoring**: Real-time violation tracking with filtering
+- **AI Assistant**: Chat interface powered by Claude AI for accounting and compliance questions
 
 ## Prerequisites
 
@@ -71,7 +72,8 @@ JERP.Desktop/
 │   ├── EmployeesViewModel.cs
 │   ├── TimesheetsViewModel.cs
 │   ├── PayrollViewModel.cs
-│   └── ComplianceViewModel.cs
+│   ├── ComplianceViewModel.cs
+│   └── AIAssistantViewModel.cs
 ├── Views/                 # XAML Views
 │   ├── LoginWindow.xaml
 │   ├── MainWindow.xaml
@@ -79,7 +81,8 @@ JERP.Desktop/
 │   ├── EmployeesView.xaml
 │   ├── TimesheetsView.xaml
 │   ├── PayrollView.xaml
-│   └── ComplianceView.xaml
+│   ├── ComplianceView.xaml
+│   └── AIAssistantView.xaml
 ├── Converters/           # XAML Value Converters
 │   ├── BooleanToVisibilityConverter.cs
 │   ├── InverseBooleanConverter.cs
@@ -139,6 +142,16 @@ See the API documentation for default login credentials.
 - Filter by severity and status
 - Resolve violations
 - View violation details
+
+### AI Assistant
+- Chat interface with Claude AI
+- Context-aware responses for accounting and compliance questions
+- Message history with timestamps
+- User messages styled in blue (right-aligned)
+- Assistant messages styled in dark gray (left-aligned)
+- Clear chat functionality
+- Enter key to send messages
+- "Thinking..." indicator while processing
 
 ## Registry Storage
 
