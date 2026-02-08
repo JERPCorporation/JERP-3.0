@@ -431,5 +431,9 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+
+# Local development settings (may contain secrets)
+**/appsettings.Development.json
+
 /src/JERP.Application/Services/Employees
 src/JERP.Application/Services/Employees/EmployeeService.cs
