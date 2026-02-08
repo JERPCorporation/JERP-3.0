@@ -52,6 +52,12 @@ public static class DependencyInjection
         services.AddScoped<IPdfGenerationService, PdfGenerationService>();
         services.AddScoped<IAuditLogService, AuditLogService>();
         
+        // Tax services per country
+        services.AddScoped<TaxCalculationService>();           // US (existing)
+        services.AddScoped<GuatemalaTaxCalculationService>();   // Guatemala (new)
+        services.AddScoped<GuatemalaLaborBenefitsService>();    // Guatemala benefits (new)
+        services.AddScoped<ITaxCalculationServiceFactory, TaxCalculationServiceFactory>(); // Factory (new)
+        
         // Register purchase order services
         services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
         services.AddScoped<IPOReceiptService, POReceiptService>();
