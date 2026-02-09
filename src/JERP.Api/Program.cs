@@ -34,6 +34,16 @@ Log.Logger = new LoggerConfiguration()
    .Enrich.FromLogContext()
    .CreateLogger();
 builder.Host.UseSerilog();
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("fixed", opt =>
+    {
+        opt.PermitLimit = 100;
+        opt.Window = TimeSpan.FromMinutes(1);
+    });
+});
+
+app.UseRateLimiter();
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
 // Log application startup
