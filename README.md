@@ -6,11 +6,11 @@
 
 ## 🎯 Built by a Contractor, for Contractors
 
-JERP 3.0 is an affordable, full-featured ERP system designed specifically for construction contractors. Unlike expensive enterprise solutions that cost $20,000-$50,000/year, JERP 3.0 offers professional tools at prices small contractors can afford.
+JERP 3.0 is an affordable, full-featured ERP system designed specifically for construction contractors.
 
 **Developer:** Julio Cesar Mendez Tobar Jr.  
 🎓 Business Administration (Universidad de El Salvador) | Construction PM (UC Davis)  
-👷 10+ years construction experience | Self-taught developer
+👷 10+ years construction experience | AI-taught developer
 
 ---
 
