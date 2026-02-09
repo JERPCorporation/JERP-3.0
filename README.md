@@ -9,8 +9,8 @@
 JERP 3.0 is an affordable, full-featured ERP system designed specifically for construction contractors.
 
 **Developer:** Julio Cesar Mendez Tobar Jr.  
-🎓 Business Administration (Universidad de El Salvador) | Construction PM (UC Davis)  
-👷 10+ years construction experience | AI-taught developer
+🎓 Business Administration (Universidad de El Salvador) | Construction Project Managemet (UC Davis)  
+👷 10+ years managing construction | Currently managing JERP software development, an AI project | AI-taught developer
 
 ---
 
