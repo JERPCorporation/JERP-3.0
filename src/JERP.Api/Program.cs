@@ -1,5 +1,3 @@
-using JERP.Application;
-using JERP.Compliance;
 using JERP.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,246 +5,58 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Serilog;
 using Microsoft.OpenApi.Models;
-using JERP.Api.Services;
 using JERP.Api.Middleware;
 
+var builder = WebApplication.CreateBuilder(args);
+
+// ---- Serilog (single configuration) ----
 Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
     .WriteTo.Console()
-    .WriteTo.File("logs/jerp-.log", rollingInterval: RollingInterval.Day)
+    .WriteTo.File("logs/jerp-.log", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 14, shared: true)
     .CreateLogger();
 
 builder.Host.UseSerilog();
 
-_logger.LogInformation("User {UserId} logged in", userId);
-
-cat logs/jerp-20260209.log
-
-var builder = WebApplication.CreateBuilder(args);
-
-
-using Serilog;
-var builder = WebApplication.CreateBuilder(args);
-// Configure Serilog
-Log.Logger = new LoggerConfiguration()
-   .MinimumLevel.Information()
-   .WriteTo.Console()
-   .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-   .Enrich.FromLogContext()
-   .CreateLogger();
-builder.Host.UseSerilog();
-builder.Services.AddRateLimiter(options =>
-{
-    options.AddFixedWindowLimiter("fixed", opt =>
-    {
-        opt.PermitLimit = 100;
-        opt.Window = TimeSpan.FromMinutes(1);
-    });
-});
-
-app.UseRateLimiter();
-builder.Services.AddControllersWithViews();
-var app = builder.Build();
-// Log application startup
-Log.Information("Application is starting...");
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthorization();
-app.MapControllerRoute(
-   name: "default",
-   pattern: "{controller=Home}/{action=Index}/{id?}");
-try
-{
-   app.Run();
-}
-catch (Exception ex)
-{
-   Log.Fatal(ex, "Application terminated unexpectedly.");
-}
-finally
-{
-   Log.CloseAndFlush();
-}
-
-public class HomeController : Controller
-{
-   private readonly ILogger<HomeController> _logger;
-   public HomeController(ILogger<HomeController> logger)
-   {
-       _logger = logger;
-   }
-   public IActionResult Index()
-   {
-       _logger.LogInformation("Rendering Index view.");
-       return View();
-   }
-}
-
-app.UseSerilogRequestLogging(); // Logs HTTP requests with method, path, status code, and timing
-
-// Add services to the container
+// ---- Services ----
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger Configuration
+// Swagger
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "JERP 3.0 API",
-        Version = "v1",
-        Description = "Enterprise Resource Planning System - SQL Server Edition"
-    });
-
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "JERP 3.0 API", Version = "v1" });
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+        Description = "JWT Bearer token. Example: 'Bearer {token}'",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
+            new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" } },
             Array.Empty<string>()
         }
     });
 });
 
-// Database - SQL Server ONLY
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<JerpDbContext>(options =>
-    options.UseSqlServer(connectionString, sqlOptions =>
-    {
-        sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 3,
-            maxRetryDelay: TimeSpan.FromSeconds(10),
-            errorNumbersToAdd: null);
-        sqlOptions.CommandTimeout(30);
-        sqlOptions.MigrationsAssembly("JERP.Infrastructure");
-    })
-);
-
-// JWT Authentication
-var jwtKey = builder.Configuration["Jwt:Key"];
-var jwtIssuer = builder.Configuration["Jwt:Issuer"];
-var jwtAudience = builder.Configuration["Jwt:Audience"];
-
-builder.Services.AddAuthentication(options =>
+// Rate limiting (global fixed-window)
+builder.Services.AddRateLimiter(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+    options.AddFixedWindowLimiter("ip_fixed", opt =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtIssuer,
-        ValidAudience = jwtAudience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey ?? throw new InvalidOperationException("JWT Key not configured"))),
-        ClockSkew = TimeSpan.Zero
-    };
+        opt.PermitLimit = 100;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 0;
+    });
 });
 
-builder.Services.AddAuthorization();
-
-// HttpClient for ClaudeApiService
-builder.Services.AddHttpClient<ClaudeApiService>();
-
-// Application Services
-builder.Services.AddApplicationServices();
-
-// Compliance Services (must be registered for Employee, Timesheet, and Payroll services)
-builder.Services.AddComplianceServices();
-
-// CORS
+// CORS (reads Cors:AllowedOrigins from appsettings.json)
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins(allowedOrigins)
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
-    });
-});
-
-// Health Checks - SQL Server
-builder.Services.AddHealthChecks()
-    .AddSqlServer(
-        connectionString ?? throw new InvalidOperationException("Connection string not configured"),
-        name: "sqlserver",
-        failureStatus: Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy,
-        tags: new[] { "db", "sql", "sqlserver" });
-
-var app = builder.Build();
-
-// Error handling middleware
-app.UseMiddleware<ErrorHandlingMiddleware>();
-
-// Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "JERP 3.0 API v1");
-        options.RoutePrefix = string.Empty; // Swagger at root
-    });
-}
-
-app.UseSerilogRequestLogging();
-
-app.UseHttpsRedirection();
-
-app.UseCors();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapHealthChecks("/health");
-
-app.MapGet("/", () => Results.Json(new 
-{ 
-    name = "JERP 3.0 API",
-    version = "1.0.0",
-    developer = "Julio Cesar Mendez Tobar Jr.",
-    contact = "ichbincesartobar@yahoo.com"
-}));
-
-try
-{
-    Log.Information("Starting JERP 3.0 API - SQL Server Edition");
-    app.UseXContentTypeOptions();
-app.UseXfo(options => options.Deny());
-app.UseXXssProtection(options => options.EnabledWithBlockMode());
-app.UseReferrerPolicy(opts => opts.StrictOriginWhenCrossOrigin());
-app.UseHsts();
-    app.Run();
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex, "Application start-up failed");
-}
-finally
-{
-    Log.CloseAndFlush();
-}
+builder.Services.AddCors(o => o.AddDefaultPolicy(p => p.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
