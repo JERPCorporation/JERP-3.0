@@ -11,6 +11,12 @@
 # Mono auto generated files
 mono_crash.*
 
+# Ignore logs and backups
+/logs/
+/Backups/
+C:\Backups/
+*.bak
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
