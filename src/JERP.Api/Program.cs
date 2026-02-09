@@ -10,6 +10,17 @@ using Microsoft.OpenApi.Models;
 using JERP.Api.Services;
 using JERP.Api.Middleware;
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/jerp-.log", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+_logger.LogInformation("User {UserId} logged in", userId);
+
+cat logs/jerp-20260209.log
+
 var builder = WebApplication.CreateBuilder(args);
 
 
