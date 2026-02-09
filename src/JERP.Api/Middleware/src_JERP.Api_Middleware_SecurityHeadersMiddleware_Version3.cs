@@ -1,0 +1,36 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+
+namespace JERP.Api.Middleware;
+
+public class SecurityHeadersMiddleware
+{
+    private readonly RequestDelegate _next;
+    public SecurityHeadersMiddleware(RequestDelegate next) => _next = next;
+
+    public async Task Invoke(HttpContext context)
+    {
+        var headers = context.Response.Headers;
+
+        // Conservative CSP - adjust as needed (allow your trusted external domains)
+        headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'";
+        headers["X-Content-Type-Options"] = "nosniff";
+        headers["X-Frame-Options"] = "DENY";
+        headers["Referrer-Policy"] = "no-referrer";
+        headers["Permissions-Policy"] = "geolocation=(), microphone=()";
+        headers["X-XSS-Protection"] = "1; mode=block";
+
+        if (context.Request.IsHttps)
+        {
+            headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains";
+        }
+
+        await _next(context);
+    }
+}
+
+public static class SecurityHeadersExtensions
+{
+    public static IApplicationBuilder UseSecurityHeaders(this IApplicationBuilder app) =>
+        app.UseMiddleware<SecurityHeadersMiddleware>();
+}
