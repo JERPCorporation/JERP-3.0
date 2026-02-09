@@ -9,6 +9,11 @@
                 <ui:ThemeResources RequestedTheme="Dark" />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
+
+ <SolidColorBrush x:Key="PrimaryBrush" Color="#1E88E5"/>
+        <SolidColorBrush x:Key="SecondaryBrush" Color="#43A047"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#FFB300"/>
+        <SolidColorBrush x:Key="DangerBrush" Color="#E53935"/>
             
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <converters:TemplateIconConverter x:Key="TemplateIconConverter"/>
@@ -18,3 +23,7 @@
         </ResourceDictionary>
     </Application.Resources>
 </Application>
+
+
+        
+        
