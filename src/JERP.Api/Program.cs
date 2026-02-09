@@ -47,6 +47,20 @@ finally
    Log.CloseAndFlush();
 }
 
+public class HomeController : Controller
+{
+   private readonly ILogger<HomeController> _logger;
+   public HomeController(ILogger<HomeController> logger)
+   {
+       _logger = logger;
+   }
+   public IActionResult Index()
+   {
+       _logger.LogInformation("Rendering Index view.");
+       return View();
+   }
+}
+
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
