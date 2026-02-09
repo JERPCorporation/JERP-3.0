@@ -12,13 +12,40 @@ using JERP.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+using Serilog;
+var builder = WebApplication.CreateBuilder(args);
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .CreateLogger();
-
+   .MinimumLevel.Information()
+   .WriteTo.Console()
+   .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+   .Enrich.FromLogContext()
+   .CreateLogger();
 builder.Host.UseSerilog();
+builder.Services.AddControllersWithViews();
+var app = builder.Build();
+// Log application startup
+Log.Information("Application is starting...");
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAuthorization();
+app.MapControllerRoute(
+   name: "default",
+   pattern: "{controller=Home}/{action=Index}/{id?}");
+try
+{
+   app.Run();
+}
+catch (Exception ex)
+{
+   Log.Fatal(ex, "Application terminated unexpectedly.");
+}
+finally
+{
+   Log.CloseAndFlush();
+}
 
 // Add services to the container
 builder.Services.AddControllers();
