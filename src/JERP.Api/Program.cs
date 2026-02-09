@@ -171,6 +171,11 @@ app.MapGet("/", () => Results.Json(new
 try
 {
     Log.Information("Starting JERP 3.0 API - SQL Server Edition");
+    app.UseXContentTypeOptions();
+app.UseXfo(options => options.Deny());
+app.UseXXssProtection(options => options.EnabledWithBlockMode());
+app.UseReferrerPolicy(opts => opts.StrictOriginWhenCrossOrigin());
+app.UseHsts();
     app.Run();
 }
 catch (Exception ex)
