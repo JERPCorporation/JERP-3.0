@@ -61,6 +61,8 @@ public class HomeController : Controller
    }
 }
 
+app.UseSerilogRequestLogging(); // Logs HTTP requests with method, path, status code, and timing
+
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
