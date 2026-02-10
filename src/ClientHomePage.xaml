@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:JERP.Maui.ViewModels"
+             x:Class="JERP.Maui.Views.ClientHomePage"
+             x:DataType="vm:ClientHomeViewModel"
+             Title="Mi Negocio">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            
+            <!-- Header: Mi Contador -->
+            <Frame BackgroundColor="{StaticResource Primary}" 
+                   Padding="15" 
+                   CornerRadius="10"
+                   HasShadow="True">
+                <Grid ColumnDefinitions="60,*,Auto">
+                    <!-- Accountant Avatar -->
+                    <Frame Grid.Column="0" 
+                           CornerRadius="30" 
+                           Padding="0" 
+                           HeightRequest="60" 
+                           WidthRequest="60"
+                           BackgroundColor="{StaticResource White}">
+                        <Label Text="👨‍💼" FontSize="30" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                    </Frame>
+
+                    <!-- Accountant Info -->
+                    <VerticalStackLayout Grid.Column="1" Spacing="5" Padding="10,0">
+                        <Label Text="Mi Contador" 
+                               TextColor="{StaticResource White}" 
+                               FontSize="12"
+                               Opacity="0.8"/>
+                        <Label Text="{Binding AccountantName}" 
+                               TextColor="{StaticResource White}" 
+                               FontSize="18"
+                               FontAttributes="Bold"/>
+                        <Label Text="{Binding AccountantStatus}" 
+                               TextColor="{StaticResource White}" 
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+
+                    <!-- Chat Button -->
+                    <Button Grid.Column="2"
+                            Text="💬"
+                            FontSize="24"
+                            BackgroundColor="{StaticResource White}"
+                            TextColor="{StaticResource Primary}"
+                            CornerRadius="25"
+                            WidthRequest="50"
+                            HeightRequest="50"
+                            Command="{Binding ChatWithAccountantCommand}"/>
+                </Grid>
+            </Frame>
+
+            <!-- Pending Approvals Alert -->
+            <Frame BackgroundColor="{StaticResource Warning}"
+                   Padding="15"
+                   CornerRadius="10"
+                   IsVisible="{Binding HasPendingApprovals}">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Label Grid.Column="0" Text="⏳" FontSize="30" VerticalTextAlignment="Center"/>
+                    <VerticalStackLayout Grid.Column="1" Padding="10,0" Spacing="5">
+                        <Label Text="Pendiente de revisión" FontAttributes="Bold"/>
+                        <Label Text="{Binding PendingApprovalsMessage}"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Quick Stats -->
+            <Label Text="Resumen del Mes" FontSize="20" FontAttributes="Bold"/>
+            
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                <!-- Income -->
+                <Frame Grid.Row="0" Grid.Column="0" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="💰" FontSize="24"/>
+                        <Label Text="Ingresos" FontSize="12" Opacity="0.7"/>
+                        <Label Text="{Binding MonthIncome, StringFormat='Q{0:N2}'}" 
+                               FontSize="20" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Success}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Expenses -->
+                <Frame Grid.Row="0" Grid.Column="1" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="💸" FontSize="24"/>
+                        <Label Text="Gastos" FontSize="12" Opacity="0.7"/>
+                        <Label Text="{Binding MonthExpenses, StringFormat='Q{0:N2}'}" 
+                               FontSize="20" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Danger}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ISR Estimate -->
+                <Frame Grid.Row="1" Grid.Column="0" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="📊" FontSize="24"/>
+                        <Label Text="ISR Estimado" FontSize="12" Opacity="0.7"/>
+                        <Label Text="{Binding EstimatedISR, StringFormat='Q{0:N2}'}" 
+                               FontSize="20" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource Info}"/>
+                        <Label Text="(Preliminar)" FontSize="10" Opacity="0.6"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Transactions -->
+                <Frame Grid.Row="1" Grid.Column="1" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="📝" FontSize="24"/>
+                        <Label Text="Transacciones" FontSize="12" Opacity="0.7"/>
+                        <Label Text="{Binding TransactionCount}" 
+                               FontSize="20" 
+                               FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Claude Suggestions -->
+            <Label Text="💡 Sugerencias" FontSize="20" FontAttributes="Bold" IsVisible="{Binding HasSuggestions}"/>
+            
+            <CollectionView ItemsSource="{Binding ClaudeSuggestions}" IsVisible="{Binding HasSuggestions}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,0,0,10" Padding="15" BackgroundColor="{StaticResource Secondary}">
+                            <Label Text="{Binding}" FontSize="14"/>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Quick Actions -->
+            <Label Text="Acciones Rápidas" FontSize="20" FontAttributes="Bold"/>
+            
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                <Button Grid.Row="0" Grid.Column="0"
+                        Text="➕ Nueva Venta"
+                        Command="{Binding AddSaleCommand}"
+                        BackgroundColor="{StaticResource Success}"/>
+                        
+                <Button Grid.Row="0" Grid.Column="1"
+                        Text="➖ Nuevo Gasto"
+                        Command="{Binding AddExpenseCommand}"
+                        BackgroundColor="{StaticResource Danger}"/>
+                        
+                <Button Grid.Row="1" Grid.Column="0"
+                        Text="📸 Subir Factura"
+                        Command="{Binding UploadInvoiceCommand}"
+                        BackgroundColor="{StaticResource Info}"/>
+                        
+                <Button Grid.Row="1" Grid.Column="1"
+                        Text="📊 Ver Reportes"
+                        Command="{Binding ViewReportsCommand}"
+                        BackgroundColor="{StaticResource Primary}"/>
+            </Grid>
+
+            <!-- Recent Transactions -->
+            <Label Text="Transacciones Recientes" FontSize="20" FontAttributes="Bold"/>
+            
+            <CollectionView ItemsSource="{Binding RecentTransactions}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:TransactionViewModel">
+                        <Frame Margin="0,0,0,10" Padding="15">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Label Grid.Column="0" 
+                                       Text="{Binding Icon}" 
+                                       FontSize="24"
+                                       VerticalTextAlignment="Center"/>
+                                       
+                                <VerticalStackLayout Grid.Column="1" Padding="10,0" Spacing="3">
+                                    <Label Text="{Binding Description}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}" 
+                                           FontSize="12" 
+                                           Opacity="0.7"/>
+                                    <Label Text="{Binding Status}" 
+                                           FontSize="11" 
+                                           TextColor="{Binding StatusColor}"/>
+                                </VerticalStackLayout>
+                                
+                                <Label Grid.Column="2" 
+                                       Text="{Binding Amount, StringFormat='Q{0:N2}'}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="{Binding AmountColor}"
+                                       VerticalTextAlignment="Center"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
