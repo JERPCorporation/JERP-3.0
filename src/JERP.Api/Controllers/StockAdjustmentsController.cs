@@ -18,13 +18,14 @@ using JERP.Application.DTOs.Inventory;
 namespace JERP.Api.Controllers;
 
 /// <summary>
-/// Stock adjustment endpoints with approval workflow and ledger posting
+/// Stock adjustment endpoints with approval workflow and ledger posting.
+/// 
+/// FIX: Changed from ControllerBase to BaseApiController for consistent response format.
+/// Also removed try-catch blocks - ExceptionHandlingMiddleware handles exceptions globally.
 /// </summary>
 [Route("api/v1/inventory/adjustments")]
 [Authorize]
-[ApiController]
-[Produces("application/json")]
-public class StockAdjustmentsController : ControllerBase
+public class StockAdjustmentsController : BaseApiController
 {
     private readonly IStockAdjustmentService _stockAdjustmentService;
     private readonly ILogger<StockAdjustmentsController> _logger;
@@ -59,9 +60,7 @@ public class StockAdjustmentsController : ControllerBase
         var adjustment = await _stockAdjustmentService.GetByIdAsync(id);
         
         if (adjustment == null)
-        {
-            return NotFound(new { success = false, error = $"Stock adjustment with ID {id} not found" });
-        }
+            return NotFound($"Stock adjustment with ID {id} not found");
 
         return Ok(adjustment);
     }
@@ -85,22 +84,13 @@ public class StockAdjustmentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromQuery] Guid companyId, [FromBody] CreateStockAdjustmentRequest request)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var adjustment = await _stockAdjustmentService.CreateAsync(companyId, request, userId);
         
-        try
-        {
-            var adjustment = await _stockAdjustmentService.CreateAsync(companyId, request, userId);
-            
-            _logger.LogInformation("Created stock adjustment for item {ItemId}, adjustment quantity {Quantity}", 
-                request.InventoryItemId, request.AdjustmentQuantity);
-            
-            return StatusCode(201, new { success = true, data = adjustment });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error creating stock adjustment");
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        _logger.LogInformation("Created stock adjustment for item {ItemId}, adjustment quantity {Quantity}", 
+            request.InventoryItemId, request.AdjustmentQuantity);
+        
+        return Created(adjustment);
     }
 
     /// <summary>
@@ -112,26 +102,14 @@ public class StockAdjustmentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Approve(Guid id)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var adjustment = await _stockAdjustmentService.ApproveAsync(id, userId);
         
-        try
-        {
-            var adjustment = await _stockAdjustmentService.ApproveAsync(id, userId);
-            
-            if (adjustment == null)
-            {
-                return NotFound(new { success = false, error = $"Stock adjustment with ID {id} not found" });
-            }
-            
-            _logger.LogInformation("Approved stock adjustment {AdjustmentId}", id);
-            
-            return Ok(adjustment);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error approving stock adjustment {AdjustmentId}", id);
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        if (adjustment == null)
+            return NotFound($"Stock adjustment with ID {id} not found");
+        
+        _logger.LogInformation("Approved stock adjustment {AdjustmentId}", id);
+        return Ok(adjustment);
     }
 
     /// <summary>
@@ -143,26 +121,14 @@ public class StockAdjustmentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post(Guid id)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var adjustment = await _stockAdjustmentService.PostAsync(id, userId);
         
-        try
-        {
-            var adjustment = await _stockAdjustmentService.PostAsync(id, userId);
-            
-            if (adjustment == null)
-            {
-                return NotFound(new { success = false, error = $"Stock adjustment with ID {id} not found" });
-            }
-            
-            _logger.LogInformation("Posted stock adjustment {AdjustmentId} to ledger", id);
-            
-            return Ok(adjustment);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error posting stock adjustment {AdjustmentId} to ledger", id);
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        if (adjustment == null)
+            return NotFound($"Stock adjustment with ID {id} not found");
+        
+        _logger.LogInformation("Posted stock adjustment {AdjustmentId} to ledger", id);
+        return Ok(adjustment);
     }
 
     /// <summary>
@@ -174,26 +140,14 @@ public class StockAdjustmentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Reject(Guid id, [FromBody] RejectionRequest request)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var result = await _stockAdjustmentService.RejectAsync(id, request.Reason, userId);
         
-        try
-        {
-            var result = await _stockAdjustmentService.RejectAsync(id, request.Reason, userId);
-            
-            if (!result)
-            {
-                return NotFound(new { success = false, error = $"Stock adjustment with ID {id} not found" });
-            }
-            
-            _logger.LogInformation("Rejected stock adjustment {AdjustmentId} - Reason: {Reason}", id, request.Reason);
-            
-            return Ok(new { success = true, message = "Stock adjustment rejected successfully" });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error rejecting stock adjustment {AdjustmentId}", id);
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        if (!result)
+            return NotFound($"Stock adjustment with ID {id} not found");
+        
+        _logger.LogInformation("Rejected stock adjustment {AdjustmentId} - Reason: {Reason}", id, request.Reason);
+        return Ok(new { success = true, message = "Stock adjustment rejected successfully" });
     }
 }
 

@@ -17,11 +17,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace JERP.Api.Controllers;
 
 /// <summary>
-/// Controller for admin operations including audit log management
-/// TODO: Add role-based authorization [Authorize(Roles = "Admin,SuperAdmin")] or 
-/// policy-based authorization [Authorize(Policy = "AdminOnly")] to restrict access
+/// Controller for admin operations including audit log management.
+/// 
+/// SECURITY FIX: Changed from [Authorize] to [Authorize(Roles = "Admin,SuperAdmin")]
+/// 
+/// BEFORE: Any authenticated user (employees, basic users) could access audit logs,
+/// verify audit chains, and export sensitive compliance data.
+/// 
+/// AFTER: Only users with the Admin or SuperAdmin role can access these endpoints.
+/// The [Authorize(Roles = "...")] attribute checks the role claims in the JWT token.
+/// If a user's token doesn't contain one of these roles, they get a 403 Forbidden response.
+/// 
+/// HOW IT WORKS:
+/// When a user logs in, your AuthService creates a JWT token with claims like:
+///   { "role": "Admin" } or { "role": "Employee" }
+/// The [Authorize(Roles = "Admin")] attribute checks for that claim automatically.
+/// You need to make sure your AuthService includes role claims in the token.
 /// </summary>
-[Authorize]
+[Authorize(Roles = "Admin,SuperAdmin")]
 public class AdminController : BaseApiController
 {
     private readonly IAuditLogService _auditLogService;
@@ -56,59 +69,41 @@ public class AdminController : BaseApiController
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 50)
     {
-        try
+        if (page < 1)
+            return BadRequest("Page number must be greater than 0");
+
+        if (pageSize < 1 || pageSize > 100)
+            return BadRequest("Page size must be between 1 and 100");
+
+        var (logs, total) = await _auditLogService.GetAuditLog(
+            companyId, startDate, endDate, action, userId, page, pageSize);
+
+        return Success(new
         {
-            if (page < 1)
+            logs = logs.Select(log => new
             {
-                return BadRequest("Page number must be greater than 0");
-            }
-
-            if (pageSize < 1 || pageSize > 100)
+                id = log.Id,
+                companyId = log.CompanyId,
+                sequenceNumber = log.SequenceNumber,
+                timestamp = log.Timestamp,
+                userId = log.UserId,
+                userEmail = log.UserEmail,
+                userName = log.UserName,
+                action = log.Action,
+                resource = log.Resource ?? log.EntityType,
+                details = log.Details,
+                ipAddress = log.IpAddress,
+                previousHash = log.PreviousHash,
+                currentHash = log.CurrentHash
+            }),
+            pagination = new
             {
-                return BadRequest("Page size must be between 1 and 100");
-            }
-
-            var (logs, total) = await _auditLogService.GetAuditLog(
-                companyId,
-                startDate,
-                endDate,
-                action,
-                userId,
+                total,
                 page,
-                pageSize);
-
-            return Success(new
-            {
-                logs = logs.Select(log => new
-                {
-                    id = log.Id,
-                    companyId = log.CompanyId,
-                    sequenceNumber = log.SequenceNumber,
-                    timestamp = log.Timestamp,
-                    userId = log.UserId,
-                    userEmail = log.UserEmail,
-                    userName = log.UserName,
-                    action = log.Action,
-                    resource = log.Resource ?? log.EntityType,
-                    details = log.Details,
-                    ipAddress = log.IpAddress,
-                    previousHash = log.PreviousHash,
-                    currentHash = log.CurrentHash
-                }),
-                pagination = new
-                {
-                    total,
-                    page,
-                    pageSize,
-                    totalPages = (int)Math.Ceiling(total / (double)pageSize)
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving audit logs for company {CompanyId}", companyId);
-            return Error("Failed to retrieve audit logs", 500);
-        }
+                pageSize,
+                totalPages = (int)Math.Ceiling(total / (double)pageSize)
+            }
+        });
     }
 
     /// <summary>
@@ -119,23 +114,15 @@ public class AdminController : BaseApiController
     [HttpPost("audit-log/verify")]
     public async Task<IActionResult> VerifyAuditChain([FromBody] VerifyAuditChainRequest request)
     {
-        try
-        {
-            var (isValid, message, brokenLinks) = await _auditLogService.VerifyAuditChain(request.CompanyId);
+        var (isValid, message, brokenLinks) = await _auditLogService.VerifyAuditChain(request.CompanyId);
 
-            return Success(new
-            {
-                isValid,
-                message,
-                brokenLinks,
-                timestamp = DateTime.UtcNow
-            });
-        }
-        catch (Exception ex)
+        return Success(new
         {
-            _logger.LogError(ex, "Error verifying audit chain for company {CompanyId}", request.CompanyId);
-            return Error("Failed to verify audit chain", 500);
-        }
+            isValid,
+            message,
+            brokenLinks,
+            timestamp = DateTime.UtcNow
+        });
     }
 
     /// <summary>
@@ -151,22 +138,14 @@ public class AdminController : BaseApiController
         [FromQuery] DateTime? startDate = null,
         [FromQuery] DateTime? endDate = null)
     {
-        try
-        {
-            var csv = await _auditLogService.ExportToCsv(companyId, startDate, endDate);
+        var csv = await _auditLogService.ExportToCsv(companyId, startDate, endDate);
 
-            var fileName = $"audit-log-{companyId}-{DateTime.UtcNow:yyyyMMddHHmmss}.csv";
+        var fileName = $"audit-log-{companyId}-{DateTime.UtcNow:yyyyMMddHHmmss}.csv";
 
-            return File(
-                System.Text.Encoding.UTF8.GetBytes(csv),
-                "text/csv",
-                fileName);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error exporting audit logs for company {CompanyId}", companyId);
-            return Error("Failed to export audit logs", 500);
-        }
+        return File(
+            System.Text.Encoding.UTF8.GetBytes(csv),
+            "text/csv",
+            fileName);
     }
 }
 

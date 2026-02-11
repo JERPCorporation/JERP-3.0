@@ -1,276 +1,120 @@
-# JERP 3.0 - MAUI Native Application
+# JERP 3.0 API - Code Fixes Summary
 
-Aplicación móvil y de escritorio multiplataforma construida con .NET MAUI.
+## Files In This Package
 
-## 🚀 Plataformas Soportadas
+### New Files (add to your project)
+| File | Where to put it | What it does |
+|------|----------------|--------------|
+| `IJournalEntryService.cs` | `src/JERP.Application/Services/Finance/` | Interface defining journal entry operations |
+| `JournalEntryService.cs` | `src/JERP.Infrastructure/Services/Finance/` | Implementation with all business logic (moved from controller) |
+| `WIRING_INSTRUCTIONS.cs` | (don't add to project - read it) | Step-by-step instructions for Program.cs changes |
 
-- ✅ **Windows** (10/11)
-- ✅ **macOS** (Catalyst)
-- ✅ **iOS** (11.0+)
-- ✅ **Android** (API 21+)
+### Replacement Files (replace existing files)
+| File | What changed |
+|------|-------------|
+| `JournalEntriesController.cs` | **Complete rewrite.** Removed 300 lines of business logic, now delegates to IJournalEntryService. Added role-based auth on post/void. |
+| `AdminController.cs` | **Security fix.** Changed `[Authorize]` to `[Authorize(Roles = "Admin,SuperAdmin")]` |
+| `AuthController.cs` | **Security fix.** Logout now revokes refresh token instead of doing nothing |
+| `HealthController.cs` | **Fixes.** Route now matches `/api/v1/health`, removed personal email from response |
+| `DashboardController.cs` | **Consistency fix.** Removed direct `JerpDbContext` injection, all endpoints use `IDashboardService` |
+| `InventoryItemsController.cs` | **Consistency fix.** Changed from `ControllerBase` to `BaseApiController` |
+| `StockMovementsController.cs` | **Consistency fix.** Changed from `ControllerBase` to `BaseApiController` |
+| `StockAdjustmentsController.cs` | **Consistency fix.** Changed from `ControllerBase` to `BaseApiController` |
 
-## 📋 Requisitos Previos
+### File to Delete
+| File | Why |
+|------|-----|
+| `ErrorHandlingMiddleware.cs` | Duplicate of `ExceptionHandlingMiddleware.cs` (which handles more exception types) |
 
-### Desarrollo
-- .NET 10.0 SDK o superior
-- Visual Studio 2022 17.12+ o Visual Studio Code
-- Cargas de trabajo de MAUI instaladas
+---
 
-### Windows
-```powershell
-# Instalar carga de trabajo de MAUI
-dotnet workload install maui
+## What Was Fixed (and Why)
+
+### 1. CRITICAL: Role-Based Authorization
+**Before:** Any authenticated user could access admin audit logs, post journal entries to the ledger, and void financial records.
+
+**After:** Sensitive endpoints require specific roles:
+- Admin endpoints → `Admin, SuperAdmin`
+- Journal posting/voiding → `Accountant, Admin`
+
+**What you still need to do:** Make sure your `AuthService.LoginAsync()` includes role claims in the JWT token. Look for where the token is created and add:
+```csharp
+new Claim(ClaimTypes.Role, user.Role)  // or user.Roles for multiple
 ```
 
-### macOS
-```bash
-# Instalar carga de trabajo de MAUI
-sudo dotnet workload install maui
-sudo dotnet workload install maui-ios
-sudo dotnet workload install maui-maccatalyst
-```
-
-## 🛠️ Configuración del Proyecto
-
-### 1. Clonar/Ubicar el proyecto
-
-El proyecto MAUI debe estar en:
-```
-JERP-3.0/
-├── src/
-│   ├── JERP.Api/           # Backend existente
-│   ├── JERP.Desktop/       # WPF existente
-│   ├── JERP.Maui/          # ← Nueva app MAUI
-│   └── JERP.Shared/        # ← DTOs compartidos
-└── landing-page/           # Next.js existente
-```
-
-### 2. Restaurar dependencias
-
-```powershell
-cd C:\Users\ichbi\OneDrive\Documents\GitHub\JERP-3.0\src\JERP.Maui
-dotnet restore
-```
-
-### 3. Configurar appsettings.json
-
-Edita `appsettings.json` con la URL de tu backend:
-
-```json
-{
-  "Api": {
-    "BaseUrl": "http://localhost:7001"  // Tu puerto del backend
-  }
-}
-```
-
-### 4. Para desarrollo en Android (opcional)
-
-Si estás en Windows y quieres probar Android:
-
-```powershell
-# Verificar que Android SDK esté instalado
-dotnet build -t:Run -f net10.0-android
-```
-
-### 5. Para desarrollo en iOS (solo macOS)
-
-```bash
-# Desde macOS
-dotnet build -t:Run -f net10.0-ios
-```
-
-## 🏃 Ejecutar la Aplicación
-
-### Windows (recomendado para empezar)
-
-```powershell
-cd src\JERP.Maui
-dotnet build -f net10.0-windows10.0.19041.0
-dotnet run --framework net10.0-windows10.0.19041.0
-```
-
-O desde Visual Studio:
-1. Abrir la solución `JERP.slnx`
-2. Establecer `JERP.Maui` como proyecto de inicio
-3. Seleccionar framework: `net10.0-windows`
-4. Presionar F5
-
-### Android
-
-```powershell
-dotnet build -f net10.0-android
-dotnet run --framework net10.0-android
-```
-
-### iOS (macOS solamente)
-
-```bash
-dotnet build -f net10.0-ios
-dotnet run --framework net10.0-ios
-```
-
-## 📱 Estructura del Proyecto
-
-```
-JERP.Maui/
-├── Views/              # Páginas XAML
-│   ├── LoginPage.xaml
-│   ├── MainPage.xaml
-│   └── DashboardPage.xaml
-├── ViewModels/         # ViewModels con MVVM
-│   ├── LoginViewModel.cs
-│   └── MainViewModel.cs
-├── Services/           # Servicios de negocio
-│   ├── IAuthenticationService.cs
-│   ├── AuthenticationService.cs
-│   └── ApiInterfaces.cs
-├── Resources/          # Recursos de la app
-│   ├── Fonts/
-│   ├── Images/
-│   └── Styles/
-├── Platforms/          # Código específico por plataforma
-│   ├── Android/
-│   ├── iOS/
-│   ├── MacCatalyst/
-│   └── Windows/
-├── MauiProgram.cs      # Configuración DI
-└── App.xaml            # App principal
-```
+### 2. CRITICAL: Logout Security
+**Before:** The logout endpoint returned "success" without doing anything. The JWT remained valid.
 
-## 🎨 Tecnologías Utilizadas
+**After:** Logout calls `_authService.RevokeRefreshTokenAsync()` to invalidate the refresh token.
 
-- **MAUI Native** - Framework multiplataforma
-- **CommunityToolkit.Maui** - Componentes adicionales
-- **CommunityToolkit.Mvvm** - MVVM Toolkit
-- **Refit** - Cliente HTTP type-safe
-- **System.IdentityModel.Tokens.Jwt** - Manejo de JWT
+**What you still need to do:** Add `RevokeRefreshTokenAsync` method to your `IAuthService` and implementation (see WIRING_INSTRUCTIONS.cs).
 
-## 🔐 Autenticación
+### 3. CRITICAL: Journal Entry Race Condition
+**Before:** Number generation read the last entry, parsed the string, added 1. Two simultaneous requests got the same number.
 
-La app usa JWT tokens para autenticación:
+**After:** Uses a database transaction and a `SequenceNumber` integer column for atomic increment.
 
-1. El usuario ingresa credenciales
-2. Se obtiene access token + refresh token
-3. Tokens se guardan de forma segura en `SecureStorage`
-4. `AuthHeaderHandler` inyecta el token automáticamente en todas las peticiones HTTP
-5. Si el token expira, se renueva automáticamente
+**What you still need to do:** Add `SequenceNumber` property to JournalEntry entity and create a migration (see WIRING_INSTRUCTIONS.cs).
 
-### Credenciales de Prueba
+### 4. HIGH: Service Layer Consistency
+**Before:** JournalEntriesController had 378 lines with direct DbContext queries, entity creation, balance updates, and DTO mapping all in the controller.
 
-```
-Usuario: admin
-Contraseña: Admin@123
-```
+**After:** Controller is 80 lines. All logic is in JournalEntryService.
 
-## 🌐 Configuración de Red
+### 5. HIGH: Controller Base Class Consistency
+**Before:** 10 controllers inherited from `ControllerBase` instead of `BaseApiController`, giving them different response formats.
 
-### Android - Permitir HTTP en desarrollo
+**After:** Fixed 3 (InventoryItems, StockMovements, StockAdjustments). The remaining 7 follow the same pattern if you want to fix them too.
 
-Edita `Platforms/Android/Resources/xml/network_security_config.xml`:
+### 6. MEDIUM: Dashboard Multi-Tenancy
+**Before:** `GetOverview()`, `GetPayrollMetrics()`, etc. had no `companyId` parameter - they queried ALL data across all companies.
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <base-config cleartextTrafficPermitted="true" />
-</network-security-config>
-```
+**After:** All endpoints require `companyId`.
 
-### iOS - Configurar ATS
+---
 
-Edita `Platforms/iOS/Info.plist` si usas HTTP:
+## Steps to Apply These Changes
 
-```xml
-<key>NSAppTransportSecurity</key>
-<dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-</dict>
-```
+1. **Read `WIRING_INSTRUCTIONS.cs` first** - it tells you what to add to Program.cs and entity classes
 
-## 🐛 Troubleshooting
+2. **Add the new service files:**
+   - Copy `IJournalEntryService.cs` to `src/JERP.Application/Services/Finance/`
+   - Copy `JournalEntryService.cs` to `src/JERP.Infrastructure/Services/Finance/`
 
-### Error: "No se puede conectar al backend"
+3. **Replace the controller files** (make a git commit first so you can revert!)
 
-1. Verifica que el backend esté corriendo
-2. En Android Emulator usa `10.0.2.2` en lugar de `localhost`
-3. En iOS Simulator puedes usar `localhost`
+4. **Add the DI registration** to Program.cs (see WIRING_INSTRUCTIONS.cs)
 
-```json
-// appsettings.json para Android
-{
-  "Api": {
-    "BaseUrl": "http://10.0.2.2:7001"  // Android emulator
-  }
-}
-```
+5. **Add the JournalEntry.SequenceNumber property** and run a migration
 
-### Error: "Workload not found"
+6. **Add RevokeRefreshTokenAsync** to IAuthService + implementation
 
-```powershell
-dotnet workload restore
-dotnet workload install maui
-```
+7. **Delete `ErrorHandlingMiddleware.cs`** and remove its registration from Program.cs
 
-### Error de compilación en Android
+8. **Test:** Run the API and verify:
+   - `GET /api/v1/health` returns 200 (was returning 404)
+   - `POST /api/v1/finance/journal-entries/{id}/post` returns 403 without Admin/Accountant role
+   - `GET /api/v1/admin/audit-log` returns 403 without Admin role
 
-```powershell
-# Limpiar y reconstruir
-dotnet clean
-dotnet build -f net10.0-android
-```
+---
 
-## 📦 Publicar la Aplicación
+## Controllers Still Using Direct DbContext (for you to fix later)
 
-### Windows (MSIX)
+These controllers still inject `JerpDbContext` directly. The pattern is the same as what we did for JournalEntriesController - create an interface, move the logic to a service, make the controller thin:
 
-```powershell
-dotnet publish -f net10.0-windows10.0.19041.0 -c Release
-```
+- `AccountsController.cs` → needs `IAccountService`
+- `GeneralLedgerController.cs` → needs `IGeneralLedgerService`  
+- `DepartmentsController.cs` → needs `IDepartmentService`
+- `FASBController.cs` → needs `IFASBService`
+- `ReportsController.cs` → needs `IReportService`
 
-### Android (APK)
+## Controllers Still Using ControllerBase (for you to fix later)
 
-```powershell
-dotnet publish -f net10.0-android -c Release
-```
+Change `ControllerBase` to `BaseApiController` and remove the redundant `[ApiController]` and `[Produces]` attributes:
 
-El APK estará en: `bin/Release/net10.0-android/publish/`
-
-### iOS (IPA - requiere certificado de Apple)
-
-```bash
-dotnet publish -f net10.0-ios -c Release
-```
-
-## 🔄 Migración desde WPF
-
-Si ya tienes código en WPF (`JERP.Desktop`), mucho puede reutilizarse:
-
-1. **ViewModels** - La mayoría son compatibles (usa CommunityToolkit.Mvvm)
-2. **Servicios** - 100% reutilizables si no dependen de WPF
-3. **XAML** - Similar pero con diferencias (ContentPage vs Window)
-
-## 🚢 Despliegue
-
-### App Stores
-
-- **Google Play**: Necesitas cuenta de desarrollador ($25 único)
-- **Apple App Store**: Necesitas cuenta de desarrollador ($99/año)
-- **Microsoft Store**: Incluido con cuenta de desarrollador
-
-### Distribución interna (Enterprise)
-
-Puedes distribuir directamente sin app stores:
-- Android: Instalar APK directamente
-- iOS: Usar TestFlight o MDM
-- Windows: Instalar MSIX
-
-## 📞 Soporte
-
-Para problemas o preguntas:
-- Email: ichbincesartobar@yahoo.com
-- Documentación MAUI: https://learn.microsoft.com/dotnet/maui
-
-## 📄 Licencia
-
-Copyright (c) 2026 Julio Cesar Mendez Tobar. All Rights Reserved.
+- `AIAssistantController.cs`
+- `AccountTemplatesController.cs`
+- `BatchLotsController.cs`
+- `InventoryValuationController.cs`
+- `KPIController.cs`
+- `LicenseController.cs`

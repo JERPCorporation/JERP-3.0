@@ -37,7 +37,7 @@ public class AuthenticationService : IAuthenticationService
         try
         {
             var loginRequest = new { Username = username, Password = password };
-            var response = await _apiClient.PostAsync<dynamic>("api/auth/login", loginRequest);
+            var response = await _apiClient.PostAsync<dynamic>("api/v1/auth/login", loginRequest);
             
             Token = response?.token?.ToString();
             
@@ -45,7 +45,7 @@ public class AuthenticationService : IAuthenticationService
             {
                 _apiClient.SetAuthToken(Token);
                 
-                var userResponse = await _apiClient.GetAsync<UserDto>("api/users/current");
+                var userResponse = await _apiClient.GetAsync<UserDto>("api/v1/users/current");
                 CurrentUser = userResponse;
                 IsAuthenticated = true;
                 

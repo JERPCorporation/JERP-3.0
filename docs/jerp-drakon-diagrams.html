@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JERP 3.0 — DRAKON Algorithm Diagrams</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05080e;--bg2:#0b1018;--bg3:#111824;
+  --border:#1e2a3a;--border-h:#2d4055;
+  --text:#d4dae4;--dim:#6b7a8d;--muted:#3a4a5c;
+  --red:#e05555;--red-g:rgba(224,85,85,.12);
+  --blue:#4da6e8;--blue-g:rgba(77,166,232,.1);
+  --green:#4ec990;--green-g:rgba(78,201,144,.1);
+  --gold:#dab45e;--gold-g:rgba(218,180,94,.12);
+  --purple:#a78bfa;--purple-g:rgba(167,139,250,.1);
+  --orange:#e8945a;--orange-g:rgba(232,148,90,.12);
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+/* ── Grid background ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;opacity:.08;pointer-events:none;z-index:0;
+}
+
+.app{max-width:1100px;margin:0 auto;padding:1.5rem;position:relative;z-index:1}
+
+/* ── Header ── */
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:1rem}
+.hdr-left{}
+.hdr-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--red);margin-bottom:.4rem}
+.hdr h1{font-family:'Fraunces',serif;font-size:1.75rem;font-weight:700;color:var(--text)}
+.hdr h1 span{color:var(--blue)}
+.hdr-right{display:flex;gap:.5rem;align-items:center}
+.legend-item{display:flex;align-items:center;gap:.35rem;font-size:.68rem;color:var(--dim);font-family:'IBM Plex Mono',monospace}
+.legend-dot{width:8px;height:8px;border-radius:2px}
+
+/* ── Diagram selector ── */
+.selector{display:flex;gap:.35rem;margin-bottom:2rem;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:none}
+.selector::-webkit-scrollbar{display:none}
+.sel-btn{
+  padding:.6rem 1.1rem;font-family:'IBM Plex Mono',monospace;font-size:.72rem;
+  color:var(--dim);background:var(--bg2);border:1px solid var(--border);
+  border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:.02em;
+}
+.sel-btn:hover{color:var(--text);border-color:var(--border-h)}
+.sel-btn.active{color:var(--blue);border-color:var(--blue);background:var(--blue-g)}
+
+/* ── Diagram container ── */
+.diagram-wrap{display:none;animation:fadeUp .35s ease}
+.diagram-wrap.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.dia-header{margin-bottom:1.5rem}
+.dia-badge{
+  display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.58rem;
+  letter-spacing:.25em;text-transform:uppercase;padding:.25rem .7rem;
+  border-radius:4px;margin-bottom:.6rem;
+}
+.dia-badge.auth{background:var(--green-g);color:var(--green);border:1px solid rgba(78,201,144,.2)}
+.dia-badge.finance{background:var(--gold-g);color:var(--gold);border:1px solid rgba(218,180,94,.2)}
+.dia-badge.payroll{background:var(--purple-g);color:var(--purple);border:1px solid rgba(167,139,250,.2)}
+.dia-badge.inventory{background:var(--orange-g);color:var(--orange);border:1px solid rgba(232,148,90,.2)}
+.dia-badge.security{background:var(--red-g);color:var(--red);border:1px solid rgba(224,85,85,.2)}
+.dia-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;margin-bottom:.3rem}
+.dia-sub{color:var(--dim);font-size:.85rem;font-weight:300}
+.dia-file{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);margin-top:.4rem}
+
+/* ── DRAKON Canvas ── */
+.drakon{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:2rem 1rem;overflow-x:auto;position:relative;
+}
+.drakon-inner{display:flex;flex-direction:column;align-items:center;min-width:fit-content;margin:0 auto}
+
+/* ── Nodes ── */
+.node{
+  font-family:'IBM Plex Mono',monospace;text-align:center;
+  position:relative;min-width:180px;max-width:340px;
+  transition:all .2s;cursor:default;
+}
+.node:hover{transform:scale(1.02)}
+.node .ru{font-size:.65rem;color:var(--dim);margin-top:2px;font-style:italic}
+
+/* Start/End - Rounded pill */
+.n-start,.n-end{
+  background:var(--red);color:#fff;font-weight:600;font-size:.8rem;
+  padding:.55rem 2rem;border-radius:24px;
+}
+.n-end{background:var(--red)}
+
+/* Action - Rectangle */
+.n-action{
+  background:var(--bg3);border:1.5px solid var(--blue);color:var(--text);
+  font-size:.75rem;padding:.55rem 1.2rem;border-radius:5px;line-height:1.4;
+}
+
+/* Decision - Diamond shape (CSS) */
+.n-decision-wrap{position:relative;padding:1rem 0}
+.n-decision{
+  background:var(--bg3);border:2px solid var(--gold);color:var(--gold);
+  font-size:.73rem;font-weight:500;padding:.6rem 1.4rem;
+  transform:rotate(0deg);border-radius:5px;position:relative;
+}
+.n-decision::before{
+  content:'◆';position:absolute;left:-18px;top:50%;transform:translateY(-50%);
+  font-size:.7rem;color:var(--gold);opacity:.5;
+}
+
+/* IO - Parallelogram feel */
+.n-io{
+  background:var(--bg3);border:1.5px solid var(--green);color:var(--green);
+  font-size:.75rem;padding:.5rem 1.2rem;border-radius:5px;
+  border-left:4px solid var(--green);
+}
+
+/* Error/Return */
+.n-error{
+  background:var(--red-g);border:1.5px solid var(--red);color:var(--red);
+  font-size:.73rem;padding:.45rem 1rem;border-radius:5px;
+}
+
+/* Loop node */
+.n-loop{
+  background:var(--bg3);border:1.5px solid var(--purple);color:var(--purple);
+  font-size:.73rem;padding:.5rem 1.2rem;border-radius:5px;
+  border-left:4px solid var(--purple);
+}
+
+/* ── Arrows ── */
+.arrow{
+  width:2px;height:22px;background:var(--muted);margin:0 auto;position:relative;
+}
+.arrow::after{
+  content:'';position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);
+  border-left:4px solid transparent;border-right:4px solid transparent;
+  border-top:5px solid var(--muted);
+}
+.arrow-short{height:14px}
+
+/* Branch container */
+.branch{
+  display:flex;gap:2rem;align-items:flex-start;justify-content:center;
+  position:relative;margin:0;width:100%;
+}
+.branch-path{
+  display:flex;flex-direction:column;align-items:center;min-width:140px;max-width:200px;
+}
+.branch-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:600;
+  letter-spacing:.1em;margin-bottom:4px;
+}
+.branch-label.yes{color:var(--green)}
+.branch-label.no{color:var(--red)}
+
+/* Horizontal connector from decision */
+.h-line{
+  position:absolute;top:0;height:2px;background:var(--muted);
+}
+
+/* Merge arrow */
+.merge{
+  width:2px;height:16px;background:var(--muted);margin:0 auto;position:relative;
+}
+
+/* ── Code peek ── */
+.code-peek{
+  margin-top:1.5rem;background:#080c14;border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;
+}
+.code-peek-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.6rem 1rem;border-bottom:1px solid var(--border);background:var(--bg2);
+}
+.code-peek-title{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase}
+.code-peek-lang{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--muted);background:var(--bg);padding:2px 8px;border-radius:3px}
+.code-peek pre{
+  padding:1rem 1.2rem;font-family:'IBM Plex Mono',monospace;font-size:.73rem;
+  line-height:1.7;overflow-x:auto;color:var(--dim);
+}
+.code-peek .hl-kw{color:var(--blue)}
+.code-peek .hl-fn{color:var(--green)}
+.code-peek .hl-str{color:var(--gold)}
+.code-peek .hl-cm{color:#3a5a3a}
+.code-peek .hl-tp{color:var(--purple)}
+.code-peek .hl-num{color:var(--orange)}
+.code-peek .hl-err{color:var(--red)}
+
+/* ── Info callout ── */
+.callout{
+  margin-top:1.5rem;padding:1rem 1.2rem;border-radius:6px;font-size:.82rem;line-height:1.6;
+  border-left:3px solid;
+}
+.callout.drakon-note{background:var(--blue-g);border-color:var(--blue);color:var(--text)}
+.callout.security-note{background:var(--red-g);border-color:var(--red);color:var(--text)}
+.callout.bug-note{background:var(--orange-g);border-color:var(--orange);color:var(--text)}
+.callout-label{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.3rem}
+.callout.drakon-note .callout-label{color:var(--blue)}
+.callout.security-note .callout-label{color:var(--red)}
+.callout.bug-note .callout-label{color:var(--orange)}
+
+/* ── Responsive ── */
+@media(max-width:700px){
+  .hdr{flex-direction:column;align-items:flex-start}
+  .hdr-right{display:none}
+  .branch{gap:1rem}
+  .branch-path{min-width:110px}
+  .node{min-width:140px;max-width:220px;font-size:.7rem}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-eyebrow">ДРАКОН // Algorithm Visualization</div>
+    <h1>JERP 3.0 <span>DRAKON</span> Diagrams</h1>
+  </div>
+  <div class="hdr-right">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Start / End</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Action</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Decision</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>I/O</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red);opacity:.5"></div>Error</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Loop</div>
+  </div>
+</header>
+
+<nav class="selector" id="nav"></nav>
+<main id="main"></main>
+
+</div>
+<script>
+const diagrams = [
+{
+  id:'login', tab:'🔐 Login',
+  badge:'auth', badgeText:'Authentication',
+  title:'User Login Flow',
+  sub:'AuthController.Login() → JWT token generation with security logging',
+  file:'src/JERP.Api/Controllers/AuthController.cs → Lines 38–53',
+  nodes:`
+    <div class="node n-start">Начало / START<div class="ru">POST /api/v1/auth/login</div></div>
+    <div class="arrow"></div>
+    <div class="node n-io">Получить запрос / Receive LoginRequest<div class="ru">request.Username, request.Password</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Записать в журнал / Log attempt<div class="ru">_logger.LogInformation("Login attempt...")</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Проверить учётные данные / Validate credentials<div class="ru">_authService.LoginAsync(request)</div></div>
+    <div class="arrow"></div>
+    <div class="node n-decision">◆ Результат == null?<div class="ru">Did validation fail?</div></div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label yes">ДА / YES</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action">Записать предупреждение / Log warning<div class="ru">LogWarning("Failed login...")</div></div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 401 Unauthorized<div class="ru">"Invalid username or password"</div></div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ / NO</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action">Записать успех / Log success<div class="ru">LogInformation("User logged in")</div></div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-io">→ 200 OK + TokenResponse<div class="ru">JWT access + refresh token</div></div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node n-end">Конец / END</div>
+  `,
+  code:`<span class="hl-cm">// Начало — POST /api/v1/auth/login</span>
+<span class="hl-kw">public async</span> Task&lt;IActionResult&gt; <span class="hl-fn">Login</span>(LoginRequest request)
+{
+    _logger.<span class="hl-fn">LogInformation</span>(<span class="hl-str">"Login attempt for: {Username}"</span>, request.Username);
+
+    <span class="hl-kw">var</span> result = <span class="hl-kw">await</span> _authService.<span class="hl-fn">LoginAsync</span>(request);
+
+    <span class="hl-cm">// ◆ Результат == null? (Decision)</span>
+    <span class="hl-kw">if</span> (result == <span class="hl-kw">null</span>)  <span class="hl-cm">// ← Да (Yes) branch</span>
+    {
+        _logger.<span class="hl-fn">LogWarning</span>(<span class="hl-str">"Failed login: {Username}"</span>, request.Username);
+        <span class="hl-kw">return</span> <span class="hl-err">Unauthorized</span>(<span class="hl-str">"Invalid username or password"</span>);
+    }
+    <span class="hl-cm">// ← Нет (No) branch — credentials valid</span>
+    _logger.<span class="hl-fn">LogInformation</span>(<span class="hl-str">"User {Username} logged in"</span>, request.Username);
+    <span class="hl-kw">return</span> <span class="hl-fn">Ok</span>(result);  <span class="hl-cm">// Конец</span>
+}`,
+  callout:{type:'security-note',label:'Security Gap Found',text:'The current Logout endpoint returns "success" without revoking the refresh token. The DRAKON diagram for logout would show a path that <em>looks</em> complete but actually leaves the token alive. The fix adds _authService.RevokeRefreshTokenAsync() before returning — which you can see in the corrected AuthController.cs we built.'}
+},
+{
+  id:'create-je', tab:'📒 Create Journal Entry',
+  badge:'finance', badgeText:'Finance',
+  title:'Create Journal Entry Flow',
+  sub:'JournalEntriesController.CreateJournalEntry() — The core double-entry bookkeeping algorithm',
+  file:'src/JERP.Api/Controllers/JournalEntriesController.cs → Lines 149–269',
+  nodes:`
+    <div class="node n-start">Начало / START<div class="ru">POST /api/v1/finance/journal-entries</div></div>
+    <div class="arrow"></div>
+    <div class="node n-io">Получить запрос / Receive request<div class="ru">CreateJournalEntryRequest (lines, date, desc)</div></div>
+    <div class="arrow"></div>
+    <div class="node n-decision">◆ Есть ли строки?<div class="ru">request.Entries == null || empty?</div></div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label yes">ДА (пусто) / YES</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 400 Bad Request<div class="ru">"Must have at least one entry"</div></div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ / NO (has entries)</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action">Вычислить итоги / Sum totals<div class="ru">totalDebits = Σ DebitAmount<br>totalCredits = Σ CreditAmount</div></div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node n-decision">◆ Дебет == Кредит?<div class="ru">totalDebits == totalCredits?</div></div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ / NOT BALANCED</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 400 Bad Request<div class="ru">"Entry is not balanced"</div></div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label yes">ДА / BALANCED ✓</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action">Проверить счета / Verify accounts<div class="ru">Load all AccountIds from DB</div></div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node n-decision">◆ Все счета найдены?<div class="ru">accounts.Count == accountIds.Count?</div></div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ / MISSING</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 400 Bad Request<div class="ru">"Accounts not found"</div></div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label yes">ДА / ALL FOUND ✓</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action">Создать номер / Generate number<div class="ru">JE-{nextNumber:D4}</div></div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node n-action">Сохранить проводку / Save JournalEntry<div class="ru">Status = Draft, Source = Manual</div></div>
+    <div class="arrow"></div>
+    <div class="node n-loop">Для каждой строки / foreach entry<div class="ru">Create GeneralLedgerEntry records</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Сохранить в БД / SaveChangesAsync<div class="ru">Persist to database</div></div>
+    <div class="arrow"></div>
+    <div class="node n-io">→ 201 Created + JournalEntryDto<div class="ru">Return full entry with ledger lines</div></div>
+    <div class="arrow"></div>
+    <div class="node n-end">Конец / END</div>
+  `,
+  code:`<span class="hl-cm">// ◆ Дебет == Кредит? (The fundamental accounting rule)</span>
+<span class="hl-kw">var</span> totalDebits = request.Entries.<span class="hl-fn">Sum</span>(e => e.DebitAmount);
+<span class="hl-kw">var</span> totalCredits = request.Entries.<span class="hl-fn">Sum</span>(e => e.CreditAmount);
+
+<span class="hl-kw">if</span> (totalDebits != totalCredits)  <span class="hl-cm">// ← НЕТ branch</span>
+    <span class="hl-kw">return</span> <span class="hl-err">BadRequest</span>(<span class="hl-str">$"Not balanced. Dr:{totalDebits} Cr:{totalCredits}"</span>);
+
+<span class="hl-cm">// ⚠ BUG: Race condition on number generation</span>
+<span class="hl-kw">var</span> lastEntry = <span class="hl-kw">await</span> _context.JournalEntries
+    .<span class="hl-fn">OrderByDescending</span>(j => j.CreatedAt).<span class="hl-fn">FirstOrDefaultAsync</span>();
+<span class="hl-kw">var</span> nextNumber = <span class="hl-fn">int.Parse</span>(lastEntry.JournalEntryNumber.<span class="hl-fn">Split</span>(<span class="hl-str">'-'</span>)[<span class="hl-num">1</span>]) + <span class="hl-num">1</span>;
+<span class="hl-cm">// FIX: Use DB transaction + SequenceNumber column</span>`,
+  callout:{type:'bug-note',label:'Race Condition — Visible in DRAKON',text:'The "Создать номер" (Generate number) box is where the bug lives. Two simultaneous requests both read the last entry, both parse the same number, both add 1, and both get the same JE number. In DRAKON, this box should be wrapped in a transaction block. The fixed JournalEntryService uses MAX(SequenceNumber)+1 inside a database transaction.'}
+},
+{
+  id:'post-je', tab:'📮 Post Journal Entry',
+  badge:'finance', badgeText:'Finance',
+  title:'Post Journal Entry Flow',
+  sub:'JournalEntriesController.PostJournalEntry() — Moving from Draft to Posted, updating account balances',
+  file:'src/JERP.Api/Controllers/JournalEntriesController.cs → Lines 274–325',
+  nodes:`
+    <div class="node n-start">Начало / START<div class="ru">POST /api/v1/finance/journal-entries/{id}/post</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Загрузить проводку / Load JournalEntry<div class="ru">Include(LedgerEntries) from DB</div></div>
+    <div class="arrow"></div>
+    <div class="node n-decision">◆ Найдена?<div class="ru">journalEntry == null?</div></div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label yes">ДА (null)</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 404 Not Found</div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ (found)</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-decision">◆ Статус == Draft?<div class="ru">Is it still a draft?</div></div>
+      </div>
+    </div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ / WRONG STATUS</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 400 "Can only post drafts"</div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label yes">ДА / IS DRAFT ✓</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-decision">◆ Сбалансирована?<div class="ru">IsBalanced == true?</div></div>
+      </div>
+    </div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ / UNBALANCED</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 400 "Cannot post unbalanced"</div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label yes">ДА / BALANCED ✓</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action">Статус = Posted<div class="ru">PostedAt = DateTime.UtcNow</div></div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node n-loop">Для каждой строки / foreach LedgerEntry<div class="ru">Update account balances by type</div></div>
+    <div class="arrow"></div>
+    <div class="node n-decision">◆ Тип счёта?<div class="ru">Asset/Expense vs Liability/Equity/Revenue</div></div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label yes" style="color:var(--blue)">Asset/Expense</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action" style="font-size:.68rem">Balance += Debit − Credit<div class="ru">Debit increases, Credit decreases</div></div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label no" style="color:var(--purple)">Liability/Equity/Rev</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action" style="font-size:.68rem">Balance += Credit − Debit<div class="ru">Credit increases, Debit decreases</div></div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node n-action">Сохранить в БД / SaveChangesAsync</div>
+    <div class="arrow"></div>
+    <div class="node n-io">→ 200 OK "Posted successfully"</div>
+    <div class="arrow"></div>
+    <div class="node n-end">Конец / END</div>
+  `,
+  code:`<span class="hl-cm">// ◆ Triple validation before posting (3 DRAKON decisions)</span>
+<span class="hl-kw">if</span> (journalEntry == <span class="hl-kw">null</span>) <span class="hl-kw">return</span> <span class="hl-err">NotFound</span>();        <span class="hl-cm">// ◆ Найдена?</span>
+<span class="hl-kw">if</span> (status != Draft) <span class="hl-kw">return</span> <span class="hl-err">BadRequest</span>();          <span class="hl-cm">// ◆ Статус == Draft?</span>
+<span class="hl-kw">if</span> (!IsBalanced) <span class="hl-kw">return</span> <span class="hl-err">BadRequest</span>();             <span class="hl-cm">// ◆ Сбалансирована?</span>
+
+<span class="hl-cm">// ◆ Тип счёта? — The accounting normal balance rule</span>
+<span class="hl-kw">switch</span> (account.Type) {
+    <span class="hl-kw">case</span> <span class="hl-tp">AccountType</span>.Asset:     <span class="hl-cm">// Debit ↑ Credit ↓</span>
+    <span class="hl-kw">case</span> <span class="hl-tp">AccountType</span>.Expense:
+        account.Balance += entry.DebitAmount - entry.CreditAmount;
+        <span class="hl-kw">break</span>;
+    <span class="hl-kw">case</span> <span class="hl-tp">AccountType</span>.Liability: <span class="hl-cm">// Credit ↑ Debit ↓</span>
+    <span class="hl-kw">case</span> <span class="hl-tp">AccountType</span>.Equity:
+    <span class="hl-kw">case</span> <span class="hl-tp">AccountType</span>.Revenue:
+        account.Balance += entry.CreditAmount - entry.DebitAmount;
+        <span class="hl-kw">break</span>;
+}`,
+  callout:{type:'bug-note',label:'N+1 Query — Visible in DRAKON',text:'The "Для каждой строки" (foreach) loop hides a performance bug: inside the loop, each iteration calls <code>FindAsync(entry.AccountId)</code> — that\'s one DB query per ledger line. The fix (in JournalEntryService) loads ALL accounts in a single query before the loop, then looks them up from the dictionary. In DRAKON, the corrected diagram would move a "Load all accounts" action BEFORE the loop.'}
+},
+{
+  id:'payroll', tab:'💰 Process Payroll',
+  badge:'payroll', badgeText:'Payroll',
+  title:'Payroll Processing Flow',
+  sub:'PayrollController.ProcessPayroll() → PayrollService.ProcessPayrollAsync() — End-to-end payroll cycle',
+  file:'src/JERP.Api/Controllers/PayrollController.cs → Lines 82–96',
+  nodes:`
+    <div class="node n-start">Начало / START<div class="ru">POST /api/v1/payroll/periods/{id}/process</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Загрузить период / Load PayPeriod<div class="ru">_payrollService.ProcessPayrollAsync(id)</div></div>
+    <div class="arrow"></div>
+    <div class="node n-decision">◆ Период найден?<div class="ru">PayPeriod exists?</div></div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ / NOT FOUND</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 404 Not Found</div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label yes">ДА / FOUND ✓</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action">Загрузить сотрудников / Load employees<div class="ru">Active employees for company</div></div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node n-loop">Для каждого сотрудника / foreach Employee<div class="ru">Calculate pay for each person</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Рассчитать брутто / Calculate gross<div class="ru">Hours × Rate or Salary ÷ periods</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Рассчитать налоги / Calculate taxes<div class="ru">TaxCalculationService (US or GT)</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Применить вычеты / Apply deductions<div class="ru">Insurance, 401k, garnishments</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Рассчитать нетто / Calculate net pay<div class="ru">Net = Gross − Taxes − Deductions</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Сохранить запись / Save PayrollRecord<div class="ru">One record per employee</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action" style="border-color:var(--gold)">Создать проводку / Create Journal Entry<div class="ru">PayrollToFinanceService (DR: Expense, CR: Payable)</div></div>
+    <div class="arrow"></div>
+    <div class="node n-io">→ 200 OK + PayrollProcessingResult<div class="ru">{ProcessedCount, TotalGross, TotalNet}</div></div>
+    <div class="arrow"></div>
+    <div class="node n-end">Конец / END</div>
+  `,
+  code:`<span class="hl-cm">// The payroll processing pipeline (inside PayrollService)</span>
+<span class="hl-kw">foreach</span> (<span class="hl-kw">var</span> employee <span class="hl-kw">in</span> activeEmployees)
+{
+    <span class="hl-cm">// Рассчитать брутто (Calculate gross)</span>
+    <span class="hl-kw">var</span> gross = <span class="hl-fn">CalculateGrossPay</span>(employee, payPeriod);
+
+    <span class="hl-cm">// Рассчитать налоги (Calculate taxes)</span>
+    <span class="hl-kw">var</span> taxes = <span class="hl-kw">await</span> _taxService.<span class="hl-fn">CalculateAsync</span>(employee, gross);
+
+    <span class="hl-cm">// Применить вычеты (Apply deductions)</span>
+    <span class="hl-kw">var</span> deductions = <span class="hl-kw">await</span> _deductionService.<span class="hl-fn">CalculateAsync</span>(employee);
+
+    <span class="hl-cm">// Рассчитать нетто (Calculate net)</span>
+    <span class="hl-kw">var</span> netPay = gross - taxes.Total - deductions.Total;
+
+    <span class="hl-cm">// Создать проводку → This creates a JournalEntry!</span>
+    <span class="hl-kw">await</span> _financeService.<span class="hl-fn">CreatePayrollJournalEntry</span>(record);
+}`,
+  callout:{type:'drakon-note',label:'DRAKON Insight — Cross-Module Flow',text:'Notice how the Payroll diagram connects to the Journal Entry diagram via "Создать проводку" (Create Journal Entry). In DRAKON, this would be an <strong>Insertion icon</strong> — a hexagonal shape that says "go execute this other diagram and come back." This is exactly how your PayrollToFinanceService works: payroll processing triggers journal entry creation. The two DRAKON diagrams are linked.'}
+},
+{
+  id:'void-je', tab:'🚫 Void Entry',
+  badge:'finance', badgeText:'Finance',
+  title:'Void Journal Entry Flow',
+  sub:'JournalEntriesController.VoidJournalEntry() — Reversing a posted entry safely',
+  file:'src/JERP.Api/Controllers/JournalEntriesController.cs → Lines 330–378',
+  nodes:`
+    <div class="node n-start">Начало / START<div class="ru">POST /api/v1/finance/journal-entries/{id}/void</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action">Загрузить проводку / Load entry + ledger lines</div>
+    <div class="arrow"></div>
+    <div class="node n-decision">◆ Найдена?<div class="ru">Entry exists?</div></div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label yes">НЕТ</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 404 Not Found</div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label no">ДА</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-decision">◆ Уже аннулирована?<div class="ru">Status == Voided?</div></div>
+      </div>
+    </div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label yes">ДА / ALREADY VOID</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-error">← 400 "Already voided"</div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ / CAN VOID ✓</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-decision">◆ Была проведена?<div class="ru">Status == Posted?</div></div>
+      </div>
+    </div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label yes">ДА / WAS POSTED</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-loop">Обратить балансы / Reverse balances<div class="ru">foreach: Balance −= (amounts)</div></div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ / WAS DRAFT</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action" style="border-color:var(--muted);color:var(--dim)">(no reversal needed)</div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node n-action">Статус = Voided / Set status</div>
+    <div class="arrow"></div>
+    <div class="node n-action">Сохранить в БД / SaveChangesAsync</div>
+    <div class="arrow"></div>
+    <div class="node n-io">→ 200 OK "Voided successfully"</div>
+    <div class="arrow"></div>
+    <div class="node n-end">Конец / END</div>
+  `,
+  code:`<span class="hl-cm">// ◆ Была проведена? (Was it posted?) — Only reverse if posted</span>
+<span class="hl-kw">if</span> (journalEntry.Status == <span class="hl-tp">JournalEntryStatus</span>.Posted)
+{
+    <span class="hl-cm">// Обратить балансы (Reverse balances)</span>
+    <span class="hl-kw">foreach</span> (<span class="hl-kw">var</span> entry <span class="hl-kw">in</span> journalEntry.LedgerEntries)
+    {
+        <span class="hl-kw">var</span> account = <span class="hl-kw">await</span> _context.Accounts.<span class="hl-fn">FindAsync</span>(entry.AccountId);
+        <span class="hl-cm">// Same switch logic but with -= instead of +=</span>
+        account.Balance <span class="hl-err">-=</span> entry.DebitAmount - entry.CreditAmount;
+    }
+}
+journalEntry.Status = <span class="hl-tp">JournalEntryStatus</span>.Voided;`,
+  callout:{type:'security-note',label:'Authorization Gap — Visible in DRAKON',text:'Notice what\'s <em>missing</em> from this DRAKON diagram: there\'s no authorization check! Any authenticated user can void a journal entry. The fix adds [Authorize(Roles = "Accountant,Admin")] — which in DRAKON would be a decision diamond right after Начало: "◆ Роль = Бухгалтер?" (Role = Accountant?), with the НЕТ branch going to ← 403 Forbidden.'}
+},
+{
+  id:'request-flow', tab:'🌐 HTTP Pipeline',
+  badge:'security', badgeText:'Security',
+  title:'HTTP Request Pipeline',
+  sub:'The full journey of every JERP API request through middleware, authentication, and controllers',
+  file:'src/JERP.Api/Program.cs → Middleware pipeline',
+  nodes:`
+    <div class="node n-start">Начало / HTTP Request arrives<div class="ru">Client → Kestrel → Pipeline</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action" style="border-color:var(--orange)">SecurityHeadersMiddleware<div class="ru">Add X-Frame-Options, CSP, HSTS</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action" style="border-color:var(--orange)">ExceptionHandlingMiddleware<div class="ru">try/catch around entire pipeline</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action" style="border-color:var(--orange)">RequestResponseLoggingMiddleware<div class="ru">Log request method, path, timing</div></div>
+    <div class="arrow"></div>
+    <div class="node n-action" style="border-color:var(--orange)">AuditLoggingMiddleware<div class="ru">Track who did what, when</div></div>
+    <div class="arrow"></div>
+    <div class="node n-decision">◆ Маршрут требует [Authorize]?<div class="ru">Does route require authentication?</div></div>
+    <div class="arrow arrow-short"></div>
+    <div class="branch">
+      <div class="branch-path">
+        <div class="branch-label yes">ДА / YES</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-decision">◆ JWT токен валиден?<div class="ru">Is the Bearer token valid?</div></div>
+        <div class="arrow arrow-short"></div>
+        <div class="branch">
+          <div class="branch-path">
+            <div class="branch-label no">НЕТ</div>
+            <div class="arrow arrow-short"></div>
+            <div class="node n-error">← 401</div>
+          </div>
+          <div class="branch-path">
+            <div class="branch-label yes">ДА</div>
+            <div class="arrow arrow-short"></div>
+            <div class="node n-decision" style="font-size:.67rem">◆ Роль?<div class="ru">Roles check</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="branch-path">
+        <div class="branch-label no">НЕТ (public)</div>
+        <div class="arrow arrow-short"></div>
+        <div class="node n-action" style="border-color:var(--muted);color:var(--dim)">Skip auth</div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="node n-action" style="border-color:var(--green)">Controller Action<div class="ru">Execute business logic</div></div>
+    <div class="arrow"></div>
+    <div class="node n-io">→ HTTP Response<div class="ru">200/201/400/401/403/404/500</div></div>
+    <div class="arrow"></div>
+    <div class="node n-end">Конец / Response sent to client</div>
+  `,
+  code:`<span class="hl-cm">// Program.cs — The pipeline order matters!</span>
+app.<span class="hl-fn">UseMiddleware</span>&lt;<span class="hl-tp">SecurityHeadersMiddleware</span>&gt;();
+app.<span class="hl-fn">UseMiddleware</span>&lt;<span class="hl-tp">ExceptionHandlingMiddleware</span>&gt;();
+app.<span class="hl-fn">UseMiddleware</span>&lt;<span class="hl-tp">RequestResponseLoggingMiddleware</span>&gt;();
+app.<span class="hl-fn">UseMiddleware</span>&lt;<span class="hl-tp">AuditLoggingMiddleware</span>&gt;();
+
+app.<span class="hl-fn">UseAuthentication</span>();  <span class="hl-cm">// ◆ JWT токен валиден?</span>
+app.<span class="hl-fn">UseAuthorization</span>();   <span class="hl-cm">// ◆ Роль?</span>
+
+app.<span class="hl-fn">MapControllers</span>();     <span class="hl-cm">// → Controller Action</span>`,
+  callout:{type:'drakon-note',label:'DRAKON "Silhouette" Pattern',text:'This diagram shows what DRAKON calls a <strong>Silhouette</strong> — a multi-branch diagram where the main path (the "skewer") runs straight down, and error branches exit to the left. Every JERP request follows this exact path. In DRAKON, the rule is: the happy path always goes straight down, errors always branch right or left. This makes it instantly visible which path is the "normal" one.'}
+}
+];
+
+// ── Render ──
+function render(){
+  const nav=document.getElementById('nav');
+  const main=document.getElementById('main');
+  nav.innerHTML=diagrams.map((d,i)=>`<button class="sel-btn ${i===0?'active':''}" onclick="show(${i})">${d.tab}</button>`).join('');
+  main.innerHTML=diagrams.map((d,i)=>`
+    <div class="diagram-wrap ${i===0?'active':''}" id="dia-${i}">
+      <div class="dia-header">
+        <div class="dia-badge ${d.badge}">${d.badgeText}</div>
+        <div class="dia-title">${d.title}</div>
+        <div class="dia-sub">${d.sub}</div>
+        <div class="dia-file">📁 ${d.file}</div>
+      </div>
+      <div class="drakon"><div class="drakon-inner">${d.nodes}</div></div>
+      <div class="code-peek">
+        <div class="code-peek-header">
+          <span class="code-peek-title">Source Code</span>
+          <span class="code-peek-lang">C#</span>
+        </div>
+        <pre>${d.code}</pre>
+      </div>
+      ${d.callout?`<div class="callout ${d.callout.type}"><div class="callout-label">${d.callout.label}</div>${d.callout.text}</div>`:''}
+    </div>
+  `).join('');
+}
+
+function show(idx){
+  document.querySelectorAll('.sel-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.querySelectorAll('.diagram-wrap').forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+
+render();
+</script>
+</body>
+</html>

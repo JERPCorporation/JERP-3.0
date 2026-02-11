@@ -18,13 +18,14 @@ using JERP.Application.DTOs.Inventory;
 namespace JERP.Api.Controllers;
 
 /// <summary>
-/// Stock movement endpoints for receipt, issue, transfer, and return operations
+/// Stock movement endpoints for receipt, issue, transfer, and return operations.
+/// 
+/// FIX: Changed from ControllerBase to BaseApiController for consistent response format.
+/// Also removed try-catch blocks - ExceptionHandlingMiddleware handles exceptions globally.
 /// </summary>
 [Route("api/v1/inventory/movements")]
 [Authorize]
-[ApiController]
-[Produces("application/json")]
-public class StockMovementsController : ControllerBase
+public class StockMovementsController : BaseApiController
 {
     private readonly IStockMovementService _stockMovementService;
     private readonly ILogger<StockMovementsController> _logger;
@@ -48,9 +49,7 @@ public class StockMovementsController : ControllerBase
         var movement = await _stockMovementService.GetByIdAsync(id);
         
         if (movement == null)
-        {
-            return NotFound(new { success = false, error = $"Stock movement with ID {id} not found" });
-        }
+            return NotFound($"Stock movement with ID {id} not found");
 
         return Ok(movement);
     }
@@ -85,22 +84,13 @@ public class StockMovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateReceipt([FromBody] CreateStockMovementRequest request)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var movement = await _stockMovementService.CreateReceiptAsync(request, userId);
         
-        try
-        {
-            var movement = await _stockMovementService.CreateReceiptAsync(request, userId);
-            
-            _logger.LogInformation("Created stock receipt for item {ItemId}, quantity {Quantity}", 
-                request.InventoryItemId, request.Quantity);
-            
-            return StatusCode(201, new { success = true, data = movement });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error creating stock receipt");
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        _logger.LogInformation("Created stock receipt for item {ItemId}, quantity {Quantity}", 
+            request.InventoryItemId, request.Quantity);
+        
+        return Created(movement);
     }
 
     /// <summary>
@@ -111,22 +101,13 @@ public class StockMovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateIssue([FromBody] CreateStockMovementRequest request)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var movement = await _stockMovementService.CreateIssueAsync(request, userId);
         
-        try
-        {
-            var movement = await _stockMovementService.CreateIssueAsync(request, userId);
-            
-            _logger.LogInformation("Created stock issue for item {ItemId}, quantity {Quantity}", 
-                request.InventoryItemId, request.Quantity);
-            
-            return StatusCode(201, new { success = true, data = movement });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error creating stock issue");
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        _logger.LogInformation("Created stock issue for item {ItemId}, quantity {Quantity}", 
+            request.InventoryItemId, request.Quantity);
+        
+        return Created(movement);
     }
 
     /// <summary>
@@ -137,22 +118,13 @@ public class StockMovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateTransfer([FromBody] CreateStockMovementRequest request)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var movement = await _stockMovementService.CreateTransferAsync(request, userId);
         
-        try
-        {
-            var movement = await _stockMovementService.CreateTransferAsync(request, userId);
-            
-            _logger.LogInformation("Created stock transfer for item {ItemId}, quantity {Quantity}", 
-                request.InventoryItemId, request.Quantity);
-            
-            return StatusCode(201, new { success = true, data = movement });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error creating stock transfer");
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        _logger.LogInformation("Created stock transfer for item {ItemId}, quantity {Quantity}", 
+            request.InventoryItemId, request.Quantity);
+        
+        return Created(movement);
     }
 
     /// <summary>
@@ -163,22 +135,13 @@ public class StockMovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateReturn([FromBody] CreateStockMovementRequest request)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var movement = await _stockMovementService.CreateReturnAsync(request, userId);
         
-        try
-        {
-            var movement = await _stockMovementService.CreateReturnAsync(request, userId);
-            
-            _logger.LogInformation("Created stock return for item {ItemId}, quantity {Quantity}", 
-                request.InventoryItemId, request.Quantity);
-            
-            return StatusCode(201, new { success = true, data = movement });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error creating stock return");
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        _logger.LogInformation("Created stock return for item {ItemId}, quantity {Quantity}", 
+            request.InventoryItemId, request.Quantity);
+        
+        return Created(movement);
     }
 
     /// <summary>
@@ -190,26 +153,14 @@ public class StockMovementsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ReverseMovement(Guid id, [FromBody] ReversalRequest request)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var result = await _stockMovementService.ReverseMovementAsync(id, request.Reason, userId);
         
-        try
-        {
-            var result = await _stockMovementService.ReverseMovementAsync(id, request.Reason, userId);
-            
-            if (!result)
-            {
-                return NotFound(new { success = false, error = $"Stock movement with ID {id} not found" });
-            }
-            
-            _logger.LogInformation("Reversed stock movement {MovementId} - Reason: {Reason}", id, request.Reason);
-            
-            return Ok(new { success = true, message = "Stock movement reversed successfully" });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error reversing stock movement {MovementId}", id);
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        if (!result)
+            return NotFound($"Stock movement with ID {id} not found");
+        
+        _logger.LogInformation("Reversed stock movement {MovementId} - Reason: {Reason}", id, request.Reason);
+        return Ok(new { success = true, message = "Stock movement reversed successfully" });
     }
 }
 

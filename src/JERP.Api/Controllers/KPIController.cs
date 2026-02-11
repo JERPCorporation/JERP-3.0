@@ -18,7 +18,7 @@ public class KPIController : ControllerBase
 {
     private readonly IDashboardService _dashboardService;
     private readonly ILogger<KPIController> _logger;
-    private readonly IDashboardService _dashboardService;
+    
 
     public KPIController(
         IDashboardService dashboardService,
@@ -26,7 +26,7 @@ public class KPIController : ControllerBase
     {
         _dashboardService = dashboardService;
         _logger = logger;
-        _dashboardService = dashboardService;
+      
     }
 
     /// <summary>

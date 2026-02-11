@@ -18,13 +18,26 @@ using JERP.Application.DTOs.Inventory;
 namespace JERP.Api.Controllers;
 
 /// <summary>
-/// Inventory items management endpoints
+/// Inventory items management endpoints.
+/// 
+/// FIX: Changed from "ControllerBase" to "BaseApiController".
+/// 
+/// WHY THIS MATTERS:
+/// BaseApiController provides shared helper methods (Success(), Error(), Ok(), Created(),
+/// GetCurrentUserId(), GetCurrentUsername()) and sets [ApiController], [Produces("application/json")],
+/// and the route prefix automatically.
+/// 
+/// When this controller inherited from ControllerBase directly, it had to:
+///   - Manually add [ApiController] and [Produces("application/json")] (duplicate config)
+///   - Build response objects manually: new { success = true, data = item }
+///   - Miss out on the consistent ApiResponse&lt;T&gt; wrapper other controllers use
+/// 
+/// Now it uses the same response format as SalesOrdersController, PayrollController, etc.
+/// The frontend gets consistent JSON shapes from every endpoint.
 /// </summary>
 [Route("api/v1/inventory/items")]
 [Authorize]
-[ApiController]
-[Produces("application/json")]
-public class InventoryItemsController : ControllerBase
+public class InventoryItemsController : BaseApiController
 {
     private readonly IInventoryItemService _inventoryItemService;
     private readonly ILogger<InventoryItemsController> _logger;
@@ -59,9 +72,7 @@ public class InventoryItemsController : ControllerBase
         var item = await _inventoryItemService.GetByIdAsync(id);
         
         if (item == null)
-        {
-            return NotFound(new { success = false, error = $"Inventory item with ID {id} not found" });
-        }
+            return NotFound($"Inventory item with ID {id} not found");
 
         return Ok(item);
     }
@@ -129,22 +140,13 @@ public class InventoryItemsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromQuery] Guid companyId, [FromBody] CreateInventoryItemRequest request)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var item = await _inventoryItemService.CreateAsync(companyId, request, userId);
         
-        try
-        {
-            var item = await _inventoryItemService.CreateAsync(companyId, request, userId);
-            
-            _logger.LogInformation("Created inventory item {ItemName} for company {CompanyId}", 
-                item.ItemName, companyId);
-            
-            return StatusCode(201, new { success = true, data = item });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error creating inventory item");
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        _logger.LogInformation("Created inventory item {ItemName} for company {CompanyId}", 
+            item.ItemName, companyId);
+        
+        return Created(item);
     }
 
     /// <summary>
@@ -156,26 +158,14 @@ public class InventoryItemsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateInventoryItemRequest request)
     {
-        var userId = User.FindFirst("sub")?.Value ?? "system";
+        var userId = GetCurrentUserId() ?? "system";
+        var item = await _inventoryItemService.UpdateAsync(id, request, userId);
         
-        try
-        {
-            var item = await _inventoryItemService.UpdateAsync(id, request, userId);
-            
-            if (item == null)
-            {
-                return NotFound(new { success = false, error = $"Inventory item with ID {id} not found" });
-            }
-            
-            _logger.LogInformation("Updated inventory item {ItemId}", id);
-            
-            return Ok(item);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error updating inventory item {ItemId}", id);
-            return BadRequest(new { success = false, error = ex.Message });
-        }
+        if (item == null)
+            return NotFound($"Inventory item with ID {id} not found");
+        
+        _logger.LogInformation("Updated inventory item {ItemId}", id);
+        return Ok(item);
     }
 
     /// <summary>
@@ -189,12 +179,9 @@ public class InventoryItemsController : ControllerBase
         var result = await _inventoryItemService.DeleteAsync(id);
         
         if (!result)
-        {
-            return NotFound(new { success = false, error = $"Inventory item with ID {id} not found" });
-        }
+            return NotFound($"Inventory item with ID {id} not found");
         
         _logger.LogInformation("Deleted inventory item {ItemId}", id);
-        
         return NoContent();
     }
 }

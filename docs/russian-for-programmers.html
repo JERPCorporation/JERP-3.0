@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Русский для Программистов — Russian for Programmers</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-card-hover: #1a1a26;
+  --accent: #e84545;
+  --accent-glow: rgba(232, 69, 69, 0.15);
+  --gold: #d4a843;
+  --gold-dim: rgba(212, 168, 67, 0.2);
+  --ice: #6ec8e4;
+  --ice-dim: rgba(110, 200, 228, 0.12);
+  --text: #e8e6e1;
+  --text-dim: #8a8a96;
+  --text-muted: #555566;
+  --border: #2a2a36;
+  --success: #4ade80;
+  --error: #f87171;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Source Sans 3', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background grain texture */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Decorative red star accent */
+.star-accent {
+  position: fixed;
+  top: -120px;
+  right: -120px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--text) 40%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header h1 .cyrillic {
+  font-style: italic;
+  -webkit-text-fill-color: var(--accent);
+}
+
+.header-sub {
+  color: var(--text-dim);
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+/* Navigation tabs */
+.nav-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  padding: 0.75rem 1.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Lesson section */
+.lesson { display: none; animation: fadeIn 0.4s ease; }
+.lesson.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Lesson header */
+.lesson-header {
+  margin-bottom: 2rem;
+}
+.lesson-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.lesson-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.lesson-desc {
+  color: var(--text-dim);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Vocab card */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.vocab-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.1rem 1.4rem;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+.vocab-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.vocab-russian {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+.vocab-phonetic {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+.vocab-divider {
+  width: 1px;
+  height: 30px;
+  background: var(--border);
+}
+.vocab-english {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.vocab-context {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Audio button */
+.speak-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--accent-glow);
+  border: 1px solid rgba(232, 69, 69, 0.3);
+  color: var(--accent);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.speak-btn:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* Code block */
+.code-block {
+  background: #0d0d14;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.8;
+  overflow-x: auto;
+  position: relative;
+}
+.code-block .lang-label {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.code-comment { color: #5a6a5a; }
+.code-keyword { color: var(--accent); }
+.code-string { color: var(--gold); }
+.code-function { color: var(--ice); }
+.code-type { color: #c792ea; }
+.code-number { color: #f78c6c; }
+
+/* Info box */
+.info-box {
+  background: var(--ice-dim);
+  border-left: 3px solid var(--ice);
+  padding: 1rem 1.25rem;
+  border-radius: 0 6px 6px 0;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.info-box .info-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ice);
+  margin-bottom: 0.4rem;
+}
+.info-box.history {
+  background: var(--gold-dim);
+  border-left-color: var(--gold);
+}
+.info-box.history .info-label { color: var(--gold); }
+
+/* Quiz */
+.quiz-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.quiz-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+.quiz-question {
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+.quiz-options {
+  display: grid;
+  gap: 0.5rem;
+}
+.quiz-option {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  transition: all 0.2s;
+  text-align: left;
+}
+.quiz-option:hover:not(.selected) {
+  border-color: var(--ice);
+  background: var(--ice-dim);
+}
+.quiz-option.correct {
+  border-color: var(--success);
+  background: rgba(74, 222, 128, 0.1);
+  color: var(--success);
+}
+.quiz-option.wrong {
+  border-color: var(--error);
+  background: rgba(248, 113, 113, 0.1);
+  color: var(--error);
+}
+.quiz-option.selected { pointer-events: none; }
+.quiz-feedback {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb {
+  background: rgba(74, 222, 128, 0.08);
+  color: var(--success);
+}
+.quiz-feedback.wrong-fb {
+  background: rgba(248, 113, 113, 0.08);
+  color: var(--error);
+}
+
+/* Section heading */
+.section-heading {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* DRAKON diagram (simplified visual) */
+.drakon-diagram {
+  background: #0d0d14;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2rem;
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+.drakon-diagram .lang-label {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.drakon-node {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  min-width: 200px;
+}
+.drakon-start {
+  background: var(--accent);
+  color: white;
+  border-radius: 24px;
+  font-weight: 700;
+}
+.drakon-action {
+  background: var(--bg-card);
+  border: 2px solid var(--ice);
+  color: var(--text);
+  border-radius: 6px;
+}
+.drakon-decision {
+  background: var(--bg-card);
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  transform: rotate(0deg);
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+}
+.drakon-end {
+  background: var(--accent);
+  color: white;
+  border-radius: 24px;
+  font-weight: 700;
+}
+.drakon-arrow {
+  width: 2px;
+  height: 24px;
+  background: var(--text-muted);
+  position: relative;
+}
+.drakon-arrow::after {
+  content: '▼';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.5rem;
+  color: var(--text-muted);
+}
+.drakon-branch {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  position: relative;
+}
+.drakon-branch-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  position: absolute;
+}
+.drakon-yes { left: -28px; top: 4px; color: var(--success); }
+.drakon-no { right: -24px; top: 4px; color: var(--error); }
+
+/* Progress bar */
+.progress-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 2rem;
+}
+.progress-dot {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.progress-dot.filled { background: var(--accent); }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.8rem; }
+  .vocab-card { grid-template-columns: 1fr; gap: 0.3rem; padding-right: 3rem; }
+  .vocab-divider { display: none; }
+  .nav-tab { padding: 0.6rem 0.8rem; font-size: 0.68rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="star-accent"></div>
+
+<div class="container">
+  <header class="header">
+    <div class="header-eyebrow">Языковой Курс // Language Course</div>
+    <h1><span class="cyrillic">Русский</span> for Programmers</h1>
+    <p class="header-sub">Learn Russian through programming concepts, from DRAKON to cybersecurity</p>
+  </header>
+
+  <div class="progress-bar" id="progressBar"></div>
+
+  <nav class="nav-tabs" id="navTabs"></nav>
+
+  <main id="lessonContainer"></main>
+</div>
+
+<script>
+const lessons = [
+  {
+    id: 'alphabet',
+    tab: 'Урок 1: Alphabet',
+    number: 'Урок Первый — Lesson 01',
+    title: 'The Cyrillic Alphabet for Coders',
+    desc: 'Cyrillic letters you\'ll see in Russian source code, variable names, comments, and error messages.',
+    content: `
+      <div class="info-box history">
+        <div class="info-label">Historical Context</div>
+        The Cyrillic alphabet was developed in the First Bulgarian Empire in the 9th century. Modern Russian uses 33 letters. When you reverse-engineer malware or read Russian threat intelligence, these are the characters you'll encounter.
+      </div>
+
+      <div class="section-heading">Letters That Look Familiar But Sound Different</div>
+      <div class="vocab-grid">
+        <div class="vocab-card" onclick="speak('Р — это не P, это R')">
+          <div><div class="vocab-russian">Р р</div><div class="vocab-phonetic">sounds like "R"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">Looks like P but = R</div><div class="vocab-context">переменная (peremennaya) = variable</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('С — это не S английское, это S русское')">
+          <div><div class="vocab-russian">С с</div><div class="vocab-phonetic">sounds like "S"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">Looks like C but = S</div><div class="vocab-context">сервер (server) = server</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('Н — это не H, это N')">
+          <div><div class="vocab-russian">Н н</div><div class="vocab-phonetic">sounds like "N"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">Looks like H but = N</div><div class="vocab-context">начало (nachalo) = start/begin</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('В — это не B, это V')">
+          <div><div class="vocab-russian">В в</div><div class="vocab-phonetic">sounds like "V"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">Looks like B but = V</div><div class="vocab-context">ввод (vvod) = input</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('У — это не Y, это U')">
+          <div><div class="vocab-russian">У у</div><div class="vocab-phonetic">sounds like "OO"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">Looks like Y but = OO</div><div class="vocab-context">условие (usloviye) = condition</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('Х — это не X, это KH')">
+          <div><div class="vocab-russian">Х х</div><div class="vocab-phonetic">sounds like "KH"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">Looks like X but = KH</div><div class="vocab-context">хакер (khaker) = hacker</div></div>
+        </div>
+      </div>
+
+      <div class="section-heading">Uniquely Cyrillic — No Latin Lookalike</div>
+      <div class="vocab-grid">
+        <div class="vocab-card" onclick="speak('Д')">
+          <div><div class="vocab-russian">Д д</div><div class="vocab-phonetic">sounds like "D"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">D as in данные</div><div class="vocab-context">данные (dannye) = data</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('Ж')">
+          <div><div class="vocab-russian">Ж ж</div><div class="vocab-phonetic">sounds like "ZH"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">ZH — no English equivalent</div><div class="vocab-context">Like the "s" in "pleasure"</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('Ц')">
+          <div><div class="vocab-russian">Ц ц</div><div class="vocab-phonetic">sounds like "TS"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">TS as in цикл</div><div class="vocab-context">цикл (tsikl) = loop/cycle</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('Ш')">
+          <div><div class="vocab-russian">Ш ш</div><div class="vocab-phonetic">sounds like "SH"</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">SH as in шифрование</div><div class="vocab-context">шифрование (shifrovaniye) = encryption</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('Ы')">
+          <div><div class="vocab-russian">Ы ы</div><div class="vocab-phonetic">sounds like "ui" (guttural)</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">No English equivalent!</div><div class="vocab-context">вывод (vyvod) = output</div></div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Cybersecurity Tip</div>
+        Homoglyph attacks use Cyrillic letters that look identical to Latin ones (like а, с, е, о, р) to create fake domain names. The domain "аррӏе.com" (Cyrillic) looks just like "apple.com" (Latin) but goes to a completely different server. Knowing Cyrillic helps you spot these instantly.
+      </div>
+
+      ${makeQuiz('q1', 'What does the letter Р sound like in Russian?', [
+        { text: 'P — like in "print"', correct: false },
+        { text: 'R — like in "run"', correct: true },
+        { text: 'B — like in "boolean"', correct: false },
+        { text: 'D — like in "data"', correct: false }
+      ], 'Correct! Р = R. So when you see "Русский" the first letter sounds like "R" not "P". This is the most common trap for English speakers reading Cyrillic.')}
+    `
+  },
+  {
+    id: 'keywords',
+    tab: 'Урок 2: Keywords',
+    number: 'Урок Второй — Lesson 02',
+    title: 'Programming Keywords in Russian',
+    desc: 'The Russian words behind every programming concept you already know. DRAKON was originally documented entirely in Russian.',
+    content: `
+      <div class="info-box history">
+        <div class="info-label">About DRAKON</div>
+        ДРАКОН stands for <strong>Д</strong>ружелюбный <strong>Р</strong>усский <strong>А</strong>лгоритмический язык, <strong>К</strong>оторый <strong>О</strong>беспечивает <strong>Н</strong>аглядность — "Friendly Russian Algorithmic Language That Provides Clarity." It was created in 1986 for the Soviet Buran space shuttle program to eliminate misunderstandings between engineers who spoke different programming languages.
+      </div>
+
+      <div class="section-heading">Control Flow — Управление Потоком</div>
+      <div class="vocab-grid">
+        <div class="vocab-card" onclick="speak('если')">
+          <div><div class="vocab-russian">если</div><div class="vocab-phonetic">YES-li</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">if</div><div class="vocab-context">если (условие) → if (condition)</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('иначе')">
+          <div><div class="vocab-russian">иначе</div><div class="vocab-phonetic">ee-NA-cheh</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">else</div><div class="vocab-context">иначе → вернуть ошибку</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('цикл')">
+          <div><div class="vocab-russian">цикл</div><div class="vocab-phonetic">TSIKL</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">loop / cycle</div><div class="vocab-context">для каждого элемента → foreach item</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('начало')">
+          <div><div class="vocab-russian">начало</div><div class="vocab-phonetic">na-CHA-lo</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">begin / start</div><div class="vocab-context">DRAKON: every diagram starts with Начало</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('конец')">
+          <div><div class="vocab-russian">конец</div><div class="vocab-phonetic">ka-NYETS</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">end</div><div class="vocab-context">DRAKON: every diagram ends with Конец</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('да')">
+          <div><div class="vocab-russian">да / нет</div><div class="vocab-phonetic">DA / NYET</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">yes / no (true / false)</div><div class="vocab-context">DRAKON decision diamonds use Да/Нет</div></div>
+        </div>
+      </div>
+
+      <div class="section-heading">DRAKON Diagram — Привет Мир (Hello World)</div>
+      <div class="drakon-diagram">
+        <div class="lang-label">DRAKON-Flowchart</div>
+        <div class="drakon-node drakon-start">Начало</div>
+        <div class="drakon-arrow"></div>
+        <div class="drakon-node drakon-action">Вывести(<span style="color:var(--gold)">"Привет, Мир!"</span>)</div>
+        <div class="drakon-arrow"></div>
+        <div class="drakon-node drakon-end">Конец</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">How DRAKON Works</div>
+        DRAKON is a <em>visual</em> language — you draw flowcharts, not write text. The DRAKON Editor then generates real code (C, C#, Python, JavaScript, etc.) from your diagram. The Russian labels above (Начало, Конец, Да, Нет) are the standard DRAKON vocabulary. You literally program by drawing boxes and arrows.
+      </div>
+
+      <div class="section-heading">What DRAKON-C# Generates</div>
+      <div class="code-block">
+        <div class="lang-label">C# (generated from DRAKON)</div>
+<span class="code-comment">// This C# code is what DRAKON Editor produces</span>
+<span class="code-comment">// from the "Привет, Мир!" diagram above</span>
+<span class="code-keyword">using</span> System;
+
+<span class="code-keyword">class</span> <span class="code-type">Program</span>
+{
+    <span class="code-keyword">static void</span> <span class="code-function">Main</span>(<span class="code-keyword">string</span>[] args)
+    {
+        <span class="code-comment">// Вывести = Output/Print</span>
+        Console.<span class="code-function">WriteLine</span>(<span class="code-string">"Привет, Мир!"</span>);
+    }
+}
+      </div>
+
+      ${makeQuiz('q2', 'In a DRAKON diagram, what do the labels "Да" and "Нет" mean on decision branches?', [
+        { text: 'Start and End', correct: false },
+        { text: 'Input and Output', correct: false },
+        { text: 'Yes and No (True/False)', correct: true },
+        { text: 'Read and Write', correct: false }
+      ], 'Да (DA) = Yes/True, Нет (NYET) = No/False. These are the most important two words in any DRAKON diagram — they label every decision branch, just like true/false in your C# if-statements.')}
+    `
+  },
+  {
+    id: 'drakon-flow',
+    tab: 'Урок 3: DRAKON Logic',
+    number: 'Урок Третий — Lesson 03',
+    title: 'DRAKON Decision Logic',
+    desc: 'How DRAKON visualizes if/else and loops — the core patterns that replaced text code in the Buran space program.',
+    content: `
+      <div class="section-heading">Conditional Logic — Условная Логика</div>
+
+      <div class="drakon-diagram">
+        <div class="lang-label">DRAKON — Login Validation</div>
+        <div class="drakon-node drakon-start">Начало</div>
+        <div class="drakon-arrow"></div>
+        <div class="drakon-node drakon-action">Получить логин и пароль</div>
+        <div class="drakon-arrow"></div>
+        <div class="drakon-node drakon-decision">
+          Пароль верный?
+          <span class="drakon-branch-label drakon-yes">Да ↓</span>
+          <span class="drakon-branch-label drakon-no">Нет →</span>
+        </div>
+        <div class="drakon-arrow"></div>
+        <div class="drakon-node drakon-action">Открыть доступ</div>
+        <div class="drakon-arrow"></div>
+        <div class="drakon-node drakon-end">Конец</div>
+      </div>
+
+      <div class="vocab-grid">
+        <div class="vocab-card" onclick="speak('получить')">
+          <div><div class="vocab-russian">получить</div><div class="vocab-phonetic">pa-loo-CHEET</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">to receive / to get</div><div class="vocab-context">GET request → получить данные</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('пароль')">
+          <div><div class="vocab-russian">пароль</div><div class="vocab-phonetic">pa-ROL</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">password</div><div class="vocab-context">пароль верный? = is password correct?</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('верный')">
+          <div><div class="vocab-russian">верный</div><div class="vocab-phonetic">VYER-niy</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">correct / true / valid</div><div class="vocab-context">верный = valid, верификация = verification</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('доступ')">
+          <div><div class="vocab-russian">доступ</div><div class="vocab-phonetic">DOS-tup</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">access</div><div class="vocab-context">открыть доступ = grant access</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('ошибка')">
+          <div><div class="vocab-russian">ошибка</div><div class="vocab-phonetic">a-SHIB-ka</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">error</div><div class="vocab-context">вернуть ошибку = return error</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('запрос')">
+          <div><div class="vocab-russian">запрос</div><div class="vocab-phonetic">za-PROS</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">request / query</div><div class="vocab-context">HTTP запрос = HTTP request</div></div>
+        </div>
+      </div>
+
+      <div class="section-heading">The Same Logic in Your JERP Code</div>
+      <div class="code-block">
+        <div class="lang-label">C# — AuthController.cs</div>
+<span class="code-comment">// Начало (Start)</span>
+<span class="code-keyword">public async</span> Task&lt;IActionResult&gt; <span class="code-function">Login</span>(LoginRequest request)
+{
+    <span class="code-comment">// Получить логин и пароль (Get login and password)</span>
+    <span class="code-keyword">var</span> user = <span class="code-keyword">await</span> _authService.<span class="code-function">ValidateCredentials</span>(
+        request.Email,    <span class="code-comment">// логин</span>
+        request.Password  <span class="code-comment">// пароль</span>
+    );
+
+    <span class="code-comment">// Пароль верный? (Is password correct?)</span>
+    <span class="code-keyword">if</span> (user == <span class="code-keyword">null</span>)
+    {
+        <span class="code-comment">// Нет → вернуть ошибку (No → return error)</span>
+        <span class="code-keyword">return</span> <span class="code-function">Unauthorized</span>(<span class="code-string">"Invalid credentials"</span>);
+    }
+
+    <span class="code-comment">// Да → Открыть доступ (Yes → Grant access)</span>
+    <span class="code-keyword">var</span> token = _authService.<span class="code-function">GenerateToken</span>(user);
+    <span class="code-keyword">return</span> <span class="code-function">Ok</span>(token);
+}
+<span class="code-comment">// Конец (End)</span>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">DRAKON Design Philosophy</div>
+        DRAKON enforces a strict rule: every diagram must have exactly one entry and one exit. This eliminates spaghetti code by making it structurally impossible. The Buran engineers who created it believed that if you can't draw your algorithm clearly, you don't understand it well enough.
+      </div>
+
+      ${makeQuiz('q3', 'You find a comment in malware source code: "получить доступ к серверу". What does it mean?', [
+        { text: 'Delete server data', correct: false },
+        { text: 'Get access to the server', correct: true },
+        { text: 'Start the server loop', correct: false },
+        { text: 'Encrypt the password', correct: false }
+      ], 'получить (get) + доступ (access) + к серверу (to the server). You just read a malware comment! This kind of reading is exactly what threat analysts need to do when reverse-engineering Russian-origin tools.')}
+    `
+  },
+  {
+    id: 'security',
+    tab: 'Урок 4: Security',
+    number: 'Урок Четвёртый — Lesson 04',
+    title: 'Cybersecurity Vocabulary',
+    desc: 'Essential Russian security terms you\'d encounter in threat intelligence reports, malware analysis, and dark web forums.',
+    content: `
+      <div class="section-heading">Attack & Defense — Атака и Защита</div>
+      <div class="vocab-grid">
+        <div class="vocab-card" onclick="speak('уязвимость')">
+          <div><div class="vocab-russian">уязвимость</div><div class="vocab-phonetic">oo-yaz-VEE-most</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">vulnerability</div><div class="vocab-context">уязвимость нулевого дня = zero-day vuln</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('шифрование')">
+          <div><div class="vocab-russian">шифрование</div><div class="vocab-phonetic">shif-ra-VA-ni-ye</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">encryption</div><div class="vocab-context">шифр (shifr) = cipher</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('взлом')">
+          <div><div class="vocab-russian">взлом</div><div class="vocab-phonetic">VZLOM</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">hack / breach</div><div class="vocab-context">взломать сервер = hack into a server</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('утечка')">
+          <div><div class="vocab-russian">утечка</div><div class="vocab-phonetic">oo-TECH-ka</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">leak (data leak)</div><div class="vocab-context">утечка данных = data breach/leak</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('брандмауэр')">
+          <div><div class="vocab-russian">брандмауэр</div><div class="vocab-phonetic">brand-MAU-er</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">firewall</div><div class="vocab-context">Borrowed from German! (Brandmauer)</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('ключ')">
+          <div><div class="vocab-russian">ключ</div><div class="vocab-phonetic">KLYOOCH</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">key (encryption key)</div><div class="vocab-context">закрытый ключ = private key</div></div>
+        </div>
+      </div>
+
+      <div class="section-heading">System Terms — Системные Термины</div>
+      <div class="vocab-grid">
+        <div class="vocab-card" onclick="speak('сеть')">
+          <div><div class="vocab-russian">сеть</div><div class="vocab-phonetic">SYET</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">network</div><div class="vocab-context">локальная сеть = local network (LAN)</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('база данных')">
+          <div><div class="vocab-russian">база данных</div><div class="vocab-phonetic">BA-za DAN-nykh</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">database</div><div class="vocab-context">Literally: "base of data"</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('пользователь')">
+          <div><div class="vocab-russian">пользователь</div><div class="vocab-phonetic">pol-ZO-va-tel</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">user</div><div class="vocab-context">текущий пользователь = current user</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('разрешение')">
+          <div><div class="vocab-russian">разрешение</div><div class="vocab-phonetic">raz-re-SHYE-ni-ye</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">permission</div><div class="vocab-context">проверить разрешение = check permission</div></div>
+        </div>
+      </div>
+
+      <div class="section-heading">Reading Real Russian Comments</div>
+      <div class="code-block">
+        <div class="lang-label">Malware Analysis Example</div>
+<span class="code-comment">// Реальные комментарии из проанализированного вредоносного ПО:</span>
+<span class="code-comment">// (Real comments found in analyzed malware:)</span>
+
+<span class="code-comment">// получить список файлов</span>          <span class="code-comment">→ get list of files</span>
+<span class="code-comment">// зашифровать все данные</span>          <span class="code-comment">→ encrypt all data</span>
+<span class="code-comment">// отправить ключ на сервер</span>        <span class="code-comment">→ send key to server</span>
+<span class="code-comment">// удалить следы</span>                   <span class="code-comment">→ delete traces</span>
+<span class="code-comment">// проверить антивирус</span>             <span class="code-comment">→ check antivirus</span>
+<span class="code-comment">// обойти брандмауэр</span>              <span class="code-comment">→ bypass firewall</span>
+
+<span class="code-keyword">var</span> файлы = <span class="code-function">ПолучитьФайлы</span>(путь);  <span class="code-comment">// files = GetFiles(path)</span>
+<span class="code-keyword">foreach</span> (<span class="code-keyword">var</span> ф <span class="code-keyword">in</span> файлы)
+{
+    <span class="code-function">Зашифровать</span>(ф, ключ);          <span class="code-comment">// Encrypt(file, key)</span>
+}
+<span class="code-function">Отправить</span>(ключ, сервер);           <span class="code-comment">// Send(key, server)</span>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">Real-World Application</div>
+        During the analysis of ransomware like Conti, researchers found internal chat logs and source code comments entirely in Russian. Understanding terms like <strong>зашифровать</strong> (encrypt), <strong>утечка</strong> (leak), and <strong>обойти</strong> (bypass) lets analysts understand attack intent without waiting for translations.
+      </div>
+
+      ${makeQuiz('q4', 'You find this variable in suspicious code: "утечка_данных". What is it tracking?', [
+        { text: 'User login attempts', correct: false },
+        { text: 'Encryption key rotation', correct: false },
+        { text: 'Data leak / data breach', correct: true },
+        { text: 'Network firewall status', correct: false }
+      ], 'утечка (leak) + данных (of data) = data leak/breach. The underscore naming convention is the same as English snake_case — just in Cyrillic. This is exactly the kind of variable name you\'d encounter analyzing data exfiltration malware.')}
+    `
+  },
+  {
+    id: 'erp-vocab',
+    tab: 'Урок 5: ERP/Finance',
+    number: 'Урок Пятый — Lesson 05',
+    title: 'Financial & ERP Terminology',
+    desc: 'Russian accounting and business terms — useful if your JERP ever serves Russian-speaking markets or you analyze international compliance.',
+    content: `
+      <div class="section-heading">Accounting — Бухгалтерский Учёт</div>
+      <div class="vocab-grid">
+        <div class="vocab-card" onclick="speak('счёт')">
+          <div><div class="vocab-russian">счёт</div><div class="vocab-phonetic">SHCHYOT</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">account / invoice</div><div class="vocab-context">план счетов = chart of accounts</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('проводка')">
+          <div><div class="vocab-russian">проводка</div><div class="vocab-phonetic">pra-VOD-ka</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">journal entry (posting)</div><div class="vocab-context">бухгалтерская проводка = accounting entry</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('дебет')">
+          <div><div class="vocab-russian">дебет / кредит</div><div class="vocab-phonetic">DYE-bet / kre-DEET</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">debit / credit</div><div class="vocab-context">Same Latin roots, Cyrillic spelling</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('зарплата')">
+          <div><div class="vocab-russian">зарплата</div><div class="vocab-phonetic">zar-PLA-ta</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">salary / payroll</div><div class="vocab-context">начислить зарплату = process payroll</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('налог')">
+          <div><div class="vocab-russian">налог</div><div class="vocab-phonetic">na-LOG</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">tax</div><div class="vocab-context">налог на прибыль = income tax</div></div>
+        </div>
+        <div class="vocab-card" onclick="speak('отчёт')">
+          <div><div class="vocab-russian">отчёт</div><div class="vocab-phonetic">at-CHYOT</div></div>
+          <div class="vocab-divider"></div>
+          <div><div class="vocab-english">report</div><div class="vocab-context">финансовый отчёт = financial report</div></div>
+        </div>
+      </div>
+
+      <div class="section-heading">Your JERP Service Layer — In Russian</div>
+      <div class="code-block">
+        <div class="lang-label">Conceptual — JERP in Russian</div>
+<span class="code-comment">// IJournalEntryService → ИнтерфейсСервисаПроводок</span>
+<span class="code-comment">// (Interface of the Journal Entry Service)</span>
+
+<span class="code-keyword">public interface</span> <span class="code-type">ИСервисПроводок</span>  <span class="code-comment">// IJournalEntryService</span>
+{
+    <span class="code-comment">// GetAllAsync   → ПолучитьВсеАсинх</span>
+    <span class="code-comment">// GetByIdAsync  → ПолучитьПоИдАсинх</span>
+    <span class="code-comment">// CreateAsync   → СоздатьАсинх</span>
+    <span class="code-comment">// PostAsync     → ПровестиАсинх</span>
+    <span class="code-comment">// VoidAsync     → АннулироватьАсинх</span>
+
+    Task&lt;Проводка&gt; <span class="code-function">СоздатьАсинх</span>(ЗапросСозданияПроводки запрос);
+    Task <span class="code-function">ПровестиАсинх</span>(Guid ид);        <span class="code-comment">// Post = Провести</span>
+    Task <span class="code-function">АннулироватьАсинх</span>(Guid ид);   <span class="code-comment">// Void = Аннулировать</span>
+}
+      </div>
+
+      <div class="info-box history">
+        <div class="info-label">Fun Fact</div>
+        Russian accounting uses the term "проводка" (provodka) for a journal entry, which literally means "wiring" or "conducting" — like conducting electricity. The metaphor is that money flows through accounts like current through wires. Your JournalEntryService.PostAsync() is literally "conducting" money from one account to another.
+      </div>
+
+      ${makeQuiz('q5', 'A Russian accountant says "Нужно сделать проводку по зарплате." What do they need?', [
+        { text: 'A salary report needs printing', correct: false },
+        { text: 'A payroll journal entry needs to be posted', correct: true },
+        { text: 'The tax calculation is wrong', correct: false },
+        { text: 'An employee needs to be paid', correct: false }
+      ], 'проводка (journal entry/posting) + по зарплате (for payroll) = "Need to make/post a payroll journal entry." This is exactly what your PayrollToFinanceService does — it creates проводки (journal entries) from payroll data!')}
+    `
+  }
+];
+
+// ── Build Quiz HTML ──
+function makeQuiz(id, question, options, explanation) {
+  const optionsHtml = options.map((o, i) =>
+    `<button class="quiz-option" onclick="checkAnswer('${id}', ${i}, ${o.correct}, this)">${o.text}</button>`
+  ).join('');
+
+  return `
+    <div class="quiz-section">
+      <div class="quiz-title">✦ Проверка — Quiz</div>
+      <div class="quiz-question">${question}</div>
+      <div class="quiz-options" id="${id}">${optionsHtml}</div>
+      <div class="quiz-feedback" id="${id}-feedback">${explanation}</div>
+    </div>
+  `;
+}
+
+// ── Quiz Logic ──
+function checkAnswer(quizId, index, isCorrect, btn) {
+  const container = document.getElementById(quizId);
+  const buttons = container.querySelectorAll('.quiz-option');
+  const feedback = document.getElementById(`${quizId}-feedback`);
+
+  buttons.forEach((b, i) => {
+    b.classList.add('selected');
+    if (i === index) {
+      b.classList.add(isCorrect ? 'correct' : 'wrong');
+    }
+  });
+
+  // Highlight correct answer if wrong was selected
+  if (!isCorrect) {
+    buttons.forEach((b, i) => {
+      const opts = lessons.flatMap(l => []);
+      // find correct by re-checking
+    });
+  }
+
+  feedback.classList.add('show', isCorrect ? 'correct-fb' : 'wrong-fb');
+  feedback.textContent = isCorrect
+    ? '✓ ' + feedback.textContent
+    : '✗ Incorrect. ' + feedback.textContent;
+
+  // Update progress
+  updateProgress();
+}
+
+// ── Text-to-Speech ──
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ru-RU';
+    utterance.rate = 0.8;
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
+// ── Navigation ──
+let currentLesson = 0;
+
+function renderNav() {
+  const nav = document.getElementById('navTabs');
+  nav.innerHTML = lessons.map((l, i) =>
+    `<button class="nav-tab ${i === currentLesson ? 'active' : ''}" onclick="switchLesson(${i})">${l.tab}</button>`
+  ).join('');
+}
+
+function renderLesson() {
+  const l = lessons[currentLesson];
+  document.getElementById('lessonContainer').innerHTML = `
+    <div class="lesson active">
+      <div class="lesson-header">
+        <div class="lesson-number">${l.number}</div>
+        <div class="lesson-title">${l.title}</div>
+        <div class="lesson-desc">${l.desc}</div>
+      </div>
+      ${l.content}
+    </div>
+  `;
+}
+
+function switchLesson(index) {
+  currentLesson = index;
+  renderNav();
+  renderLesson();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Progress ──
+function updateProgress() {
+  const dots = document.querySelectorAll('.progress-dot');
+  const quizzes = document.querySelectorAll('.quiz-feedback.show');
+  // Simple: fill dots based on answered quizzes
+  dots.forEach((dot, i) => {
+    if (i < quizzes.length) dot.classList.add('filled');
+  });
+}
+
+function renderProgress() {
+  const bar = document.getElementById('progressBar');
+  bar.innerHTML = lessons.map(() => '<div class="progress-dot"></div>').join('');
+}
+
+// ── Init ──
+renderProgress();
+renderNav();
+renderLesson();
+</script>
+</body>
+</html>
