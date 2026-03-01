@@ -52,30 +52,8 @@ npm install
 npm run dev
 ```
 
-### For Business Users
-- **14-Day Free Trial:** Start at https://jerp3.com/trial
-- **Pricing:** See [Pricing Guide](docs/PRICING_GUIDE.md)
-- **Plans:** From $79/month (Starter) to $999/month (Ultimate)
-- **Support:** support@jerp3.com
-- **Developer Contact:** ichbincesartobar@yahoo.com
 
----
 
-## 💰 Subscription Plans
-
-JERP 3.0 uses **employee-based pricing** (not per-user), making it affordable and predictable:
-
-| Plan | Price | Employees | Best For |
-|------|-------|-----------|----------|
-| **Starter** | $79/mo | Up to 3 | Solo contractors, small crews |
-| **Small Business** | $149/mo | Up to 10 | Growing contractors |
-| **Professional** ⭐ | $299/mo | Up to 50 | Established contractors (MOST POPULAR) |
-| **Enterprise** | $599/mo | Up to 150 | Large contractors, multi-company |
-| **Ultimate** | $999/mo | Unlimited | Major firms, custom development |
-
-**Annual Plans:** Save 10% (about 2 months free!)
-
-See the complete [Pricing Guide](docs/PRICING_GUIDE.md) for features and comparison.
 
 ---
 
